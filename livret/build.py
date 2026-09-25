@@ -88,4 +88,11 @@ page = (tpl.replace("{{TOC}}", toc).replace("{{OPTIONS}}", opts).replace("{{DATE
         .replace("{{PERSONNAGES}}", doc(ROOT / "docs" / "02-personnages-et-voix.md", "personnages"))
         .replace("{{PLAN}}", doc(ROOT / "docs" / "01-plan-projet.md", "plan")))
 OUT.write_text(page, encoding="utf-8")
-print(f"OK {OUT} ({len(page)//1024} Ko, {len(stories)} histoires)")
+# Version autonome pour GitHub Pages (page complète, non référencée par les moteurs de recherche)
+SITE = ROOT / "livret" / "site"
+SITE.mkdir(exist_ok=True)
+head = ('<!doctype html><html lang="fr"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+        '<meta name="robots" content="noindex, nofollow">')
+(SITE / "index.html").write_text(head + page.replace("<div class=\"wrap\">", "</head><body><div class=\"wrap\">", 1) + "</body></html>", encoding="utf-8")
+print(f"OK {OUT} ({len(page)//1024} Ko, {len(stories)} histoires) + {SITE / 'index.html'}")
