@@ -1,0 +1,113 @@
+<title>Les Aventures des Princesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{
+  --paper:#FAF7FB; --card:#FFFFFF; --ink:#2B2540; --muted:#6E6685; --line:#E6DFEC; --accent:#B8336A; --accent-soft:#F8E4EE; --gold:#B98A12;
+  --narr:#6E6685; --romy:#B8336A; --alix:#C8581A; --matheo:#2F7FB5; --papic:#7A5630; --mamily:#8E3FA8; --tata:#1B8468; --paillette:#A67A0C; --grumo:#3D8A2C;
+  --me-bg:#FFF1C9;
+  --display:"Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#17141F; --card:#201C2B; --ink:#EDE8F5; --muted:#A49CB8; --line:#332D44; --accent:#F07AA8; --accent-soft:#3A2130; --gold:#E8C766;
+    --narr:#A49CB8; --romy:#F07AA8; --alix:#F2A06B; --matheo:#7DBDE8; --papic:#D1A97A; --mamily:#D39BE8; --tata:#6ED3B3; --paillette:#E8C766; --grumo:#8FD27A;
+    --me-bg:#3B3218;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#17141F; --card:#201C2B; --ink:#EDE8F5; --muted:#A49CB8; --line:#332D44; --accent:#F07AA8; --accent-soft:#3A2130; --gold:#E8C766;
+  --narr:#A49CB8; --romy:#F07AA8; --alix:#F2A06B; --matheo:#7DBDE8; --papic:#D1A97A; --mamily:#D39BE8; --tata:#6ED3B3; --paillette:#E8C766; --grumo:#8FD27A;
+  --me-bg:#3B3218;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 var(--body);padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto}
+a{color:var(--accent)}
+a:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+.mast{padding-block:40px 20px;display:grid;gap:8px}
+.mast .kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.mast h1{font-size:clamp(34px,7vw,52px);color:var(--accent)}
+.mast h1 .star{color:var(--gold)}
+.mast p{margin:0;color:var(--muted);max-width:60ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.bar label{font-weight:700;font-size:15px}
+.bar select{font:inherit;font-size:15px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.bar .count{font-size:14px;color:var(--muted)}
+.bar nav{display:flex;gap:14px;font-size:15px;margin-left:auto}
+.toc{list-style:none;padding:0;margin:24px 0 8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);text-decoration:none;color:var(--ink);font-weight:700}
+.toc a:hover{border-color:var(--accent)}
+.toc .n{font-family:var(--display);color:var(--accent);min-width:2.2em}
+h2.sec{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--body);margin:28px 0 0}
+.story{margin-top:56px;scroll-margin-top:70px}
+.story header{display:grid;gap:4px;padding-bottom:12px;border-bottom:2px solid var(--accent-soft)}
+.story .num{margin:0;font-family:var(--display);font-size:15px;color:var(--gold);letter-spacing:.05em}
+.story h2{font-size:clamp(26px,5vw,34px)}
+.meta{margin:6px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
+.flow{font-size:14px;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:8px;padding:8px 12px}
+.story h4{font-family:var(--display);font-size:21px;margin:28px 0 6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag{font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:99px}
+.variant{margin:18px 0 4px;font-weight:700;color:var(--accent)}
+.note{margin:12px 0 4px;font-style:italic;color:var(--muted);font-size:15px}
+.sfxline{margin:4px 0}
+.sfx{font-size:.88em;color:var(--muted);font-style:italic;white-space:normal}
+.line{display:grid;grid-template-columns:8.5em 1fr;gap:4px 12px;padding:5px 8px;margin-inline:-8px;border-radius:8px}
+.who{font-weight:700;color:var(--rc);font-size:15px;padding-top:1px}
+.who em{font-weight:400;font-size:13px;color:var(--muted)}
+.line.me{background:var(--me-bg)}
+.line.me .say{font-weight:700}
+mark.todo{background:var(--accent-soft);color:var(--accent);padding:0 4px;border-radius:4px;font-weight:700}
+.top{margin-top:20px;font-size:14px}
+.doc{margin-top:64px;scroll-margin-top:70px}
+.doc h2{font-size:30px;margin-bottom:8px}
+.doc h3{font-size:22px;margin-top:24px}
+.tablewrap{overflow-x:auto}
+.doc table{border-collapse:collapse;font-size:15px;width:100%}
+.doc th,.doc td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.doc pre{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:13px}
+footer{margin-top:56px;color:var(--muted);font-size:14px}
+@media (max-width:520px){.line{grid-template-columns:1fr;gap:0}.bar nav{margin-left:0}}
+</style>
+<div class="wrap">
+  <header class="mast">
+    <p class="kicker">Livret de la famille · Noël 2026</p>
+    <h1>Les Aventures des Princesses <span class="star">✦</span></h1>
+    <p>Les histoires de Romy, Alix et Mathéo pour la Lunii. Choisis ton rôle ci-dessous : tes répliques s'allument dans toutes les histoires.</p>
+  </header>
+  <div class="bar">
+    <label for="role">Mes répliques</label>
+    <select id="role"><option value="">Personne</option>{{OPTIONS}}</select>
+    <span class="count" id="count"></span>
+    <nav><a href="#sommaire">Histoires</a><a href="#personnages">Personnages</a><a href="#plan">Le projet</a></nav>
+  </div>
+  <h2 class="sec" id="sommaire">Les 9 histoires</h2>
+  <ul class="toc">{{TOC}}</ul>
+  {{STORIES}}
+  {{PERSONNAGES}}
+  {{PLAN}}
+  <footer>Version du {{DATE}}. Les textes changent encore : relis le livret avant d'enregistrer.</footer>
+</div>
+<script>
+(function(){
+  var sel=document.getElementById('role'), count=document.getElementById('count');
+  function apply(v){
+    var n=0;
+    document.querySelectorAll('.line').forEach(function(el){
+      var on = v && (el.dataset.role===v || (v==='ROMY'||v==='ALIX') && el.dataset.role==='ROMY ET ALIX');
+      el.classList.toggle('me', !!on); if(on) n++;
+    });
+    count.textContent = v ? n+' répliques' : '';
+  }
+  try{ var saved=localStorage.getItem('role'); if(saved){ sel.value=saved; } }catch(e){}
+  apply(sel.value);
+  sel.addEventListener('change',function(){ apply(sel.value); try{localStorage.setItem('role',sel.value);}catch(e){} });
+})();
+</script>
