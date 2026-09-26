@@ -61,7 +61,7 @@ Papic et Mamily racontent à tour de rôle : Papic pour H1, H4, H7, H9 ; Mamily 
 - Lunii.QT : transfert des packs sur la Lunii.
 - Images : 320×240, simples et lisibles (une par personnage, histoire, choix).
 - Audio : MP3, montage et musique avec Audacity.
-- À vérifier d'abord : modèle et firmware de la Lunii (les modèles récents sont plus contraignants).
+- Transfert sur la Lunii : Morgan le fait déjà avec « l'outil magique ».
 
 ## Où sont les fichiers
 - **Textes** : ce dépôt GitHub (source de référence), avec une copie locale dans `Documents/histoires-lunii` sur le Mac.
@@ -86,7 +86,7 @@ Papic et Mamily racontent à tour de rôle : Papic pour H1, H4, H7, H9 ; Mamily 
 - [x] Premier jet des 9 scripts
 - [x] Tata Bêtise positive, répliques variées
 - [ ] Valider les scripts (voir la liste « À valider » dans 03-sommaire.md)
-- [ ] Vérifier modèle / firmware de la Lunii
+- [x] Lunii : Morgan (le papa) y a déjà ajouté des packs avec « l'outil magique » → la chaîne fonctionne. À confirmer avec lui : le format de pack que son outil importe (probablement le .zip STUdio).
 - [ ] Pack test
 - [ ] Enregistrements
 - [ ] Illustrations
