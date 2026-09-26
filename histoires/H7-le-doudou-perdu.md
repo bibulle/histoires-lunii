@@ -34,12 +34,12 @@ NARRATEUR : La corne de Paillette s'allume, comme une petite lampe, pour éclair
 **Grumo**
 GRUMO : « Je vais le trouver avec mon nez ! Snif, snif… Aaaatchi ! »
 [bulles]
-GRUMO : « Oh non… avec mon rhume, je ne sens rien du tout ! »
+GRUMO : « [sigh] Oh non… avec mon rhume, je ne sens rien du tout ! »
 
 **Tata Bêtise**
 TATA BÊTISE : « Je sais où il est ! »
 NARRATEUR : Tata Bêtise cherche dans le frigo… dans la chaussure de Papic… et même sous son chapeau !
-TATA BÊTISE : « Hi hi hi ! Un doudou dans le frigo… Quelle bêtise ! Il aurait froid, le pauvre ! »
+TATA BÊTISE : « [laughter] Hi hi hi ! Un doudou dans le frigo… Quelle bêtise ! Il aurait froid, le pauvre ! »
 
 ### H7-3 – Question [commun]
 NARRATEUR : Où est-ce qu'on cherche le doudou ? Sous le lit… ou dans la baignoire ? Tourne la molette pour choisir !
@@ -57,7 +57,7 @@ NARRATEUR : Et dans le jardin ? Derrière les fleurs… pas de doudou ! Dans la 
 NARRATEUR : Alors, dans sa poussette, le tout petit Prince Mathéo se met à gazouiller.
 MATHÉO : « Areuh ! Areuh ! »
 NARRATEUR : Mathéo montre le grand arbre avec son petit doigt. Tout le monde lève la tête… Et là-haut, sur une branche, un petit écureuil fait un gros câlin au doudou !
-NOISETTE : « Pardon… Je m'appelle Noisette. J'avais froid, cette nuit… et ce doudou est si doux… »
+NOISETTE : « [sigh] Pardon… Je m'appelle Noisette. J'avais froid, cette nuit… et ce doudou est si doux… »
 
 **Version Romy**
 ROMY : « Je comprends, Noisette. Mais ce doudou, c'est le mien. Tu sais quoi ? Je vais te donner une petite couverture, et tu pourras venir lui faire des câlins quand tu veux ! »

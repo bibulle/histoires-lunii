@@ -18,11 +18,18 @@ ROLES = {  # clé -> (libellé, variable de couleur)
 FILTER = ["NARRATEUR", "PAPIC", "MAMILY", "TATA BÊTISE", "ROMY", "ALIX", "MATHÉO", "PAILLETTE", "GRUMO", "PÈRE NOËL"]
 ROLE_RE = re.compile(r"^([A-ZÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ' ]{3,}?)(\s*\([^)]*\))?\s*:\s(.*)$")
 TAG_RE = re.compile(r"\[(×3|×compagnon|commun)\]")
+OV = {  # balises OmniVoice -> libellé affiché dans le livret
+    "laughter": "rire", "sigh": "soupir", "surprise-oh": "oh !", "surprise-ah": "ah !", "surprise-wa": "waouh !",
+    "surprise-yo": "oh !", "dissatisfaction-hnn": "hmm…", "confirmation-en": "mm-hm", "question-en": "hein ?",
+    "question-ah": "ah ?", "question-oh": "oh ?", "question-ei": "hein ?", "question-yi": "hein ?",
+}
+OV_RE = re.compile(r"\[(" + "|".join(map(re.escape, OV)) + r")\]\s?")
 
 def inline(t):
     t = html.escape(t, quote=False)
     t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
     t = re.sub(r"\{([A-Z_]+)\}", r'<mark class="todo">\1</mark>', t)
+    t = OV_RE.sub(lambda m: f'<span class="ov" title="Balise OmniVoice : {m.group(1)}">{OV[m.group(1)]}</span> ', t)
     t = re.sub(r"\[([^\]]+)\]", r'<span class="sfx">\1</span>', t)
     return t
 

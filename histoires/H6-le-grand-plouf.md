@@ -15,7 +15,7 @@ Déroulé : H6-1 (×3) → H6-2 → H6-3 question → H6-4a / H6-4b → H6-5 (×
 NARRATEUR : Il était une fois, dans le jardin du château, une grande piscine toute bleue. Et un matin… la piscine s'est mise à briller comme la mer !
 [vagues]
 NARRATEUR : Plouf ! Un tout petit dauphin sort la tête de l'eau.
-PIPOU : « I-hi-hi ! Bonjour ! Je m'appelle Pipou… J'ai perdu ma maman… »
+PIPOU : « I-hi-hi ! Bonjour ! Je m'appelle Pipou… [sigh] J'ai perdu ma maman… »
 
 **Version Romy**
 ROMY : « Ne pleure pas, Pipou. On va la retrouver ! Mais d'abord, je mets mes brassards. Dans l'eau, on met toujours ses brassards ! »
@@ -62,8 +62,8 @@ NARRATEUR : Une bulle géante ! Tout le monde regarde dedans, comme dans une lou
 **Tata Bêtise**
 TATA BÊTISE : « Attendez, je vais regarder ! »
 NARRATEUR : Tata Bêtise se penche… se penche… encore un peu… PLOUF ! Elle tombe dans l'eau ! Elle ressort avec des algues sur la tête, comme une perruque.
-TATA BÊTISE : « Hi hi hi ! J'ai fait une bêtise mouillée ! Vous aimez ma nouvelle coiffure ? »
-PIPOU : « I-hi-hi ! Elle est très jolie ! »
+TATA BÊTISE : « [laughter] Hi hi hi ! J'ai fait une bêtise mouillée ! Vous aimez ma nouvelle coiffure ? »
+PIPOU : « [laughter] I-hi-hi ! Elle est très jolie ! »
 
 ### H6-6 – Fin [×3]
 
@@ -82,9 +82,9 @@ NARRATEUR : « Pipou, Pipou, où es-tu ? MAMAN DE PIPOUUUU ! »
 *(Fin commune aux 3 versions)*
 NARRATEUR : Et là… une grande dauphine saute hors de l'eau ! I-hi-hi-hi !
 [grand splash]
-MAMAN DAUPHIN : « Pipou ! Mon petit Pipou ! »
+MAMAN DAUPHIN : « [surprise-ah] Pipou ! Mon petit Pipou ! »
 NARRATEUR : Pipou saute dans les nageoires de sa maman. Gros câlin de dauphin !
 MAMAN DAUPHIN : « Merci à tous ! »
 NARRATEUR : Et pour dire merci, Pipou éclabousse tout le monde. Mathéo rit aux éclats.
-MATHÉO : « Ha ha ha ! »
+MATHÉO : « [laughter] Ha ha ha ! »
 NARRATEUR : Le soir, la piscine est redevenue une piscine toute simple. Mais parfois, si on écoute bien… on entend encore Pipou rire. I-hi-hi ! Fin !

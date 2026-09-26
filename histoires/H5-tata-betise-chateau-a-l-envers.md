@@ -16,7 +16,7 @@ NARRATEUR : Il était une fois, un matin, dans le grand château tout rose… il
 
 **Version Romy**
 NARRATEUR : La Princesse Romy ouvre les yeux.
-ROMY : « Ça, ce n'est pas normal ! Je vais trouver qui a fait ça ! »
+ROMY : « [dissatisfaction-hnn] Ça, ce n'est pas normal ! Je vais trouver qui a fait ça ! »
 
 **Version Alix**
 NARRATEUR : La Princesse Alix saute de son lit.
@@ -24,28 +24,28 @@ ALIX : « Hé ! Qui a fait ça ? Je vais le trouver ! »
 
 **Version les deux**
 NARRATEUR : Les deux princesses ouvrent les yeux.
-ROMY : « Ce n'est pas normal ! »
+ROMY : « [dissatisfaction-hnn] Ce n'est pas normal ! »
 ALIX : « On mène l'enquête ! Suivez-moi ! »
 
 ### H5-2 – Qui a fait ça ? [commun]
 NARRATEUR : Dans la cuisine, les chaussures sont… dans le frigo !
 [porte de frigo]
 NARRATEUR : Dans le salon, le canapé est… à l'envers ! Et derrière le rideau, il y a deux pieds qui dépassent… et quelqu'un qui rigole. Qui se cache là ?
-TATA BÊTISE : « Hi hi hi ! Coucou, c'est moi ! J'ai fait une grosse bêtise ! »
-TOUS (en riant) : « Oh, Tata Bêtise ! »
-TATA BÊTISE : « Je voulais vous faire une surprise… mais j'ai tout mélangé ! Ha ha ha ! »
+TATA BÊTISE : « [laughter] Hi hi hi ! Coucou, c'est moi ! J'ai fait une grosse bêtise ! »
+TOUS (en riant) : « [laughter] Oh, Tata Bêtise ! »
+TATA BÊTISE : « Je voulais vous faire une surprise… mais j'ai tout mélangé ! [laughter] Ha ha ha ! »
 
 ### H5-3 – Question [commun]
 NARRATEUR : Il faut tout ranger ! Par où est-ce qu'on commence ? Par la chambre… ou par la salle de bain ? Tourne la molette pour choisir !
 
 ### H5-4a – La chambre [commun]
 NARRATEUR : Dans le lit de Papic, il y a… vingt-trois doudous ! Et dans l'armoire… des carottes ! Et sous l'oreiller… une banane !
-TATA BÊTISE : « Ah oui… la banane, c'était pour le goûter ! Hi hi ! »
+TATA BÊTISE : « Ah oui… la banane, c'était pour le goûter ! [laughter] Hi hi ! »
 NARRATEUR : Et hop, on remet tout à sa place.
 
 ### H5-4b – La salle de bain [commun]
 NARRATEUR : Dans la baignoire, il n'y a pas d'eau… il y a des céréales ! Et la brosse à dents est dans… le pot de confiture !
-TATA BÊTISE : « Comme ça, les dents sont sucrées ! Ha ha ! »
+TATA BÊTISE : « Comme ça, les dents sont sucrées ! [laughter] Ha ha ! »
 NARRATEUR : Tout le monde éclate de rire. Pas dans la confiture, Tata !
 NARRATEUR : Et hop, on remet tout à sa place.
 
@@ -60,7 +60,7 @@ NARRATEUR : …et tout ce qui était à l'envers s'envole et retourne à sa plac
 NARRATEUR : Grumo veut souffler la poussière… Atchoum-boum !
 [bulles]
 NARRATEUR : Les bulles emportent toute la poussière… mais aussi toutes les chaussettes du château !
-GRUMO : « Oups… Maintenant, c'est moi qui fais des bêtises ! »
+GRUMO : « Oups… [laughter] Maintenant, c'est moi qui fais des bêtises ! »
 
 **Papic**
 [bruits d'outils]
@@ -72,19 +72,19 @@ NARRATEUR : Papic remet le canapé à l'endroit, revisse la poignée de la porte
 *(Début commun aux 3 versions)*
 NARRATEUR : Ouf ! Tout est rangé ! Mais… où est le Prince Mathéo ?
 NARRATEUR : On cherche partout… Et on le trouve dans le panier à linge, au milieu des serviettes, en train de rire !
-MATHÉO : « Hi hi hi hi ! »
-TATA BÊTISE : « Oups ! Celle-là, c'est la plus rigolote de mes bêtises ! »
+MATHÉO : « [laughter] Hi hi hi hi ! »
+TATA BÊTISE : « Oups ! Celle-là, c'est la plus rigolote de mes bêtises ! [laughter] »
 
 **Version Romy**
 ROMY : « Tata Bêtise, écoute bien : les chaussures, c'est dans l'entrée. Les bébés, c'est dans les bras ! »
 
 **Version Alix**
-ALIX : « C'était rigolo, quand même ! On recommence ? »
+ALIX : « [laughter] C'était rigolo, quand même ! On recommence ? »
 
 **Version les deux**
 ROMY : « Plus de bêtises, Tata ! »
 ALIX : « Enfin… juste une petite ? »
 
 *(Fin commune)*
-TATA BÊTISE : « Promis, plus de bêtises… Enfin… presque plus ! Hi hi hi ! »
+TATA BÊTISE : « Promis, plus de bêtises… Enfin… presque plus ! [laughter] Hi hi hi ! »
 NARRATEUR : Et tout le monde rit. Fin !

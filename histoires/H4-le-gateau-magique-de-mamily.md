@@ -53,12 +53,12 @@ PAILLETTE : « Voilà ! Un gâteau arc-en-ciel ! »
 NARRATEUR : Oh non ! Le four est tout froid ! Grumo souffle dessus, tout doucement, un souffle bien chaud… mais ça le chatouille… Aaaa… TCHA !
 [bulles]
 NARRATEUR : Des bulles partout dans le gâteau ! Maintenant, c'est un gâteau qui pétille !
-GRUMO : « Oups… Mais il sent bon ! »
+GRUMO : « Oups… [laughter] Mais il sent bon ! »
 
 **Tata Bêtise**
 NARRATEUR : Tata Bêtise goûte la crème. Une cuillère… deux cuillères… toute la crème !
-TATA BÊTISE : « Hi hi… Ça, c'est une bêtise de Tata Bêtise ! Mais qu'elle était bonne ! »
-MAMILY (en riant) : « Oh, ma Tata… tu as une moustache de crème ! »
+TATA BÊTISE : « [laughter] Hi hi… Ça, c'est une bêtise de Tata Bêtise ! Mais qu'elle était bonne ! »
+MAMILY (en riant) : « [laughter] Oh, ma Tata… tu as une moustache de crème ! »
 NARRATEUR : Heureusement, Mamily en refait.
 
 ### H4-6 – Fin [×3]

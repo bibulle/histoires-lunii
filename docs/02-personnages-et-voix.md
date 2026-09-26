@@ -46,3 +46,40 @@ Romy et Alix sont très complices : dans les versions « les deux princesses »,
 - Répartir les rôles en famille : Papic = Bibulle, Mamily = la vraie Mamily, Tata Bêtise = la vraie tata si possible.
 - **Mathéo** : demander à ses parents d'enregistrer ses vrais gazouillis et éclats de rire au téléphone. Ce sera magique pour les filles.
 - Les princesses : les voix peuvent être jouées par un adulte. Autre idée : glisser une ou deux vraies phrases de Romy et d'Alix enregistrées discrètement.
+
+## Générer les voix avec OmniVoice
+
+Dans les scripts, les **balises en anglais** placées dans les répliques (`[laughter]`, `[sigh]`…) sont des balises OmniVoice (modèle officiel `k2-fsa/OmniVoice`). Les **bruitages en français** (`[bulles]`, `[clochette]`…) sont à ajouter dans Audacity : ne jamais les coller dans OmniVoice.
+
+**Mode d'emploi** : copier le texte entre « » (balises comprises) dans OmniVoice, langue *French*. Pour les voix jouées par la famille, la balise sert simplement d'indication de jeu.
+
+| Balise | Effet | Utilisée pour |
+|---|---|---|
+| `[laughter]` | un rire | Tata Bêtise, les rires de Grumo, Papic, Mamily, le Père Noël… |
+| `[sigh]` | un soupir | Paillette qui a peur, Grumo triste, Pipou, Noisette |
+| `[surprise-oh]` / `[surprise-ah]` / `[surprise-wa]` | un « oh ! », « ah ! », « wa ! » étonné | émerveillement, Grumo qui vole |
+| `[dissatisfaction-hnn]` | un « hmm » pas content | Romy qui mène l'enquête (H5) |
+
+Autres balises existantes, pas utilisées pour l'instant : `[question-ah]`, `[question-oh]`, `[question-en]`, `[question-ei]`, `[question-yi]`, `[surprise-yo]`, `[confirmation-en]`. Il n'y a **pas** de balise pour renifler ou éternuer : « Snif » et « ATCHOUM » restent écrits en toutes lettres, ou se font en bruitage.
+
+**Astuces**
+- Si « Hi hi hi » ou « Ha ha ha » est lu comme des mots au lieu d'être ri, supprimer ces mots dans OmniVoice et garder seulement `[laughter]`.
+- Si une phrase est coupée : générer une petite phrase à la fois, remplacer les « … » par des points, ou ralentir (vitesse 0,9).
+- Pas d'émotion « peur » dans OmniVoice : pour Paillette, jouer sur le `[sigh]`, les silences dans Audacity et un léger trémolo (sinus, 40-60 %, 6-8 Hz).
+- Une fois une voix réussie, garder le clip (5 à 10 s) et s'en servir comme référence (clonage) pour toutes les répliques du personnage, dans les 9 histoires.
+
+**Voix de départ (mode « conception de voix », champ *instruct*)**. OmniVoice a appris ces voix sur de l'anglais et du chinois : en français le résultat varie, il faut parfois générer plusieurs fois.
+
+| Personnage | instruct |
+|---|---|
+| Narrateur (si pas de voix famille) | `male, middle-aged, low pitch` |
+| Romy | `female, child, moderate pitch` |
+| Alix | `female, child, high pitch` |
+| Paillette | `female, child, very high pitch` (+ `whisper` dans H9) |
+| Grumo | `male, middle-aged, very low pitch` |
+| Tata Bêtise (maquette) | `female, young adult, high pitch` |
+| Papic / Mamily (maquette) | `male, elderly, low pitch` / `female, elderly, moderate pitch` |
+| Père Noël | `male, elderly, very low pitch` |
+| Pipou / Maman dauphin | `male, child, very high pitch` / `female, middle-aged, high pitch` |
+| Noisette | `female, teenager, high pitch, whisper` |
+| Le crabe / Le poisson rouge | `male, middle-aged, high pitch` / `male, child, moderate pitch` |

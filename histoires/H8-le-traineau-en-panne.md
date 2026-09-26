@@ -30,7 +30,7 @@ NARRATEUR : Les deux princesses n'arrivaient pas à dormir. Elles regardaient pa
 NARRATEUR : Soudain, badaboum ! Dans le jardin, il y a un traîneau renversé dans la neige, des rennes… et un monsieur avec une grande barbe blanche. C'est le Père Noël !
 
 ### H8-2 – Papic répare [commun]
-PÈRE NOËL : « Ho ho ho… Oh là là ! Mon traîneau est cassé ! Et j'ai encore plein de cadeaux à livrer ! »
+PÈRE NOËL : « Ho ho ho… [sigh] Oh là là ! Mon traîneau est cassé ! Et j'ai encore plein de cadeaux à livrer ! »
 NARRATEUR : Papic arrive en pyjama, avec sa boîte à outils.
 PAPIC : « Hmm hmm, voyons voir… Un petit coup de tournevis, et hop ! »
 [toc, toc, toc] [cric, crac]
@@ -54,7 +54,7 @@ NARRATEUR : Les rennes remuent la queue. Tornade fait un bisou tout mouillé à 
 
 *(Début commun, à coller en tête des 3 versions)*
 NARRATEUR : Mais le traîneau est si plein de cadeaux qu'il est trop lourd. Il ne décolle pas !
-PÈRE NOËL : « Oh là là… Qui peut m'aider ? »
+PÈRE NOËL : « [sigh] Oh là là… Qui peut m'aider ? »
 
 **Paillette**
 NARRATEUR : Paillette s'avance, et elle chante sa plus belle chanson de Noël : « Ding, ding, dong… »
@@ -69,8 +69,8 @@ NARRATEUR : Des milliers de bulles soulèvent le traîneau, et il s'envole !
 **Tata Bêtise**
 NARRATEUR : Tata Bêtise veut aider… mais elle trébuche, et s'assoit sur un bouton caché. Un gros bouton rouge marqué « Turbo » !
 [vroooom !]
-TATA BÊTISE : « Oups-la-boum ! Encore une bêtise ! Hi hi hi ! »
-PÈRE NOËL : « Ho ho ho ! La plus belle bêtise de Noël ! Merci, Tata Bêtise ! »
+TATA BÊTISE : « Oups-la-boum ! Encore une bêtise ! [laughter] Hi hi hi ! »
+PÈRE NOËL : « [laughter] Ho ho ho ! La plus belle bêtise de Noël ! Merci, Tata Bêtise ! »
 NARRATEUR : Et le traîneau s'envole, comme une fusée !
 
 ### H8-6 – Fin [×3]
@@ -90,7 +90,7 @@ NARRATEUR : Il leur lance une toute petite clochette dorée. [ding]
 *(Fin commune)*
 NARRATEUR : À la fenêtre, le Prince Mathéo fait coucou avec sa petite main.
 MATHÉO : « Ba-ba ! »
-PÈRE NOËL : « Ho ho ho ! Joyeux Noël à tous ! »
+PÈRE NOËL : « [laughter] Ho ho ho ! Joyeux Noël à tous ! »
 [grelots qui s'éloignent]
 NARRATEUR : Et le traîneau disparaît dans les étoiles. Tout le monde retourne vite au lit.
 NARRATEUR : Le lendemain matin, sous le sapin, il y avait plein de cadeaux… et si tu écoutes bien, on entend encore une petite clochette. Ding… ding… Joyeux Noël ! Fin !

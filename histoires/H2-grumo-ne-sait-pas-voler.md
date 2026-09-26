@@ -13,7 +13,7 @@ Déroulé : H2-1 (×3) → H2-2 → H2-3 (×compagnon) → H2-4 question → H2-
 
 *(Début commun aux 3 versions)*
 NARRATEUR : Il était une fois, dans le jardin du château, un gros dragon vert tout triste, assis dans l'herbe. C'était Grumo.
-GRUMO : « Tous les dragons savent voler… sauf moi. Snif… Aaaah… TCHOUM ! »
+GRUMO : « [sigh] Tous les dragons savent voler… sauf moi. Snif… Aaaah… TCHOUM ! »
 [bulles]
 NARRATEUR : Grumo était un peu enrhumé. Au lieu de cracher du feu, il éternuait des bulles !
 
@@ -38,7 +38,7 @@ NARRATEUR : Papic attache les ailes à ressort sur le dos de Grumo. Grumo saute�
 [boing, boing, boing]
 NARRATEUR : …et il retombe sur les fesses !
 GRUMO : « Ouille ! »
-PAPIC : « Bon… il faut encore bricoler. »
+PAPIC : « [sigh] Bon… il faut encore bricoler. »
 
 ### H2-3 – Le compagnon essaie d'aider [×compagnon]
 
@@ -53,20 +53,20 @@ NARRATEUR : Et tous les oiseaux du jardin s'envolent… mais pas Grumo !
 TATA BÊTISE : « J'ai une super idée ! Des ballons ! »
 NARRATEUR : Tata Bêtise attache vingt ballons à la queue de Grumo. Grumo monte… un tout petit peu… et…
 [pop, pop, pop]
-TATA BÊTISE : « Oups-la-boum ! Une toute petite bêtise… Hi hi hi ! »
-GRUMO (en riant) : « Hi hi, ça chatouille, Tata ! »
+TATA BÊTISE : « Oups-la-boum ! Une toute petite bêtise… [laughter] Hi hi hi ! »
+GRUMO (en riant) : « [laughter] Hi hi, ça chatouille, Tata ! »
 
 **Mamily**
 MAMILY : « Pour voler, il faut des forces, mon gros dragon ! »
 NARRATEUR : Mamily apporte des crêpes. Grumo en mange une… deux… douze crêpes !
-GRUMO : « Oh là là… j'ai trop mangé… Maintenant, je suis trop lourd pour voler ! »
+GRUMO : « [sigh] Oh là là… j'ai trop mangé… Maintenant, je suis trop lourd pour voler ! »
 
 ### H2-4 – Question [commun]
 NARRATEUR : D'où est-ce que Grumo doit essayer de s'envoler ? Du haut de la grande colline… ou du trampoline ? Tourne la molette pour choisir !
 
 ### H2-5a – La colline [commun]
 NARRATEUR : Grumo monte tout en haut de la colline. Il court, il bat des ailes… flap, flap, flap… et il roule, roule, roule jusqu'en bas, dans l'herbe !
-GRUMO : « Hou là là, ça tourne ! »
+GRUMO : « [surprise-wa] Hou là là, ça tourne ! »
 
 ### H2-5b – Le trampoline [commun]
 NARRATEUR : Grumo saute sur le trampoline. Boing ! Boing ! BOIIIING ! Si haut qu'il voit le toit du château ! Mais… il retombe.
@@ -76,9 +76,9 @@ GRUMO : « Presque ! J'ai presque volé ! »
 
 *(Début commun aux 3 versions)*
 NARRATEUR : Grumo est tout fatigué, tout ébouriffé. Alors arrive le tout petit Prince Mathéo, dans les bras de sa maman. Il regarde Grumo… et il éclate de rire !
-MATHÉO : « Ha ha ha ha ! »
+MATHÉO : « [laughter] Ha ha ha ha ! »
 NARRATEUR : Le rire de Mathéo est si rigolo que tout le monde se met à rire. Et Grumo rit, rit, rit si fort que ses ailes se mettent à battre toutes seules… flap, flap, flap… et il s'envole !
-GRUMO : « Je vole ! JE VOLE ! »
+GRUMO : « [surprise-wa] Je vole ! JE VOLE ! »
 
 **Version Romy**
 ROMY : « Tu vois, Grumo ? Tu as réussi ! »

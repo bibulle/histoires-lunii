@@ -17,7 +17,7 @@ NARRATEUR : Il était une fois, au fond du château, un atelier plein d'outils, 
 PAPIC : « Venez voir ! J'ai inventé… une machine à bisous ! »
 
 **Version Romy**
-ROMY : « Une machine à bisous ? Comment elle marche, Papic ? »
+ROMY : « [surprise-oh] Une machine à bisous ? Comment elle marche, Papic ? »
 
 **Version Alix**
 ALIX : « Je peux appuyer ? Je peux ? Je peux ? »
@@ -38,14 +38,14 @@ NARRATEUR : Trop tard ! Tata Bêtise va appuyer… Sur le bouton rouge… ou sur
 ### H3-4a – Le bouton rouge [commun]
 [bip !] [pffffffffft]
 NARRATEUR : La machine souffle… des milliers de bulles de savon ! Il y en a partout dans l'atelier. Et Papic a une grosse bulle sur le bout du nez !
-TATA BÊTISE : « Oh là là, encore une bêtise ! Ha ha ha ! »
-PAPIC (en riant) : « Bravo, Tata… Me voilà avec un nez en bulle ! »
+TATA BÊTISE : « Oh là là, encore une bêtise ! [laughter] Ha ha ha ! »
+PAPIC (en riant) : « [laughter] Bravo, Tata… Me voilà avec un nez en bulle ! »
 
 ### H3-4b – Le bouton bleu [commun]
 [bip !] [fiou, fiou, fiou]
 NARRATEUR : La machine envoie… des chaussettes volantes ! Des rayées, des rouges, des chaussettes à pois ! Et une chaussette atterrit sur la tête de Papic !
-TATA BÊTISE : « Oh la boulette ! Hi hi hi ! Pas grave, on répare ! »
-PAPIC (en riant) : « Heureusement que je suis là ! »
+TATA BÊTISE : « Oh la boulette ! [laughter] Hi hi hi ! Pas grave, on répare ! »
+PAPIC (en riant) : « [laughter] Heureusement que je suis là ! »
 
 ### H3-5 – Le compagnon essaie aussi [×compagnon]
 
@@ -80,7 +80,7 @@ MATHÉO : « Ba-ba-ba ! »
 ROMY : « C'est Mathéo qui a trouvé ! Bravo, mon petit cousin ! »
 
 **Version Alix**
-ALIX : « Encore ! Encore des bisous ! »
+ALIX : « [laughter] Encore ! Encore des bisous ! »
 
 **Version les deux**
 ROMY : « Bravo, Mathéo ! »
