@@ -20,6 +20,6 @@ Conseil : l'histoire 8 à écouter en premier le soir du réveillon. On peut met
 - [x] Doudou de Romy : Doudou Renard (H7, H9).
 - [x] Doudou d'Alix : Doudou Lapin (H7, H9).
 - [x] Château : rose pour Romy, bleu pour Alix, rose et bleu à deux.
-- [ ] Romy va à l'école : faut-il des détails réels (nom de la maîtresse, du copain…) ?
+- [x] École de Romy : pas de détails réels, on garde l'histoire telle quelle.
 - [x] Narrateur : Papic et Mamily à tour de rôle.
 - [ ] Relire chaque script : ton, longueur, mots trop difficiles.
