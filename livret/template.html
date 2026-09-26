@@ -102,7 +102,7 @@ footer{margin-top:56px;color:var(--muted);font-size:14px}
   function apply(v){
     var n=0;
     document.querySelectorAll('.line').forEach(function(el){
-      var on = v && (el.dataset.role===v || (v==='ROMY'||v==='ALIX') && el.dataset.role==='ROMY ET ALIX');
+      var on = v && (el.dataset.role===v || (el.dataset.role==='NARRATEUR' && el.closest('.story') && el.closest('.story').dataset.narr===v) || (v==='ROMY'||v==='ALIX') && el.dataset.role==='ROMY ET ALIX');
       el.classList.toggle('me', !!on); if(on) n++;
     });
     count.textContent = v ? n+' répliques' : '';

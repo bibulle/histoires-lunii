@@ -4,6 +4,7 @@
 - Compagnons : Grumo / Tata Bêtise / Papic
 - Choix : toboggan ou bac à sable
 - Voix : Narrateur, Romy, Alix, Paillette, Mamily, Mathéo + le compagnon
+- Narrateur : Papic
 
 Déroulé : H1-1 (×3) → H1-2 (×compagnon) → H1-3 → H1-4 question → H1-5a / H1-5b → H1-6 (×3) → Fin
 
@@ -19,14 +20,14 @@ PAILLETTE : « [sigh] C'est mon premier jour d'école… J'ai un peu peur… »
 ROMY : « Pas de panique, Paillette, je suis là ! Viens, je te montre tout ! »
 
 **Version Alix**
-NARRATEUR : Il était une fois, dans un grand château tout rose, la Princesse Alix, qui courait toujours plus vite que tout le monde. Ce matin-là, elle fonçait vers l'école !
+NARRATEUR : Il était une fois, dans un grand château tout bleu, la Princesse Alix, qui courait toujours plus vite que tout le monde. Ce matin-là, elle fonçait vers l'école !
 ALIX : « Vite, vite, l'école ! »
 NARRATEUR : Devant la porte de l'école, il y avait une petite licorne toute blanche, cachée derrière un arbre. C'était Paillette. Elle tremblait comme une feuille.
 PAILLETTE : « [sigh] C'est mon premier jour d'école… J'ai un peu peur… »
 ALIX : « Même pas peur, moi ! Suis-moi, Paillette ! »
 
 **Version les deux**
-NARRATEUR : Il était une fois, dans un grand château tout rose, deux petites princesses qui faisaient tout ensemble : la Princesse Romy et la Princesse Alix. Ce matin-là, Romy prend la main d'Alix.
+NARRATEUR : Il était une fois, dans un grand château rose et bleu, deux petites princesses qui faisaient tout ensemble : la Princesse Romy et la Princesse Alix. Ce matin-là, Romy prend la main d'Alix.
 ROMY : « Viens, je te montre mon école ! »
 ALIX : « Moi d'abord ! »
 NARRATEUR : Devant la porte de l'école, il y avait une petite licorne toute blanche, cachée derrière un arbre. C'était Paillette. Elle tremblait comme une feuille.
@@ -77,7 +78,7 @@ NARRATEUR : Elle atterrit dans un gros tas de feuilles. [froufrou]
 PAILLETTE : « [laughter] Encore ! Encore ! »
 
 ### H1-5b – Le bac à sable [commun]
-NARRATEUR : Dans le bac à sable, on construit un château. Une tour… deux tours… trois tours ! Tout pareil que le château rose !
+NARRATEUR : Dans le bac à sable, on construit un château. Une tour… deux tours… trois tours ! Tout pareil que le vrai château des princesses !
 NARRATEUR : Paillette pose une paillette tout en haut… et le château de sable se met à briller.
 [clochette]
 PAILLETTE : « [surprise-oh] Qu'il est beau ! »

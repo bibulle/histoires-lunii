@@ -4,6 +4,7 @@
 - Compagnons : Paillette / Grumo / Tata Bêtise
 - Choix : étoiles en sucre (dans le ciel) ou fraises géantes (dans le jardin)
 - Voix : Narrateur, Romy, Alix, Mamily, Mathéo + le compagnon
+- Narrateur : Papic
 
 Déroulé : H4-1 (×3) → H4-2 → H4-3 question → H4-4a / H4-4b → H4-5 (×compagnon) → H4-6 (×3) → Fin
 

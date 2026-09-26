@@ -4,6 +4,7 @@
 - Compagnons : Paillette / Grumo / Mamily
 - Choix : bouton rouge ou bouton bleu
 - Voix : Narrateur, Romy, Alix, Papic, Tata Bêtise, Mathéo + le compagnon
+- Narrateur : Mamily
 
 Déroulé : H3-1 (×3) → H3-2 → H3-3 question → H3-4a / H3-4b → H3-5 (×compagnon) → H3-6 (×3) → Fin
 

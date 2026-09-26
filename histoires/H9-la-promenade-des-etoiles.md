@@ -3,6 +3,7 @@
 - Durée : environ 3 min
 - Pas de menu compagnon, pas de choix : histoire calme pour s'endormir.
 - Voix : Narrateur, Romy, Alix, Paillette, Mamily, Mathéo, Grumo (ronflement)
+- Narrateur : Papic
 - Conseil d'enregistrement : la voix ralentit et baisse au fil de l'histoire. Musique douce (boîte à musique) en fond. Pas de fin « Tu veux une autre aventure ? » : l'histoire s'arrête simplement.
 
 Déroulé : H9-1 (×3) → H9-2 → H9-3 (×3)
@@ -13,16 +14,16 @@ Déroulé : H9-1 (×3) → H9-2 → H9-3 (×3)
 
 *(Début commun aux 3 versions)*
 [boîte à musique]
-NARRATEUR : Il était une fois, le soir, dans le grand château tout rose. Le soleil était parti se coucher, et la lune se levait tout doucement.
+NARRATEUR : Il était une fois, le soir, dans le grand château des princesses. Le soleil était parti se coucher, et la lune se levait tout doucement.
 
 **Version Romy**
-NARRATEUR : La Princesse Romy était dans son lit, avec Doudou Renard. Mais elle avait encore les yeux tout ouverts.
+NARRATEUR : La Princesse Romy était dans son lit, au château rose, avec Doudou Renard. Mais elle avait encore les yeux tout ouverts.
 
 **Version Alix**
-NARRATEUR : La Princesse Alix était dans son lit, avec son doudou. Elle avait beaucoup couru, toute la journée… mais elle avait encore les yeux tout ouverts.
+NARRATEUR : La Princesse Alix était dans son lit, au château bleu, avec Doudou Lapin. Elle avait beaucoup couru, toute la journée… mais elle avait encore les yeux tout ouverts.
 
 **Version les deux**
-NARRATEUR : Les deux princesses étaient dans leur lit, chacune avec son doudou. Mais elles avaient encore les yeux tout ouverts.
+NARRATEUR : Les deux princesses étaient dans leur lit, au château rose et bleu : Romy avec Doudou Renard, Alix avec Doudou Lapin. Mais elles avaient encore les yeux tout ouverts.
 
 *(Suite commune)*
 NARRATEUR : Alors, tout doucement, on frappe à la fenêtre. Toc… toc…
@@ -52,10 +53,10 @@ MAMILY (tout bas) : « Bonne nuit, mes caillettes… »
 NARRATEUR : La Princesse Romy serre Doudou Renard tout contre elle. Ses yeux se ferment… tout doucement…
 
 **Version Alix**
-NARRATEUR : La Princesse Alix serre son doudou. Ses yeux se ferment… tout doucement…
+NARRATEUR : La Princesse Alix serre Doudou Lapin tout contre elle. Ses yeux se ferment… tout doucement…
 
 **Version les deux**
-NARRATEUR : Les deux princesses serrent leur doudou. Leurs yeux se ferment… tout doucement…
+NARRATEUR : Romy serre Doudou Renard, Alix serre Doudou Lapin. Leurs yeux se ferment… tout doucement…
 
 *(Fin commune)*
 PAILLETTE (en chuchotant) : « Bonne nuit, princesse… Fais de beaux rêves… »

@@ -4,6 +4,7 @@
 - Compagnons : Paillette / Tata Bêtise / Mamily
 - Choix : colline ou trampoline
 - Voix : Narrateur, Romy, Alix, Grumo, Papic, Mathéo + le compagnon
+- Narrateur : Mamily
 
 Déroulé : H2-1 (×3) → H2-2 → H2-3 (×compagnon) → H2-4 question → H2-5a / H2-5b → H2-6 (×3) → Fin
 

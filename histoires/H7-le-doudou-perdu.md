@@ -4,8 +4,9 @@
 - Compagnons : Paillette / Grumo / Tata Bêtise
 - Choix : sous le lit ou dans la baignoire
 - Voix : Narrateur, Romy, Alix, Noisette l'écureuil, Mathéo + le compagnon
+- Narrateur : Papic
 - Doudou de Romy : Doudou Renard.
-- **À compléter** : {DOUDOU_ALIX} = le vrai nom du doudou d'Alix.
+- Doudou d'Alix : Doudou Lapin.
 
 Déroulé : H7-1 (×3) → H7-2 (×compagnon) → H7-3 question → H7-4a / H7-4b → H7-5 (×3) → Fin
 
@@ -18,12 +19,12 @@ NARRATEUR : Il était une fois, dans le grand château tout rose, la Princesse R
 ROMY : « Doudou Renard ? Où es-tu, Doudou Renard ? »
 
 **Version Alix**
-NARRATEUR : Il était une fois, dans le grand château tout rose, la Princesse Alix qui sautait de son lit. Elle se retourne pour prendre son doudou, {DOUDOU_ALIX}… Mais il n'est plus là !
-ALIX : « Doudou ! Je vais te trouver ! Hop, hop, hop ! »
+NARRATEUR : Il était une fois, dans le grand château tout bleu, la Princesse Alix qui sautait de son lit. Elle se retourne pour prendre Doudou Lapin, son petit lapin tout doux… Mais il n'est plus là !
+ALIX : « Doudou Lapin ! Je vais te trouver ! Hop, hop, hop ! »
 
 **Version les deux**
-NARRATEUR : Il était une fois, dans le grand château tout rose, deux princesses qui se réveillaient. Mais le doudou d'Alix, {DOUDOU_ALIX}, avait disparu !
-ALIX : « Mon doudou ! »
+NARRATEUR : Il était une fois, dans le grand château rose et bleu, deux princesses qui se réveillaient. Mais Doudou Lapin, le doudou d'Alix, avait disparu !
+ALIX : « Doudou Lapin ! »
 ROMY : « Ne t'inquiète pas, Alix. On va le trouver ensemble ! »
 
 ### H7-2 – Le compagnon cherche aussi [×compagnon]

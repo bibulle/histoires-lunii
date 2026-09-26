@@ -4,6 +4,7 @@
 - Compagnons : Paillette / Grumo / Tata Bêtise
 - Choix : derrière le grand rocher ou au fond, dans les algues
 - Voix : Narrateur, Romy, Alix, Pipou, Maman dauphin, Papic, Mathéo, le crabe, le poisson rouge + le compagnon
+- Narrateur : Mamily
 
 Déroulé : H6-1 (×3) → H6-2 → H6-3 question → H6-4a / H6-4b → H6-5 (×compagnon) → H6-6 (×3) → Fin
 

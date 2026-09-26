@@ -36,7 +36,7 @@ def inline(t):
 def story(path):
     lines = path.read_text(encoding="utf-8").splitlines()
     sid = path.stem.split("-")[0].lower()
-    out, meta, title = [], [], ""
+    out, meta, title, narr = [], [], "", ""
     for ln in lines:
         s = ln.strip()
         if not s or s == "---":
@@ -44,6 +44,8 @@ def story(path):
         if s.startswith("# "):
             title = s[2:]
         elif s.startswith("- ") and not out:
+            if s.startswith("- Narrateur : "):
+                narr = s[len("- Narrateur : "):].strip()
             meta.append(f"<li>{inline(s[2:])}</li>")
         elif s.startswith("Déroulé"):
             out.append(f'<p class="flow">{inline(s)}</p>')
@@ -67,6 +69,8 @@ def story(path):
             if m and m.group(1).strip() in ROLES:
                 key = m.group(1).strip()
                 label, color = ROLES[key]
+                if key == "NARRATEUR" and narr:
+                    label = f"Narrateur ({narr})"
                 how = f' <em>{html.escape(m.group(2).strip())}</em>' if m.group(2) else ""
                 out.append(f'<div class="line" data-role="{key}" style="--rc:var(--{color})">'
                            f'<span class="who">{label}{how}</span><span class="say">{inline(m.group(3))}</span></div>')
@@ -74,7 +78,7 @@ def story(path):
                 out.append(f"<p>{inline(s)}</p>")
     num = sid.upper()
     short = title.split("–", 1)[-1].strip()
-    body = (f'<article class="story" id="{sid}"><header><p class="num">{num}</p><h2>{html.escape(short)}</h2>'
+    body = (f'<article class="story" id="{sid}" data-narr="{narr.upper()}"><header><p class="num">{num}</p><h2>{html.escape(short)}</h2>'
             f'<ul class="meta">{"".join(meta)}</ul></header>{"".join(out)}'
             f'<p class="top"><a href="#sommaire">Retour au sommaire</a></p></article>')
     return sid, num, short, body

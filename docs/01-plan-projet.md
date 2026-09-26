@@ -40,6 +40,12 @@ Accueil
 La Lunii n'a pas de « mémoire » : pour qu'une fin dise « Romy » après un choix, le graphe doit garder des chemins séparés par héroïne et compagnon (3 × 3 = 9 chemins par histoire). Les **fichiers audio sont réutilisés** dans ces chemins : on n'enregistre pas plus, c'est seulement le graphe STUdio qui est plus gros.
 Idée : comme les scripts sont codés, on pourra **générer le pack automatiquement** (story.json STUdio) avec un petit script Python au lieu de tout cliquer à la main.
 
+## Le château
+Le château est **rose pour Romy**, **bleu pour Alix** et **rose et bleu** quand les deux princesses partent ensemble. La couleur n'est dite que dans les segments [×3] ; les segments communs parlent du « château des princesses ».
+
+## Narrateur
+Papic et Mamily racontent à tour de rôle : Papic pour H1, H4, H7, H9 ; Mamily pour H2, H3, H5, H6, H8. Les menus de la Lunii sont dits à deux voix.
+
 ## Textes des menus (communs)
 - **Accueil** : « Bienvenue au château des Princesses ! Tourne la molette pour choisir, et appuie sur le bouton pour commencer ! »
 - **Menu 1** : « Qui part à l'aventure aujourd'hui ? »

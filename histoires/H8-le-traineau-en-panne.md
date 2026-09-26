@@ -4,6 +4,7 @@
 - Compagnons : Paillette / Grumo / Tata Bêtise (c'est le compagnon qui fait décoller le traîneau)
 - Choix : carottes du jardin ou biscuits de Mamily pour les rennes
 - Voix : Narrateur, Romy, Alix, Père Noël, Papic, Mamily, Mathéo + le compagnon
+- Narrateur : Mamily
 - Idée : une vraie petite clochette sous le sapin le matin de Noël.
 
 Déroulé : H8-1 (×3) → H8-2 → H8-3 question → H8-4a / H8-4b → H8-5 (×compagnon) → H8-6 (×3) → Fin

@@ -4,6 +4,7 @@
 - Compagnons : Paillette / Grumo / Papic
 - Choix : la chambre ou la salle de bain
 - Voix : Narrateur, Romy, Alix, Tata Bêtise, Mathéo + le compagnon
+- Narrateur : Mamily
 
 Déroulé : H5-1 (×3) → H5-2 → H5-3 question → H5-4a / H5-4b → H5-5 (×compagnon) → H5-6 (×3) → Fin
 
@@ -12,7 +13,7 @@ Déroulé : H5-1 (×3) → H5-2 → H5-3 question → H5-4a / H5-4b → H5-5 (×
 ### H5-1 – Un drôle de réveil [×3]
 
 *(Début commun aux 3 versions)*
-NARRATEUR : Il était une fois, un matin, dans le grand château tout rose… il se passait quelque chose de très bizarre. Les chaussons étaient accrochés au plafond !
+NARRATEUR : Il était une fois, un matin, dans le grand château des princesses… il se passait quelque chose de très bizarre. Les chaussons étaient accrochés au plafond !
 
 **Version Romy**
 NARRATEUR : La Princesse Romy ouvre les yeux.

@@ -4,7 +4,7 @@
 
 | Personnage | Caractère | Voix |
 |---|---|---|
-| Narrateur | Le conteur | Calme et chaleureuse (Papic ou Mamily en « voix de conteur ») |
+| Narrateur | Le conteur : Papic et Mamily à tour de rôle (voir le sommaire) | Calme et chaleureuse, « voix de conteur » |
 | Princesse Romy | La grande (3 ans), très fière d'aller à l'école, montre l'exemple | Claire, un peu solennelle |
 | Princesse Alix | Garçon manqué (2 ans), fonce toujours | Pétillante, rapide |
 | Prince Mathéo | Le bébé prince (6 mois), ses bruits de bébé déclenchent la magie | Gazouillis, rires (idéalement ses vrais enregistrements) |
