@@ -4,7 +4,8 @@
 - Compagnons : Paillette / Grumo / Tata Bêtise
 - Choix : sous le lit ou dans la baignoire
 - Voix : Narrateur, Romy, Alix, Noisette l'écureuil, Mathéo + le compagnon
-- **À compléter** : {DOUDOU_ROMY} et {DOUDOU_ALIX} = les vrais noms des doudous.
+- Doudou de Romy : Doudou Renard.
+- **À compléter** : {DOUDOU_ALIX} = le vrai nom du doudou d'Alix.
 
 Déroulé : H7-1 (×3) → H7-2 (×compagnon) → H7-3 question → H7-4a / H7-4b → H7-5 (×3) → Fin
 
@@ -13,8 +14,8 @@ Déroulé : H7-1 (×3) → H7-2 (×compagnon) → H7-3 question → H7-4a / H7-4
 ### H7-1 – Où est le doudou ? [×3]
 
 **Version Romy**
-NARRATEUR : Il était une fois, dans le grand château tout rose, la Princesse Romy qui se réveillait. Elle tend les bras pour faire un câlin à son doudou, {DOUDOU_ROMY}… Mais le lit est vide !
-ROMY : « Doudou ? Où es-tu, doudou ? »
+NARRATEUR : Il était une fois, dans le grand château tout rose, la Princesse Romy qui se réveillait. Elle tend les bras pour faire un câlin à Doudou Renard, son petit renard tout doux… Mais le lit est vide !
+ROMY : « Doudou Renard ? Où es-tu, Doudou Renard ? »
 
 **Version Alix**
 NARRATEUR : Il était une fois, dans le grand château tout rose, la Princesse Alix qui sautait de son lit. Elle se retourne pour prendre son doudou, {DOUDOU_ALIX}… Mais il n'est plus là !
@@ -60,7 +61,7 @@ NARRATEUR : Mathéo montre le grand arbre avec son petit doigt. Tout le monde l�
 NOISETTE : « [sigh] Pardon… Je m'appelle Noisette. J'avais froid, cette nuit… et ce doudou est si doux… »
 
 **Version Romy**
-ROMY : « Je comprends, Noisette. Mais ce doudou, c'est le mien. Tu sais quoi ? Je vais te donner une petite couverture, et tu pourras venir lui faire des câlins quand tu veux ! »
+ROMY : « Je comprends, Noisette. Mais Doudou Renard, c'est mon doudou à moi. Tu sais quoi ? Je vais te donner une petite couverture, et tu pourras venir lui faire des câlins quand tu veux ! »
 
 **Version Alix**
 ALIX : « Je grimpe le chercher ! »

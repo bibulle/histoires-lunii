@@ -16,7 +16,7 @@ Déroulé : H9-1 (×3) → H9-2 → H9-3 (×3)
 NARRATEUR : Il était une fois, le soir, dans le grand château tout rose. Le soleil était parti se coucher, et la lune se levait tout doucement.
 
 **Version Romy**
-NARRATEUR : La Princesse Romy était dans son lit, avec son doudou. Mais elle avait encore les yeux tout ouverts.
+NARRATEUR : La Princesse Romy était dans son lit, avec Doudou Renard. Mais elle avait encore les yeux tout ouverts.
 
 **Version Alix**
 NARRATEUR : La Princesse Alix était dans son lit, avec son doudou. Elle avait beaucoup couru, toute la journée… mais elle avait encore les yeux tout ouverts.
@@ -49,7 +49,7 @@ NARRATEUR : Par la fenêtre, on retrouve le lit tout chaud. Mamily remonte la co
 MAMILY (tout bas) : « Bonne nuit, mes caillettes… »
 
 **Version Romy**
-NARRATEUR : La Princesse Romy serre son doudou. Ses yeux se ferment… tout doucement…
+NARRATEUR : La Princesse Romy serre Doudou Renard tout contre elle. Ses yeux se ferment… tout doucement…
 
 **Version Alix**
 NARRATEUR : La Princesse Alix serre son doudou. Ses yeux se ferment… tout doucement…

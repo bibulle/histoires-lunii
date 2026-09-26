@@ -17,7 +17,8 @@ Scripts complets dans le dossier `histoires/`. Chaque histoire existe en version
 Conseil : l'histoire 8 à écouter en premier le soir du réveillon. On peut mettre une vraie petite clochette sous le sapin, pour faire écho à la fin de l'histoire.
 
 ## À valider / compléter
-- [ ] Le nom des doudous de Romy et d'Alix (H7, remplacer {DOUDOU}).
+- [x] Doudou de Romy : Doudou Renard (H7, H9).
+- [ ] Le nom du doudou d'Alix (H7, remplacer {DOUDOU_ALIX}).
 - [ ] Le château est « tout rose » dans les histoires : couleur à garder ?
 - [ ] Romy va à l'école : faut-il des détails réels (nom de la maîtresse, du copain…) ?
 - [ ] Qui fait le narrateur ?
