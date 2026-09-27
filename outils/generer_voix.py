@@ -123,14 +123,20 @@ def trouver_references(sources):
     return refs
 
 
+def cmp_nom(t):
+    """Forme de comparaison des noms : minuscules, sans accents."""
+    return sans_accents(t).lower()
+
+
 def reference_pour(voix, cfg, refs):
     """Cherche l'échantillon de la voix : nom exact, Personnage-Interprete, puis voix de secours."""
     for cle in [voix] + cfg.get("secours", {}).get(voix, []):
-        nom = nom_propre(cle)
-        if nom in refs:
-            return nom, refs[nom]
+        nom = cmp_nom(nom_propre(cle))
+        for stem, r in refs.items():  # nom exact (sans tenir compte des majuscules/accents)
+            if cmp_nom(stem) == nom:
+                return stem, r
         for stem, r in refs.items():  # Personnage-Interprete (ex. Grumo-Papic)
-            if stem.startswith(nom + "-"):
+            if cmp_nom(stem).startswith(nom + "-"):
                 return stem, r
     return None, None
 
@@ -219,7 +225,7 @@ def resume(taches):
     if not vus:
         return
     print("\nRéglages utilisés (* = différent du défaut) :")
-    print(f"  {'voix':<18}{'référence':<24}{'étapes':>7}{'guidance':>10}{'vitesse':>9}{'tempér.':>9}  seed      fichiers")
+    print(f"  {'voix':<22}{'référence':<24}{'étapes':>7}{'guidance':>10}{'vitesse':>9}{'tempér.':>9}  seed      fichiers")
     for (v, regl, ref_nom), (n, seeds) in vus.items():
         regl = dict(regl)
         def val(k):
@@ -227,7 +233,7 @@ def resume(taches):
             return f"{(DEFAUTS[k] if x is None else x):g}" + ("*" if x is not None and float(x) != DEFAUTS[k] else " ")
         s = ",".join(str(x) for x in sorted(seeds)[:3]) + ("…" if len(seeds) > 3 else "")
         s += "*" if seeds != {DEFAUTS["seed"]} else ""
-        print(f"  {v:<18}{(ref_nom or 'voix décrite'):<24}{val('etapes'):>7}{val('guidance'):>10}"
+        print(f"  {v:<22}{(ref_nom or 'voix décrite'):<24}{val('etapes'):>7}{val('guidance'):>10}"
               f"{val('vitesse'):>9}{val('temperature'):>9}  {s:<9} {n:>4}")
     print()
 
@@ -262,8 +268,16 @@ def main():
 
     taches, manquantes = [], {}
     if a.essais:
+        voix_essai = []  # (nom affiché, échantillon ou None, clé dans voix.json)
         for stem, ref in refs.items():
-            cle = next((k for k in cfg["voix"] if nom_propre(k) == stem or stem.startswith(nom_propre(k) + "-")), None)
+            cle = next((k for k in cfg["voix"] if cmp_nom(nom_propre(k)) == cmp_nom(stem)), None) or \
+                next((k for k in cfg["voix"] if cmp_nom(stem).startswith(cmp_nom(nom_propre(k)) + "-")), None)
+            voix_essai.append((stem, ref, cle))
+        if sans_ref == "instruct":  # voix sans échantillon (ni voix de secours) : voix décrite par « instruct »
+            for cle, r in cfg["voix"].items():
+                if not r.get("ignorer") and r.get("instruct") and not reference_pour(cle, cfg, refs)[1]:
+                    voix_essai.append((nom_propre(cle) + "-decrite", None, cle))
+        for stem, ref, cle in voix_essai:
             if roles and not ({stem.upper(), (cle or "").upper()} & roles):
                 continue
             base = cfg["voix"].get(cle, {})
@@ -288,7 +302,7 @@ def main():
             for p in range(1, prises + 1):
                 nom = f"{it['segment']}_{it['n']:02d}_{it['qui']}_omnivoice{p}.wav"
                 taches.append((it["texte"], ref, reglage, reglage.get("seed", 1234) + p - 1,
-                               dossier_prises(audio, it["hid"]) / nom, nom_ref or f"{it['voix']} (décrite)"))
+                               dossier_prises(audio, it["hid"]) / nom, nom_ref or nom_propre(it['voix']) + "-decrite"))
 
     if manquantes:
         print(f"Sans échantillon dans Sources ({'maquette voix décrite' if sans_ref == 'instruct' else 'non générées'}) : "
