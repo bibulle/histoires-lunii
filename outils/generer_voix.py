@@ -244,9 +244,11 @@ def main():
             cle = next((k for k in cfg["voix"] if nom_propre(k) == stem or stem.startswith(nom_propre(k) + "-")), None)
             if roles and not ({stem.upper(), (cle or "").upper()} & roles):
                 continue
-            reglage = regler(cfg["voix"].get(cle, {}), a)
+            base = cfg["voix"].get(cle, {})
+            reglage = regler(base, a)
+            # Dans le nom : seulement ce qui diffère de voix.json (donc ce qui a été forcé en ligne de commande)
             suffixe = "".join(f"_{k}{reglage[k]:g}" for k in DEFAUTS
-                              if k in reglage and float(reglage[k]) != DEFAUTS[k])
+                              if getattr(a, k) is not None and float(reglage[k]) != float(base.get(k, DEFAUTS[k])))
             f = audio / "0 – À trier (dépôt)" / "essais-omnivoice" / f"Essai_{stem}{suffixe}_omnivoice1.wav"
             taches.append((cfg["phrase_essai"], ref, reglage, reglage.get("seed", 1234), f, stem))
     else:
