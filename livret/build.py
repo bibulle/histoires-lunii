@@ -2,7 +2,11 @@
 """Génère livret/livret.html (livret famille) à partir des fichiers Markdown du dépôt.
 Usage : python3 livret/build.py
 """
-import html, re, subprocess, pathlib, datetime
+import html, json, os, re, subprocess, pathlib, datetime, sys, urllib.parse
+
+ROOT_OUTILS = pathlib.Path(__file__).resolve().parent.parent / "outils"
+sys.path.insert(0, str(ROOT_OUTILS))
+from generer_voix import nom_propre, nettoyer, VERSIONS, SCENE_RE, VERSION_RE, BLOC_RE  # même numérotation que la génération
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "livret" / "livret.html"
@@ -25,6 +29,46 @@ OV = {  # balises OmniVoice -> libellé affiché dans le livret
 }
 OV_RE = re.compile(r"\[(" + "|".join(map(re.escape, OV)) + r")\]\s?")
 
+def index_audio():
+    """{'H1-1-Romy_04_Paillette': [nom de fichier, ...]} pour toutes les prises présentes dans le Drive."""
+    try:
+        cfg = json.loads((ROOT_OUTILS / "voix.json").read_text(encoding="utf-8"))
+        audio = pathlib.Path(os.environ.get("LIVRET_AUDIO") or cfg["drive_audio"]).expanduser()
+    except Exception:
+        return {}
+    idx = {}
+    for d in sorted(audio.glob("H* */1 – Prises")) if audio.is_dir() else []:
+        for f in sorted(d.iterdir()):
+            m = re.match(r"^(H\d+-\d+[a-z]?(?:-[^_]+)?_\d\d_[^_]+)_(.+)\.(wav|mp3|m4a)$", f.name)
+            if m:
+                idx.setdefault(m.group(1), []).append(f)
+    return idx
+
+AUDIO = index_audio()
+
+def drive_id(f):
+    """Identifiant Google Drive du fichier (attribut posé par Google Drive pour ordinateur), sinon None."""
+    try:
+        out = subprocess.run(["xattr", "-p", "com.google.drivefs.item-id#S", str(f)], capture_output=True, text=True)
+        return out.stdout.strip() or None
+    except Exception:
+        return None
+
+def audio_links(cle):
+    files = AUDIO.get(cle, [])
+    if not files:
+        return ""
+    liens = []
+    for f in files:
+        prise = f.stem[len(cle) + 1:]
+        lab = prise.replace("omnivoice", "IA ").replace("prise", "voix ").replace("_OK", " ✓")
+        fid = drive_id(f)
+        url = (f"https://drive.google.com/file/d/{fid}/view" if fid
+               else "https://drive.google.com/drive/search?q=" + urllib.parse.quote(f.stem))
+        ok = " ok" if prise.endswith("_OK") else ""
+        liens.append(f'<a class="play{ok}" href="{url}" target="_blank" rel="noopener" title="{html.escape(f.name)}">▶ {html.escape(lab)}</a>')
+    return '<span class="audio">' + "".join(liens) + "</span>"
+
 def inline(t):
     t = html.escape(t, quote=False)
     t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
@@ -37,6 +81,7 @@ def story(path):
     lines = path.read_text(encoding="utf-8").splitlines()
     sid = path.stem.split("-")[0].lower()
     out, meta, title, narr = [], [], "", ""
+    scene, variante, compteur, nb, nb_audio = None, None, {}, 0, 0
     for ln in lines:
         s = ln.strip()
         if not s or s == "---":
@@ -50,6 +95,8 @@ def story(path):
         elif s.startswith("Déroulé"):
             out.append(f'<p class="flow">{inline(s)}</p>')
         elif s.startswith("### "):
+            m = SCENE_RE.match(s)
+            scene, variante = (m.group(1) if m else None), None
             h = s[4:]
             m = TAG_RE.search(h)
             tag = ""
@@ -59,8 +106,11 @@ def story(path):
                 h = TAG_RE.sub("", h).strip()
             out.append(f"<h4>{inline(h)} {tag}</h4>")
         elif s.startswith("**") and s.endswith("**"):
+            v = s[2:-2].strip()
+            variante = VERSIONS.get(v.lower()) or nom_propre(v.upper())
             out.append(f'<p class="variant">{inline(s[2:-2])}</p>')
         elif s.startswith("*(") and s.endswith(")*"):
+            variante = "commun"
             out.append(f'<p class="note">{inline(s[2:-2])}</p>')
         elif s.startswith("[") and s.endswith("]") and "]" not in s[1:-1]:
             out.append(f'<p class="sfxline">{inline(s)}</p>')
@@ -70,12 +120,22 @@ def story(path):
                 key = m.group(1).strip()
                 label, color = ROLES[key]
                 if key == "NARRATEUR" and narr:
-                    label = f"Narrateur ({narr})"
+                    label = f"Narrateur · {narr}"
+                    color = {"Papic": "papic", "Mamily": "mamily"}.get(narr, color)
+                son = ""
+                if scene and nettoyer(m.group(3)):
+                    seg = scene + (f"-{variante}" if variante else "")
+                    compteur[seg] = compteur.get(seg, 0) + 1
+                    son = audio_links(f"{seg}_{compteur[seg]:02d}_{nom_propre(key)}")
+                    nb += 1
+                    nb_audio += bool(son)
                 how = f' <em>{html.escape(m.group(2).strip())}</em>' if m.group(2) else ""
                 out.append(f'<div class="line" data-role="{key}" style="--rc:var(--{color})">'
-                           f'<span class="who">{label}{how}</span><span class="say">{inline(m.group(3))}</span></div>')
+                           f'<span class="who">{label}{how}</span><span class="say">{inline(m.group(3))}{son}</span></div>')
             else:
                 out.append(f"<p>{inline(s)}</p>")
+    if nb_audio:
+        meta.append(f'<li class="avancement">Audio : {nb_audio} répliques sur {nb} déjà générées ou enregistrées</li>')
     num = sid.upper()
     short = title.split("–", 1)[-1].strip()
     body = (f'<article class="story" id="{sid}" data-narr="{narr.upper()}"><header><p class="num">{num}</p><h2>{html.escape(short)}</h2>'
@@ -91,7 +151,8 @@ def doc(path, anchor):
 
 stories = [story(p) for p in sorted((ROOT / "histoires").glob("H*.md"))]
 toc = "".join(f'<li><a href="#{sid}"><span class="n">{num}</span>{html.escape(t)}</a></li>' for sid, num, t, _ in stories)
-opts = "".join(f'<option value="{k}">{ROLES[k][0]}</option>' for k in FILTER)
+opts = ('<option value="NARRATEUR-PAPIC">Narrateur · Papic</option><option value="NARRATEUR-MAMILY">Narrateur · Mamily</option>'
+        + "".join(f'<option value="{k}">{ROLES[k][0]}</option>' for k in FILTER if k != "NARRATEUR"))
 today = datetime.date.today().strftime("%d/%m/%Y")
 tpl = (ROOT / "livret" / "template.html").read_text(encoding="utf-8")
 page = (tpl.replace("{{TOC}}", toc).replace("{{OPTIONS}}", opts).replace("{{DATE}}", today)

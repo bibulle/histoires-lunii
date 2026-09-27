@@ -4,7 +4,8 @@
 
 | Personnage | Caractère | Voix |
 |---|---|---|
-| Narrateur | Le conteur : Papic et Mamily à tour de rôle (voir le sommaire) | Calme et chaleureuse, « voix de conteur » |
+| Narrateur · Papic | Le conteur de H1, H4, H7, H9 | Calme et chaleureuse, « voix de conteur » (échantillon Narrateur-Papic) |
+| Narrateur · Mamily | La conteuse de H2, H3, H5, H6, H8 | Douce, « voix de conteuse » (échantillon Narrateur-Mamily) |
 | Princesse Romy | La grande (3 ans), très fière d'aller à l'école, montre l'exemple | Claire, un peu solennelle |
 | Princesse Alix | Garçon manqué (2 ans), fonce toujours | Pétillante, rapide |
 | Prince Mathéo | Le bébé prince (6 mois), ses bruits de bébé déclenchent la magie | Gazouillis, rires (idéalement ses vrais enregistrements) |
@@ -51,7 +52,13 @@ Romy et Alix sont très complices : dans les versions « les deux princesses »,
 
 Dans les scripts, les **balises en anglais** placées dans les répliques (`[laughter]`, `[sigh]`…) sont des balises OmniVoice (modèle officiel `k2-fsa/OmniVoice`). Les **bruitages en français** (`[bulles]`, `[clochette]`…) sont à ajouter dans Audacity : ne jamais les coller dans OmniVoice.
 
-**Mode d'emploi** : copier le texte entre « » (balises comprises) dans OmniVoice, langue *French*. Pour les voix jouées par la famille, la balise sert simplement d'indication de jeu.
+**Mode d'emploi** : la génération se fait sur le Mac avec les scripts du dossier `outils/` (voir `outils/generer_voix.py`) :
+- `sh outils/essais.sh` : une phrase test par voix, dans le Drive « 0 – À trier (dépôt)/essais-omnivoice » ;
+- `sh outils/nuit.sh` : toutes les répliques qui manquent, rangées dans « H… / 1 – Prises » (`H1-1-Romy_04_Paillette_omnivoice1.wav`).
+
+Les voix sont **clonées** depuis les échantillons du Drive « Audio (enregistrements)/4 - Sources » (`Personnage-Interprete.wav` + `.txt` avec le texte exact). Le narrateur a deux voix distinctes, **Narrateur-Papic** et **Narrateur-Mamily**, séparées des personnages Papic et Mamily. Une voix sans échantillon est générée en « voix décrite » (champ *instruct* de `outils/voix.json`), où se règlent aussi seed, guidance, étapes, vitesse et température. Un fichier déjà généré n'est jamais refait : pour le refaire, le supprimer. Dans le livret, les boutons ▶ à côté des répliques ouvrent les audios déjà faits dans le Drive.
+
+Pour les voix jouées par la famille, la balise sert simplement d'indication de jeu.
 
 | Balise | Effet | Utilisée pour |
 |---|---|---|
@@ -72,7 +79,7 @@ Autres balises existantes, pas utilisées pour l'instant : `[question-ah]`, `[qu
 
 | Personnage | instruct |
 |---|---|
-| Narrateur (si pas de voix famille) | `male, middle-aged, low pitch` |
+| Narrateur · Papic / Narrateur · Mamily (si pas d'échantillon) | `male, elderly, low pitch` / `female, elderly, moderate pitch` |
 | Romy | `female, child, moderate pitch` |
 | Alix | `female, child, high pitch` |
 | Paillette | `female, child, very high pitch` (+ `whisper` dans H9) |

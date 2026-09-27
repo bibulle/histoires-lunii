@@ -64,6 +64,11 @@ h2.sec{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--
 .who{font-weight:700;color:var(--rc);font-size:15px;padding-top:1px}
 .who em{font-weight:400;font-size:13px;color:var(--muted)}
 .line.me{background:var(--me-bg)}
+.audio{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:6px;vertical-align:1px}
+.play{font-size:12px;font-weight:700;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:0 7px;white-space:nowrap;background:var(--card)}
+.play:hover{color:var(--accent);border-color:var(--accent)}
+.play.ok{color:var(--tata);border-color:var(--tata)}
+.avancement{color:var(--tata)}
 .line.me .say{font-weight:700}
 mark.todo{background:var(--accent-soft);color:var(--accent);padding:0 4px;border-radius:4px;font-weight:700}
 .top{margin-top:20px;font-size:14px}
@@ -81,7 +86,7 @@ footer{margin-top:56px;color:var(--muted);font-size:14px}
   <header class="mast">
     <p class="kicker">Livret de la famille · Noël 2026</p>
     <h1>Les Aventures des Princesses <span class="star">✦</span></h1>
-    <p>Les histoires de Romy, Alix et Mathéo pour la Lunii. Choisis ton rôle ci-dessous : tes répliques s'allument dans toutes les histoires.</p>
+    <p>Les histoires de Romy, Alix et Mathéo pour la Lunii. Choisis ton rôle ci-dessous : tes répliques s'allument dans toutes les histoires. Les boutons ▶ ouvrent les audios déjà faits dans le Drive (IA = voix générée, voix = vraie voix, ✓ = prise retenue).</p>
   </header>
   <div class="bar">
     <label for="role">Mes répliques</label>
@@ -102,7 +107,7 @@ footer{margin-top:56px;color:var(--muted);font-size:14px}
   function apply(v){
     var n=0;
     document.querySelectorAll('.line').forEach(function(el){
-      var on = v && (el.dataset.role===v || (el.dataset.role==='NARRATEUR' && el.closest('.story') && el.closest('.story').dataset.narr===v) || (v==='ROMY'||v==='ALIX') && el.dataset.role==='ROMY ET ALIX');
+      var on = v && (el.dataset.role===v || (el.dataset.role==='NARRATEUR' && el.closest('.story') && (el.closest('.story').dataset.narr===v || 'NARRATEUR-'+el.closest('.story').dataset.narr===v)) || (v==='ROMY'||v==='ALIX') && el.dataset.role==='ROMY ET ALIX');
       el.classList.toggle('me', !!on); if(on) n++;
     });
     count.textContent = v ? n+' répliques' : '';
