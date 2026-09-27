@@ -24,7 +24,7 @@
     "MAMILY":           {"instruct": "female, elderly, moderate pitch"},
     "TATA BÊTISE":      {"instruct": "female, young adult, high pitch"},
     "PAILLETTE":        {"instruct": "female, child, very high pitch"},
-    "GRUMO":            {"instruct": "male, middle-aged, very low pitch"},
+    "GRUMO":            {"instruct": "male, child, high pitch"},
     "PÈRE NOËL":        {"instruct": "male, elderly, very low pitch"},
     "PIPOU":            {"instruct": "male, child, very high pitch"},
     "MAMAN DAUPHIN":    {"instruct": "female, middle-aged, high pitch"},
