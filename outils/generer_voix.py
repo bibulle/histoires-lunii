@@ -19,7 +19,17 @@ Sortie (nomenclature du Drive) : « Audio (enregistrements)/H1 – …/1 – Pri
 Un fichier déjà généré n'est pas refait : on peut relancer après une coupure,
 ou après avoir ajouté une nouvelle voix dans Sources (seules les répliques manquantes sont faites).
 """
-import argparse, json, pathlib, re, sys, time, unicodedata
+import argparse, json, logging, os, pathlib, re, sys, time, unicodedata, warnings
+
+# Pas de messages parasites des bibliothèques (dépréciations, ffmpeg, transformers…)
+warnings.filterwarnings("ignore")
+os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
+logging.disable(logging.WARNING)
+
+# Valeurs par défaut d'OmniVoice (affichées dans le résumé, et absentes du nom des essais)
+DEFAUTS = {"etapes": 32, "guidance": 2.0, "vitesse": 1.0, "temperature": 0.0, "seed": 1234}
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "outils" / "voix.json"
@@ -176,6 +186,30 @@ def regler(reglage, a):
     return r
 
 
+def resume(taches):
+    """Tableau des réglages réellement utilisés, par voix (seulement celles qui vont être générées)."""
+    vus = {}
+    for _, ref, reglage, seed, _, v in taches:
+        cle = (v, tuple(sorted((k, reglage.get(k)) for k in DEFAUTS if k != "seed")), ref and ref[0].name)
+        vus.setdefault(cle, [0, set()])
+        vus[cle][0] += 1
+        vus[cle][1].add(seed)
+    if not vus:
+        return
+    print("\nRéglages utilisés (* = différent du défaut) :")
+    print(f"  {'voix':<18}{'référence':<24}{'étapes':>7}{'guidance':>10}{'vitesse':>9}{'tempér.':>9}  seed      fichiers")
+    for (v, regl, ref_nom), (n, seeds) in vus.items():
+        regl = dict(regl)
+        def val(k):
+            x = regl.get(k)
+            return f"{(DEFAUTS[k] if x is None else x):g}" + ("*" if x is not None and float(x) != DEFAUTS[k] else " ")
+        s = ",".join(str(x) for x in sorted(seeds)[:3]) + ("…" if len(seeds) > 3 else "")
+        s += "*" if seeds != {DEFAUTS["seed"]} else ""
+        print(f"  {v:<18}{(ref_nom or 'voix décrite'):<24}{val('etapes'):>7}{val('guidance'):>10}"
+              f"{val('vitesse'):>9}{val('temperature'):>9}  {s:<9} {n:>4}")
+    print()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--histoire", nargs="*", help="ex. H1 H3 (par défaut : toutes)")
@@ -211,8 +245,8 @@ def main():
             if roles and not ({stem.upper(), (cle or "").upper()} & roles):
                 continue
             reglage = regler(cfg["voix"].get(cle, {}), a)
-            suffixe = "".join(f"_{k}{a_val}" for k, a_val in (("etapes", a.etapes), ("guidance", a.guidance),
-                              ("vitesse", a.vitesse), ("temperature", a.temperature), ("seed", a.seed)) if a_val is not None)
+            suffixe = "".join(f"_{k}{reglage[k]:g}" for k in DEFAUTS
+                              if k in reglage and float(reglage[k]) != DEFAUTS[k])
             f = audio / "0 – À trier (dépôt)" / "essais-omnivoice" / f"Essai_{stem}{suffixe}_omnivoice1.wav"
             taches.append((cfg["phrase_essai"], ref, reglage, reglage.get("seed", 1234), f, stem))
     else:
@@ -236,6 +270,7 @@ def main():
         print(f"Sans échantillon dans Sources ({'maquette voix décrite' if sans_ref == 'instruct' else 'non générées'}) : "
               + ", ".join(f"{k} ({v})" for k, v in sorted(manquantes.items())))
     a_faire = [t for t in taches if a.refaire or not t[4].exists()]
+    resume(a_faire)
     print(f"{len(taches)} fichiers prévus, {len(a_faire)} à générer.")
     if a.liste:
         for texte, _, _, _, f, v in a_faire:
