@@ -16,6 +16,8 @@ Voix de référence : Drive « Audio (enregistrements)/4 - Sources », deux fich
 Sortie (nomenclature du Drive) : « Audio (enregistrements)/H1 – …/1 – Prises/ »
   H1-1-Romy_04_Paillette_omnivoice1.wav  = segment, n° de réplique dans le segment, qui parle, prise
   Les parties « début/fin commune » sont dans H1-6-commun_…
+  Réplique à plusieurs voix (« ensemble » dans voix.json, ex. ROMY ET ALIX) : un fichier par voix,
+  H1-6_03_Romy&Alix-Romy_omnivoice1.wav + H1-6_03_Romy&Alix-Alix_omnivoice1.wav, à superposer dans Audacity.
 Un fichier déjà généré n'est pas refait : on peut relancer après une coupure,
 ou après avoir ajouté une nouvelle voix dans Sources (seules les répliques manquantes sont faites).
 """
@@ -290,9 +292,16 @@ def main():
             f = audio / "0 – À trier (dépôt)" / "essais-omnivoice" / f"Essai_{stem}{suffixe}_omnivoice1.wav"
             taches.append((cfg["phrase_essai"], ref, reglage, reglage.get("seed", 1234), f, stem))
     else:
+        items = []
         for it in lire_histoires(filtre):
             if roles and it["role"] not in roles:
                 continue
+            # Réplique à plusieurs voix (ex. ROMY ET ALIX) : une prise par voix, à superposer au montage
+            for v in cfg.get("ensemble", {}).get(it["voix"], []):
+                items.append(dict(it, voix=v, qui=f"{it['qui']}-{nom_propre(v)}"))
+            if it["voix"] not in cfg.get("ensemble", {}):
+                items.append(it)
+        for it in items:
             reglage = regler(cfg["voix"].get(it["voix"], {}), a)
             if reglage.get("ignorer"):
                 continue

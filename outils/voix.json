@@ -1,10 +1,13 @@
 {
-  "_aide": "Les voix viennent des échantillons du Drive (dossier 'sources'). 'secours' : voix de référence à utiliser quand un rôle n'a pas son propre échantillon. 'sans_reference' : 'ignorer' (on ne génère pas ce rôle tant qu'il n'a pas d'échantillon) ou 'instruct' (maquette avec la voix décrite ci-dessous). Par rôle : 'ignorer': true pour ne jamais le générer (ex. Mathéo, vrais gazouillis), 'vitesse' (0.9 = plus lent), 'etapes' (32 par défaut, 16 = 2x plus rapide), 'seed' (autre tirage).",
+  "_aide": "Les voix viennent des échantillons du Drive (dossier 'sources'). 'ensemble' : répliques dites à plusieurs, générées une fois par voix (fichiers …-Romy et …-Alix à superposer). 'secours' : voix de référence à utiliser quand un rôle n'a pas son propre échantillon. 'sans_reference' : 'ignorer' (on ne génère pas ce rôle tant qu'il n'a pas d'échantillon) ou 'instruct' (maquette avec la voix décrite ci-dessous). Par rôle : 'ignorer': true pour ne jamais le générer (ex. Mathéo, vrais gazouillis), 'vitesse' (0.9 = plus lent), 'etapes' (32 par défaut, 16 = 2x plus rapide), 'seed' (autre tirage).",
   "drive_audio": "~/Google Drive/Histoires Lunii – Les Aventures des Princesses/Audio (enregistrements)",
   "sources": "4 - Sources",
   "sans_reference": "instruct",
   "prises": 1,
   "phrase_essai": "Il était une fois, dans un grand château tout rose, une petite licorne qui avait un peu peur. [laughter] Mais pas pour longtemps !",
+  "ensemble": {
+    "ROMY ET ALIX": ["ROMY", "ALIX"]
+  },
   "secours": {
     "ROMY ET ALIX": ["ROMY", "ALIX"],
     "TOUS": ["NARRATEUR-PAPIC", "NARRATEUR-MAMILY"],
