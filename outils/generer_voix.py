@@ -142,7 +142,27 @@ def dossier_prises(audio, hid):
     return audio / "0 – À trier (dépôt)" / hid
 
 
+def modele_en_cache():
+    """Vrai si le modèle (et son tokenizer audio) sont déjà téléchargés dans le cache Hugging Face."""
+    hub = pathlib.Path(os.environ.get("HF_HUB_CACHE") or
+                       pathlib.Path(os.environ.get("HF_HOME", "~/.cache/huggingface")).expanduser() / "hub")
+    def snaps(repo):
+        d = hub / f"models--{repo.replace('/', '--')}" / "snapshots"
+        return [s for s in d.iterdir() if s.is_dir()] if d.is_dir() else []
+    ov = snaps("k2-fsa/OmniVoice")
+    if not ov:
+        return False
+    return any((s / "audio_tokenizer").is_dir() for s in ov) or bool(snaps("eustlb/higgs-audio-v2-tokenizer"))
+
+
 def charger_modele():
+    if modele_en_cache():
+        # Déjà téléchargé : pas de connexion à Hugging Face (ni vérification, ni barres de progression)
+        os.environ["HF_HUB_OFFLINE"] = "1"
+        os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+    else:
+        print("Premier lancement : téléchargement du modèle (quelques Go, une seule fois)…", flush=True)
+    t0 = time.time()
     import torch
     from omnivoice import OmniVoice
     if torch.backends.mps.is_available():
@@ -151,8 +171,10 @@ def charger_modele():
         device, dtype = "cuda:0", torch.float16
     else:
         device, dtype = "cpu", torch.float32
-    print(f"Chargement du modèle sur {device}…", flush=True)
-    return OmniVoice.from_pretrained("k2-fsa/OmniVoice", device_map=device, dtype=dtype), torch
+    print(f"Chargement du modèle en mémoire ({device})…", flush=True)
+    model = OmniVoice.from_pretrained("k2-fsa/OmniVoice", device_map=device, dtype=dtype)
+    print(f"Modèle prêt en {time.time() - t0:.0f} s.\n", flush=True)
+    return model, torch
 
 
 def generer(model, torch, texte, ref, reglage, seed, sortie):
