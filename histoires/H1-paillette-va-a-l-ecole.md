@@ -54,7 +54,7 @@ NARRATEUR : Grumo est un peu enrhumé : au lieu de cracher du feu, il éternue d
 NARRATEUR : Et voilà Tata Bêtise, les cheveux tout en pétard ! Mais… qu'est-ce qu'elle a sur le dos ? Ce n'est pas un cartable… c'est une casserole !
 [clong]
 TATA BÊTISE : « Oups ! Je me suis trompée de cartable ! Encore une bêtise ! [laughter] Hi hi hi ! »
-NARRATEUR : Et Paillette se met à rire avec elle. [laughter]
+NARRATEUR : Et Paillette se met à rire avec elle !! [laughter] ha ha ha !
 
 **Papic**
 [bruits de boîte à outils]
@@ -67,7 +67,8 @@ NARRATEUR : Et hop ! Papic fabrique un porte-manteau tout doré. Paillette est r
 NARRATEUR : Dans la classe, tout le monde s'assoit. Il y a des crayons de toutes les couleurs : du rouge, du bleu, du jaune, du vert… Paillette dessine un arc-en-ciel avec le bout de sa corne.
 [clochette]
 NARRATEUR : Et quand Paillette est contente… elle chante !
-PAILLETTE : « La la laaa ! »
+[boîte à musique]
+PAILLETTE : « Rouge, jaune, vert et bleu, mon arc-en-ciel est merveilleux ! »
 NARRATEUR : Driiiiing ! C'est l'heure de la récré !
 
 ### H1-4 – Question [commun]
