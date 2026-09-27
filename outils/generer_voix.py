@@ -5,7 +5,7 @@ Usage (depuis le dossier histoires-lunii) :
   sh outils/nuit.sh                                   # tout générer (Mac éveillé, journal)
   ~/omnivoice-env/bin/python outils/generer_voix.py --liste        # voir ce qui sera fait, sans générer
   ~/omnivoice-env/bin/python outils/generer_voix.py --histoire H1  # une seule histoire
-  ~/omnivoice-env/bin/python outils/generer_voix.py --essais       # une phrase test par voix de référence
+  sh outils/essais.sh --role ALIX --etapes 64 --guidance 1.5   # essai avec d autres réglages (fichier séparé)
   ~/omnivoice-env/bin/python outils/generer_voix.py --refaire      # régénérer même ce qui existe
 
 Voix de référence : Drive « Audio (enregistrements)/4 - Sources », deux fichiers par voix,
@@ -156,7 +156,8 @@ def generer(model, torch, texte, ref, reglage, seed, sortie):
         kw["voice_clone_prompt"] = CLONES[wav]
     elif reglage.get("instruct"):
         kw["instruct"] = reglage["instruct"]
-    for cle, nom in (("vitesse", "speed"), ("etapes", "num_step"), ("guidance", "guidance_scale")):
+    for cle, nom in (("vitesse", "speed"), ("etapes", "num_step"), ("guidance", "guidance_scale"),
+                     ("temperature", "class_temperature")):
         if cle in reglage:
             kw[nom] = reglage[cle]
     audio = model.generate(**kw)
@@ -164,6 +165,15 @@ def generer(model, torch, texte, ref, reglage, seed, sortie):
     tmp = sortie.with_name(sortie.stem + ".part.wav")
     sf.write(str(tmp), audio[0], model.sampling_rate or 24000)
     tmp.rename(sortie)  # pas de fichier à moitié écrit dans le Drive
+
+
+def regler(reglage, a):
+    """Réglages de voix.json, remplacés par ceux donnés en ligne de commande."""
+    r = dict(reglage)
+    for cle in ("etapes", "guidance", "vitesse", "temperature", "seed"):
+        if getattr(a, cle) is not None:
+            r[cle] = getattr(a, cle)
+    return r
 
 
 def main():
@@ -176,6 +186,11 @@ def main():
     ap.add_argument("--refaire", action="store_true", help="régénérer les fichiers existants")
     ap.add_argument("--sans-reference", choices=["ignorer", "instruct"], default=None,
                     help="voix sans échantillon : ne pas générer (défaut) ou voix décrite (maquette)")
+    ap.add_argument("--etapes", type=int, help="itérations (défaut 32 ; 64 = plus soigné, 2x plus lent)")
+    ap.add_argument("--guidance", type=float, help="fidélité à la voix/au texte (défaut 2.0 ; 1.5 = plus doux, 3 = plus marqué)")
+    ap.add_argument("--vitesse", type=float, help="débit (1.0 ; 0.9 = plus lent)")
+    ap.add_argument("--temperature", type=float, help="variété (défaut 0 ; 0.3-0.7 = plus vivant, moins stable)")
+    ap.add_argument("--seed", type=int, help="tirage aléatoire (défaut 1234) : change-le pour une autre interprétation")
     a = ap.parse_args()
 
     cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
@@ -192,13 +207,19 @@ def main():
     taches, manquantes = [], {}
     if a.essais:
         for stem, ref in refs.items():
-            f = audio / "0 – À trier (dépôt)" / "essais-omnivoice" / f"Essai_{stem}_omnivoice1.wav"
-            taches.append((cfg["phrase_essai"], ref, {}, 1234, f, stem))
+            cle = next((k for k in cfg["voix"] if nom_propre(k) == stem or stem.startswith(nom_propre(k) + "-")), None)
+            if roles and not ({stem.upper(), (cle or "").upper()} & roles):
+                continue
+            reglage = regler(cfg["voix"].get(cle, {}), a)
+            suffixe = "".join(f"_{k}{a_val}" for k, a_val in (("etapes", a.etapes), ("guidance", a.guidance),
+                              ("vitesse", a.vitesse), ("temperature", a.temperature), ("seed", a.seed)) if a_val is not None)
+            f = audio / "0 – À trier (dépôt)" / "essais-omnivoice" / f"Essai_{stem}{suffixe}_omnivoice1.wav"
+            taches.append((cfg["phrase_essai"], ref, reglage, reglage.get("seed", 1234), f, stem))
     else:
         for it in lire_histoires(filtre):
             if roles and it["role"] not in roles:
                 continue
-            reglage = cfg["voix"].get(it["voix"], {})
+            reglage = regler(cfg["voix"].get(it["voix"], {}), a)
             if reglage.get("ignorer"):
                 continue
             nom_ref, ref = reference_pour(it["voix"], cfg, refs)
