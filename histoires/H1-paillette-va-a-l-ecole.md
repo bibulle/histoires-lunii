@@ -69,7 +69,8 @@ NARRATEUR : Dans la classe, tout le monde s'assoit. Il y a des crayons de toutes
 NARRATEUR : Et quand Paillette est contente… elle chante !
 [boîte à musique]
 PAILLETTE : « Rouge, jaune, vert et bleu, mon arc-en-ciel est merveilleux ! »
-NARRATEUR : Driiiiing ! C'est l'heure de la récré !
+[sonnerie d'école]
+NARRATEUR : C'est l'heure de la récré !
 
 ### H1-4 – Question [commun]
 NARRATEUR : À la récré, où est-ce qu'on va jouer ? Sur le grand toboggan… ou dans le bac à sable ? Tourne la molette pour choisir !
