@@ -77,24 +77,79 @@ def inline(t):
     t = re.sub(r"\[([^\]]+)\]", r'<span class="sfx">\1</span>', t)
     return t
 
+SFX_RE = re.compile(r"\[([^\]]+)\]")
+
+def sfx_items(texte):
+    """Bruitages (crochets en français) d'un texte, hors balises OmniVoice et étiquettes de scène."""
+    return [("sfx", m.group(1)) for m in SFX_RE.finditer(texte)
+            if m.group(1) not in OV and not TAG_RE.fullmatch(m.group(0))]
+
+def rendre_section(sec):
+    """Encadre chaque bloc avec le MP3 qu'il sert à monter, puis ajoute l'ordre de montage."""
+    scene, blocs = sec["scene"], [b for b in sec["blocs"] if b["html"]]
+    variantes = [b["var"] for b in blocs if b["kind"] == "variant"]
+    cibles = [f"{scene}-{v}" for v in dict.fromkeys(variantes)] or [scene]
+    html_out = [sec["head"]]
+    for b in blocs:
+        if b["kind"] == "variant":
+            tag, cls = f"🎬 {scene}-{b['var']}.mp3", "bloc"
+        elif variantes:
+            tag, cls = "Commun → à recoller dans " + ", ".join(f"{c}.mp3" for c in cibles), "bloc commun"
+        else:
+            tag, cls = f"🎬 {scene}.mp3", "bloc"
+        html_out.append(f'<div class="{cls}"><span class="bloc-tag">{html.escape(tag)}</span>{"".join(b["html"])}</div>')
+    recap = []
+    for c in cibles:
+        v = c[len(scene) + 1:] if c != scene else None
+        items = [it for b in blocs if b["kind"] != "variant" or b["var"] == v for it in b["items"]]
+        if not items:
+            continue
+        lis = []
+        for it in items:
+            if it[0] == "sfx":
+                lis.append(f'<li class="r-sfx">🔔 Bruitage : {html.escape(it[1])}</li>')
+            else:
+                _, cle, qui, texte, son = it
+                court = texte if len(texte) <= 60 else texte[:57].rsplit(" ", 1)[0] + "…"
+                lis.append(f'<li><code>{html.escape(cle)}</code> <b>{html.escape(qui)}</b> {html.escape(court)}{son}</li>')
+        recap.append(f'<p class="r-mp3"><b>{html.escape(c)}.mp3</b> <span>projet Audacity « {html.escape(c)} »</span></p><ol>{"".join(lis)}</ol>')
+    if recap:
+        n = len(recap)
+        html_out.append(f'<details class="recap"><summary>🎬 Ordre de montage : {n} fichier{"s" if n > 1 else ""} MP3</summary>{"".join(recap)}</details>')
+    return "".join(html_out)
+
 def story(path):
     lines = path.read_text(encoding="utf-8").splitlines()
     sid = path.stem.split("-")[0].lower()
     out, meta, title, narr = [], [], "", ""
     scene, variante, compteur, nb, nb_audio = None, None, {}, 0, 0
+    sec = None  # section (### …) en cours : ses blocs sont encadrés à la fin
+
+    def ajoute(h, items=()):
+        if sec:
+            sec["blocs"][-1]["html"].append(h)
+            sec["blocs"][-1]["items"].extend(items)
+        else:
+            out.append(h)
+
+    def nouveau_bloc(kind, var=None):
+        sec["blocs"].append(dict(kind=kind, var=var, html=[], items=[]))
+
     for ln in lines:
         s = ln.strip()
         if not s or s == "---":
             continue
         if s.startswith("# "):
             title = s[2:]
-        elif s.startswith("- ") and not out:
+        elif s.startswith("- ") and not out and not sec:
             if s.startswith("- Narrateur : "):
                 narr = s[len("- Narrateur : "):].strip()
             meta.append(f"<li>{inline(s[2:])}</li>")
         elif s.startswith("Déroulé"):
-            out.append(f'<p class="flow">{inline(s)}</p>')
+            ajoute(f'<p class="flow">{inline(s)}</p>')
         elif s.startswith("### "):
+            if sec:
+                out.append(rendre_section(sec))
             m = SCENE_RE.match(s)
             scene, variante = (m.group(1) if m else None), None
             h = s[4:]
@@ -104,16 +159,19 @@ def story(path):
                 label = {"×3": "3 versions", "×compagnon": "1 par compagnon", "commun": "une fois"}[m.group(1)]
                 tag = f'<span class="tag">{label}</span>'
                 h = TAG_RE.sub("", h).strip()
-            out.append(f"<h4>{inline(h)} {tag}</h4>")
-        elif s.startswith("**") and s.endswith("**"):
+            sec = dict(scene=scene or h, head=f"<h4>{inline(h)} {tag}</h4>", blocs=[])
+            nouveau_bloc("main")
+        elif sec and s.startswith("**") and s.endswith("**"):
             v = s[2:-2].strip()
             variante = VERSIONS.get(v.lower()) or nom_propre(v.upper())
-            out.append(f'<p class="variant">{inline(s[2:-2])}</p>')
-        elif s.startswith("*(") and s.endswith(")*"):
+            nouveau_bloc("variant", variante)
+            ajoute(f'<p class="variant">{inline(s[2:-2])}</p>')
+        elif sec and s.startswith("*(") and s.endswith(")*"):
             variante = "commun"
-            out.append(f'<p class="note">{inline(s[2:-2])}</p>')
+            nouveau_bloc("commun")
+            ajoute(f'<p class="note">{inline(s[2:-2])}</p>')
         elif s.startswith("[") and s.endswith("]") and "]" not in s[1:-1]:
-            out.append(f'<p class="sfxline">{inline(s)}</p>')
+            ajoute(f'<p class="sfxline">{inline(s)}</p>', sfx_items(s))
         else:
             m = ROLE_RE.match(s)
             if m and m.group(1).strip() in ROLES:
@@ -122,18 +180,23 @@ def story(path):
                 if key == "NARRATEUR" and narr:
                     label = f"Narrateur · {narr}"
                     color = {"Papic": "papic", "Mamily": "mamily"}.get(narr, color)
-                son = ""
+                son, items = "", []
                 if scene and nettoyer(m.group(3)):
                     seg = scene + (f"-{variante}" if variante else "")
                     compteur[seg] = compteur.get(seg, 0) + 1
-                    son = audio_links(f"{seg}_{compteur[seg]:02d}_{nom_propre(key)}")
+                    cle = f"{seg}_{compteur[seg]:02d}_{nom_propre(key)}"
+                    son = audio_links(cle)
                     nb += 1
                     nb_audio += bool(son)
+                    items.append(("ligne", cle, label, nettoyer(SFX_RE.sub("", m.group(3))), son))
+                items += sfx_items(m.group(3))
                 how = f' <em>{html.escape(m.group(2).strip())}</em>' if m.group(2) else ""
-                out.append(f'<div class="line" data-role="{key}" style="--rc:var(--{color})">'
-                           f'<span class="who">{label}{how}</span><span class="say">{inline(m.group(3))}{son}</span></div>')
+                ajoute(f'<div class="line" data-role="{key}" style="--rc:var(--{color})">'
+                       f'<span class="who">{label}{how}</span><span class="say">{inline(m.group(3))}{son}</span></div>', items)
             else:
-                out.append(f"<p>{inline(s)}</p>")
+                ajoute(f"<p>{inline(s)}</p>")
+    if sec:
+        out.append(rendre_section(sec))
     if nb_audio:
         meta.append(f'<li class="avancement">Audio : {nb_audio} répliques sur {nb} déjà générées ou enregistrées</li>')
     num = sid.upper()

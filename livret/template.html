@@ -69,6 +69,22 @@ h2.sec{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--
 .play:hover{color:var(--accent);border-color:var(--accent)}
 .play.ok{color:var(--tata);border-color:var(--tata)}
 .avancement{color:var(--tata)}
+.bloc{position:relative;border:1.5px dashed var(--accent);border-radius:12px;padding:20px 10px 8px;margin:22px -10px 10px}
+.bloc.commun{border-color:var(--gold)}
+.bloc-tag{position:absolute;top:-11px;left:10px;right:10px;width:fit-content;max-width:calc(100% - 20px);background:var(--paper);padding:0 6px;font-size:12.5px;font-weight:700;color:var(--accent);line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bloc.commun .bloc-tag{color:var(--gold)}
+.bloc .variant,.bloc .note{margin-top:0}
+.recap{margin:10px 0 6px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:6px 12px;font-size:14.5px}
+.recap summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.recap .r-mp3{margin:12px 0 2px}
+.recap .r-mp3 span{color:var(--muted);font-size:13px}
+.recap ol{margin:2px 0 8px;padding-left:24px}
+.recap li{margin:2px 0}
+.recap code{font-size:12px;color:var(--muted)}
+.recap .r-sfx{color:var(--muted);font-style:italic}
+.no-montage .bloc{border:0;padding:0;margin:0}
+.no-montage .bloc-tag,.no-montage .recap{display:none}
+.bar .toggle{font-weight:400;font-size:15px;display:flex;gap:6px;align-items:center}
 .line.me .say{font-weight:700}
 mark.todo{background:var(--accent-soft);color:var(--accent);padding:0 4px;border-radius:4px;font-weight:700}
 .top{margin-top:20px;font-size:14px}
@@ -86,12 +102,13 @@ footer{margin-top:56px;color:var(--muted);font-size:14px}
   <header class="mast">
     <p class="kicker">Livret de la famille · Noël 2026</p>
     <h1>Les Aventures des Princesses <span class="star">✦</span></h1>
-    <p>Les histoires de Romy, Alix et Mathéo pour la Lunii. Choisis ton rôle ci-dessous : tes répliques s'allument dans toutes les histoires. Les boutons ▶ ouvrent les audios déjà faits dans le Drive (IA = voix générée, voix = vraie voix, ✓ = prise retenue).</p>
+    <p>Les histoires de Romy, Alix et Mathéo pour la Lunii. Choisis ton rôle ci-dessous : tes répliques s'allument dans toutes les histoires. Les boutons ▶ ouvrent les audios déjà faits dans le Drive (IA = voix générée, voix = vraie voix, ✓ = prise retenue). Case « Montage » : chaque cadre indique le MP3 à monter dans Audacity, et « Ordre de montage » liste les prises et bruitages dans l'ordre.</p>
   </header>
   <div class="bar">
     <label for="role">Mes répliques</label>
     <select id="role"><option value="">Personne</option>{{OPTIONS}}</select>
     <span class="count" id="count"></span>
+    <label class="toggle"><input type="checkbox" id="montage" checked> Montage</label>
     <nav><a href="#sommaire">Histoires</a><a href="#personnages">Personnages</a><a href="#plan">Le projet</a></nav>
   </div>
   <h2 class="sec" id="sommaire">Les 9 histoires</h2>
@@ -114,6 +131,11 @@ footer{margin-top:56px;color:var(--muted);font-size:14px}
   }
   try{ var saved=localStorage.getItem('role'); if(saved){ sel.value=saved; } }catch(e){}
   apply(sel.value);
+  var mt=document.getElementById('montage');
+  function montage(on){ document.body.classList.toggle('no-montage', !on); }
+  try{ if(localStorage.getItem('montage')==='0'){ mt.checked=false; } }catch(e){}
+  montage(mt.checked);
+  mt.addEventListener('change',function(){ montage(mt.checked); try{localStorage.setItem('montage',mt.checked?'1':'0');}catch(e){} });
   sel.addEventListener('change',function(){ apply(sel.value); try{localStorage.setItem('role',sel.value);}catch(e){} });
 })();
 </script>
