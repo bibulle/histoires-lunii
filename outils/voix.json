@@ -1,0 +1,34 @@
+{
+  "_aide": "Une entrée par voix. 'instruct' = voix décrite (change un peu à chaque seed). Pour une voix stable dans les 9 histoires : mets un clip réussi (5-10 s) dans voix/, puis renseigne 'reference' (chemin) et 'reference_texte' (ce qui est dit dans le clip) : la voix est alors clonée. 'seed' : change-le pour tirer une autre voix. 'ignorer': true pour ne pas générer ce rôle (ex. voix enregistrée par la famille). Options : 'vitesse' (0.9 = plus lent), 'etapes' (32 par défaut, 16 = 2x plus rapide), 'guidance'.",
+  "sortie": "audio-genere",
+  "prises": 1,
+  "phrase_essai": {
+    "defaut": "Il était une fois, dans un grand château tout rose, une petite princesse qui allait à l'école.",
+    "PAILLETTE": "[sigh] C'est mon premier jour d'école… J'ai un peu peur… La la laaa !",
+    "GRUMO": "Attendez-moi ! Moi aussi, je veux aller à l'école ! Ah… ah… ATCHOUM !",
+    "TATA BÊTISE": "Oups ! Je me suis trompée de cartable ! Encore une bêtise ! [laughter]",
+    "ROMY": "Pas de panique, Paillette, je suis là ! Viens, je te montre tout !",
+    "ALIX": "Même pas peur, moi ! Suis-moi, Paillette ! Vite, vite !",
+    "PÈRE NOËL": "Ho ho ho ! Mon traîneau est en panne, qui peut m'aider ?"
+  },
+  "voix": {
+    "NARRATEUR-PAPIC":  {"instruct": "male, elderly, low pitch", "seed": 1234},
+    "NARRATEUR-MAMILY": {"instruct": "female, elderly, moderate pitch", "seed": 1234},
+    "ROMY":             {"instruct": "female, child, moderate pitch", "seed": 1234},
+    "ALIX":             {"instruct": "female, child, high pitch", "seed": 1234},
+    "ROMY ET ALIX":     {"instruct": "female, child, high pitch", "seed": 1234},
+    "MATHÉO":           {"instruct": "male, child, very high pitch", "seed": 1234, "ignorer": false},
+    "PAPIC":            {"instruct": "male, elderly, low pitch", "seed": 1234},
+    "MAMILY":           {"instruct": "female, elderly, moderate pitch", "seed": 1234},
+    "TATA BÊTISE":      {"instruct": "female, young adult, high pitch", "seed": 1234},
+    "PAILLETTE":        {"instruct": "female, child, very high pitch", "seed": 1234},
+    "GRUMO":            {"instruct": "male, middle-aged, very low pitch", "seed": 1234},
+    "PÈRE NOËL":        {"instruct": "male, elderly, very low pitch", "seed": 1234},
+    "PIPOU":            {"instruct": "male, child, very high pitch", "seed": 1234},
+    "MAMAN DAUPHIN":    {"instruct": "female, middle-aged, high pitch", "seed": 1234},
+    "NOISETTE":         {"instruct": "female, teenager, high pitch, whisper", "seed": 1234},
+    "LE CRABE":         {"instruct": "male, middle-aged, high pitch", "seed": 1234},
+    "LE POISSON ROUGE": {"instruct": "male, child, moderate pitch", "seed": 1234},
+    "TOUS":             {"instruct": "female, young adult, moderate pitch", "seed": 1234}
+  }
+}
