@@ -79,17 +79,19 @@ def lire_histoires(filtre=None):
         narrateur, scene, variante, compteur = "Papic", None, None, {}
         for ln in path.read_text(encoding="utf-8").splitlines():
             s = ln.strip()
-            if m := NARR_META_RE.match(s):
-                narrateur = m.group(1).capitalize()
-            elif m := SCENE_RE.match(s):
-                scene, variante = m.group(1), None
-            elif scene and (m := VERSION_RE.match(s)):
-                v = m.group(1).strip()
+            m_narr, m_scene = NARR_META_RE.match(s), SCENE_RE.match(s)
+            m_version, m_role = VERSION_RE.match(s), ROLE_RE.match(s)
+            if m_narr:
+                narrateur = m_narr.group(1).capitalize()
+            elif m_scene:
+                scene, variante = m_scene.group(1), None
+            elif scene and m_version:
+                v = m_version.group(1).strip()
                 variante = VERSIONS.get(v.lower()) or nom_propre(v.upper())
             elif scene and BLOC_RE.match(s):
                 variante = "commun"
-            elif scene and (m := ROLE_RE.match(s)):
-                role, texte = m.group(1).strip(), nettoyer(m.group(3))
+            elif scene and m_role:
+                role, texte = m_role.group(1).strip(), nettoyer(m_role.group(3))
                 if not texte:
                     continue
                 segment = scene + (f"-{variante}" if variante else "")
