@@ -48,7 +48,7 @@ NARRATEUR : Tiens ? Qui arrive en courant ?
 NARRATEUR : [surprise-oh] Oh ! Mais c'est Grumo, le dragon ! Avec un tout petit cartable sur son gros dos !
 GRUMO : « Attendez-moi ! Moi aussi, je veux aller à l'école ! Ah… ah… a-tchoum ! »
 [bulles]
-NARRATEUR : Grumo est un peu enrhumé : au lieu de cracher du feu, il éternue des bulles ! Des centaines de bulles s'envolent dans la cour. Paillette sourit, un tout petit peu.
+NARRATEUR : Grumo est un peu enrhumé : au lieu de cracher du feu, il éternue des bulles ! [laughter] Des centaines de bulles s'envolent dans la cour. Paillette sourit, un tout petit peu.
 
 **Tata Bêtise**
 NARRATEUR : Et voilà Tata Bêtise, les cheveux tout en pétard ! Mais… qu'est-ce qu'elle a sur le dos ? Ce n'est pas un cartable… c'est une casserole !
