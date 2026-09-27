@@ -144,8 +144,18 @@ def story(path):
     return sid, num, short, body
 
 def doc(path, anchor):
-    frag = subprocess.run(["pandoc", "-f", "gfm", "-t", "html", "--shift-heading-level-by=1", str(path)],
-                          capture_output=True, text=True, check=True).stdout
+    try:  # bibliothèque Python « markdown » (installée par publier.sh), sinon pandoc
+        import markdown
+        texte = path.read_text(encoding="utf-8")
+        # comme GitHub : une liste peut suivre un paragraphe sans ligne vide
+        texte = re.sub(r"(?m)^(?![-*] |\d+\. |\s*$|\|)(.+)\n(?=[-*] |\d+\. )", r"\1\n\n", texte)
+        texte = re.sub(r"(?m)^  ([-*] )", r"    \1", texte)  # sous-listes indentées de 2 espaces
+        texte = re.sub(r"(?m)^([-*]) \[([ xX])\] ", lambda m: m.group(1) + (" ☑ " if m.group(2) != " " else " ☐ "), texte)
+        frag = markdown.markdown(texte, extensions=["tables", "fenced_code", "sane_lists"])
+        frag = re.sub(r"<(/?)h([1-5])\b", lambda m: f"<{m.group(1)}h{int(m.group(2)) + 1}", frag)
+    except ImportError:
+        frag = subprocess.run(["pandoc", "-f", "gfm", "-t", "html", "--shift-heading-level-by=1", str(path)],
+                              capture_output=True, text=True, check=True).stdout
     frag = re.sub(r"<table>", '<div class="tablewrap"><table>', frag).replace("</table>", "</table></div>")
     return f'<section class="doc" id="{anchor}">{frag}<p class="top"><a href="#sommaire">Retour au sommaire</a></p></section>'
 
