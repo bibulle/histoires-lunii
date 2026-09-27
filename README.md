@@ -6,6 +6,7 @@ Histoires personnalisées pour la Lunii de Romy et Alix (avec leur cousin Mathé
 - `docs/01-plan-projet.md` : plan, structure Lunii, planning, avancement
 - `docs/02-personnages-et-voix.md` : personnages, voix, réserve de répliques
 - `docs/03-sommaire.md` : sommaire des 9 histoires et points à valider
+- `histoires/Menus.md` : les questions et réponses des menus de la Lunii
 - `histoires/H1…H9` : les scripts d'enregistrement
 - `livret/` : génération du livret HTML pour la famille (`python3 livret/build.py`)
 

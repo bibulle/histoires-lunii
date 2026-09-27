@@ -5,6 +5,7 @@ Usage (depuis le dossier histoires-lunii) :
   sh outils/nuit.sh                                   # tout générer (Mac éveillé, journal)
   ~/omnivoice-env/bin/python outils/generer_voix.py --liste        # voir ce qui sera fait, sans générer
   ~/omnivoice-env/bin/python outils/generer_voix.py --histoire H1  # une seule histoire
+  ~/omnivoice-env/bin/python outils/generer_voix.py --histoire Menus   # les questions des menus
   sh outils/essais.sh --role ALIX --etapes 64 --guidance 1.5   # essai avec d autres réglages (fichier séparé)
   ~/omnivoice-env/bin/python outils/generer_voix.py --refaire      # régénérer même ce qui existe
 
@@ -40,7 +41,7 @@ OV_TAGS = ["laughter", "sigh", "surprise-oh", "surprise-ah", "surprise-wa", "sur
            "dissatisfaction-hnn", "confirmation-en", "question-en", "question-ah", "question-oh",
            "question-ei", "question-yi"]
 ROLE_RE = re.compile(r"^([A-ZÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ' ]{3,}?)(\s*\([^)]*\))?\s*:\s(.*)$")
-SCENE_RE = re.compile(r"^###\s+(H\d+-\d+[a-z]?)\b")
+SCENE_RE = re.compile(r"^###\s+(H\d+-\d+[a-z]?|Menu\d-[^\s_]+|Fin-[^\s_]+)(?=\s|$)")
 VERSION_RE = re.compile(r"^\*\*(.+?)\*\*\s*$")
 BLOC_RE = re.compile(r"^\*\((.+?)\)\*\s*$")
 NARR_META_RE = re.compile(r"^-\s*Narrateur\s*:\s*(\w+)", re.I)
@@ -72,10 +73,15 @@ def nettoyer(texte):
     return re.sub(r"\s+", " ", t).strip()
 
 
+def fichiers_scripts():
+    """Menus.md d'abord, puis H1…H9."""
+    return sorted((ROOT / "histoires").glob("*.md"), key=lambda p: (not p.stem.lower().startswith("menu"), p.name))
+
+
 def lire_histoires(filtre=None):
     items = []
-    for path in sorted((ROOT / "histoires").glob("H*.md")):
-        hid = path.stem.split("-")[0].upper()
+    for path in fichiers_scripts():
+        hid = path.stem.split("-")[0].upper()  # H1…H9, ou MENUS
         if filtre and hid not in filtre:
             continue
         narrateur, scene, variante, compteur = "Papic", None, None, {}
@@ -146,7 +152,8 @@ def reference_pour(voix, cfg, refs):
 
 
 def dossier_prises(audio, hid):
-    for d in sorted(audio.glob(f"{hid} *")):
+    motif = "* Menus" if hid == "MENUS" else f"{hid} *"  # « 3 – Menus » dans le Drive
+    for d in sorted(audio.glob(motif)):
         if d.is_dir():
             return d / "1 – Prises"
     return audio / "0 – À trier (dépôt)" / hid
@@ -244,7 +251,7 @@ def resume(taches):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--histoire", nargs="*", help="ex. H1 H3 (par défaut : toutes)")
+    ap.add_argument("--histoire", nargs="*", help="ex. H1 H3 Menus (par défaut : toutes, menus compris)")
     ap.add_argument("--role", nargs="*", help="ex. PAILLETTE GRUMO (par défaut : tous)")
     ap.add_argument("--prises", type=int, default=None, help="nombre de prises par réplique")
     ap.add_argument("--liste", action="store_true", help="afficher sans générer")

@@ -6,7 +6,7 @@ import html, json, os, re, subprocess, pathlib, datetime, sys, urllib.parse
 
 ROOT_OUTILS = pathlib.Path(__file__).resolve().parent.parent / "outils"
 sys.path.insert(0, str(ROOT_OUTILS))
-from generer_voix import nom_propre, nettoyer, VERSIONS, SCENE_RE, VERSION_RE, BLOC_RE  # même numérotation que la génération
+from generer_voix import fichiers_scripts, nom_propre, nettoyer, VERSIONS, SCENE_RE, VERSION_RE, BLOC_RE  # même numérotation que la génération
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "livret" / "livret.html"
@@ -37,9 +37,10 @@ def index_audio():
     except Exception:
         return {}
     idx = {}
-    for d in sorted(audio.glob("H* */1 – Prises")) if audio.is_dir() else []:
+    dossiers = [*audio.glob("H* */1 – Prises"), *audio.glob("* Menus/1 – Prises")] if audio.is_dir() else []
+    for d in sorted(dossiers):
         for f in sorted(d.iterdir()):
-            m = re.match(r"^(H\d+-\d+[a-z]?(?:-[^_]+)?_\d\d_[^_]+)_(.+)\.(wav|mp3|m4a)$", f.name)
+            m = re.match(r"^((?:H\d+-\d+[a-z]?(?:-[^_]+)?|Menu\d-[^_]+|Fin-[^_]+)_\d\d_[^_]+)_(.+)\.(wav|mp3|m4a)$", f.name)
             if m:
                 idx.setdefault(m.group(1), []).append(f)
     return idx
@@ -199,7 +200,7 @@ def story(path):
         out.append(rendre_section(sec))
     if nb_audio:
         meta.append(f'<li class="avancement">Audio : {nb_audio} répliques sur {nb} déjà générées ou enregistrées</li>')
-    num = sid.upper()
+    num = "M" if sid.startswith("menu") else sid.upper()
     short = title.split("–", 1)[-1].strip()
     body = (f'<article class="story" id="{sid}" data-narr="{narr.upper()}"><header><p class="num">{num}</p><h2>{html.escape(short)}</h2>'
             f'<ul class="meta">{"".join(meta)}</ul></header>{"".join(out)}'
@@ -222,7 +223,7 @@ def doc(path, anchor):
     frag = re.sub(r"<table>", '<div class="tablewrap"><table>', frag).replace("</table>", "</table></div>")
     return f'<section class="doc" id="{anchor}">{frag}<p class="top"><a href="#sommaire">Retour au sommaire</a></p></section>'
 
-stories = [story(p) for p in sorted((ROOT / "histoires").glob("H*.md"))]
+stories = [story(p) for p in fichiers_scripts()]
 toc = "".join(f'<li><a href="#{sid}"><span class="n">{num}</span>{html.escape(t)}</a></li>' for sid, num, t, _ in stories)
 opts = ('<option value="NARRATEUR-PAPIC">Narrateur · Papic</option><option value="NARRATEUR-MAMILY">Narrateur · Mamily</option>'
         + "".join(f'<option value="{k}">{ROLES[k][0]}</option>' for k in FILTER if k != "NARRATEUR"))
@@ -240,4 +241,4 @@ head = ('<!doctype html><html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
         '<meta name="robots" content="noindex, nofollow">')
 (SITE / "index.html").write_text(head + page.replace("<div class=\"wrap\">", "</head><body><div class=\"wrap\">", 1) + "</body></html>", encoding="utf-8")
-print(f"OK {OUT} ({len(page)//1024} Ko, {len(stories)} histoires) + {SITE / 'index.html'}")
+print(f"OK {OUT} ({len(page)//1024} Ko, {len(stories) - 1} histoires + menus) + {SITE / 'index.html'}")
