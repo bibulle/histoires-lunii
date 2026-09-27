@@ -43,9 +43,10 @@ MAMILY : « Bonne journée, mes caillettes ! »
 ### H1-2 – Le compagnon arrive [×compagnon]
 
 **Grumo**
+NARRATEUR : Tiens ? Qui arrive en courant ?
 [boum, boum, boum]
-NARRATEUR : Qui arrive en courant ? C'est Grumo le dragon, avec un tout petit cartable sur son gros dos !
-GRUMO : « Attendez-moi ! Moi aussi, je veux aller à l'école ! Ah… ah… ATCHOUM ! »
+NARRATEUR : [surprise-oh] Oh ! Mais c'est Grumo, le dragon ! Avec un tout petit cartable sur son gros dos !
+GRUMO : « Attendez-moi ! Moi aussi, je veux aller à l'école ! Ah… ah… a-tchoum ! »
 [bulles]
 NARRATEUR : Grumo est un peu enrhumé : au lieu de cracher du feu, il éternue des bulles ! Des centaines de bulles s'envolent dans la cour. Paillette sourit, un tout petit peu.
 
