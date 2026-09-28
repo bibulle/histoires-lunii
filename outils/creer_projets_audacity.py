@@ -31,7 +31,7 @@ du même nom dans n'importe quel dossier « 2 – Projets Audacity » ou « 3 �
 (un montage .wav/.mp3 seul n'empêche pas la création). Un projet auquel il manque une prise
 (ex. réplique de Mathéo) n'est pas créé, mais il est signalé. Relancer ne crée que ce qui manque.
 """
-import argparse, json, os, pathlib, sys, time, unicodedata, wave
+import argparse, errno, json, os, pathlib, plistlib, re, select, subprocess, sys, time, unicodedata, wave
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from generer_voix import CONFIG, lire_histoires, dossier_prises  # noqa: E402
@@ -197,25 +197,91 @@ def frise_complete(parcours, dossier_pr, dossier_proj, entre=0.0):
 
 
 # ---------------------------------------------------------------- pilotage d'Audacity
+AIDE_AUDACITY = ("  1. Ouvre Audacity 3.7 (pas la 4 : elle n'a pas encore le module de script)\n"
+                 "  2. Préférences › Modules › mod-script-pipe : « Activé », puis quitte et relance Audacity\n"
+                 "  3. Ferme les fenêtres de dialogue éventuelles, puis relance ce script\n"
+                 "     (une seule fenêtre de projet ouverte : le script la réutilise)")
+
+
+def audacity_ouverts():
+    """Versions d'Audacity en cours d'exécution sur le Mac, ex. ['Audacity 4.0.1']."""
+    try:
+        ps = subprocess.run(["ps", "-axo", "comm="], capture_output=True, text=True, timeout=5).stdout
+    except Exception:
+        return []
+    res = []
+    for ln in ps.splitlines():
+        m = re.match(r"^(.*?\.app)/Contents/MacOS/[^/]*$", ln.strip())
+        if not m or "audacity" not in ln.lower():
+            continue
+        app = m.group(1)
+        try:
+            with open(f"{app}/Contents/Info.plist", "rb") as f:
+                v = plistlib.load(f).get("CFBundleShortVersionString", "?")
+        except Exception:
+            v = "?"
+        nom = f"Audacity {v} ({os.path.basename(app)})"
+        if nom not in res:
+            res.append(nom)
+    return res
+
+
+def pas_de_reponse(pourquoi):
+    ouverts = audacity_ouverts()
+    if not ouverts:
+        etat = "Audacity n'est pas ouvert."
+    elif not any(o.startswith("Audacity 3.") for o in ouverts):
+        etat = f"Ouvert : {', '.join(ouverts)}. Il faut la 3.7 (la 4 ne se pilote pas encore par script)."
+    else:
+        etat = f"Ouvert : {', '.join(ouverts)}, mais le module de script ne répond pas."
+    sys.exit(f"{pourquoi}\n{etat}\n{AIDE_AUDACITY}")
+
+
 class Audacity:
+    """Pilote Audacity par mod-script-pipe, sans jamais rester bloqué (plus besoin de Ctrl-C)."""
+    DELAI = 120   # s max pour une commande (import d'un long fichier, enregistrement…)
+
     def __init__(self):
         uid = os.getuid()
         to, fr = f"/tmp/audacity_script_pipe.to.{uid}", f"/tmp/audacity_script_pipe.from.{uid}"
         if not (os.path.exists(to) and os.path.exists(fr)):
-            sys.exit("Audacity ne répond pas.\n"
-                     "  1. Ouvre Audacity 3.7 (pas la 4 : elle n'a pas encore le module de script)\n"
-                     "  2. Préférences › Modules › mod-script-pipe : « Activé », puis quitte et relance Audacity\n"
-                     "  3. Relance ce script (une seule fenêtre ouverte dans Audacity : le script la réutilise)")
-        self.to, self.fr = open(to, "w"), open(fr, "r")
+            pas_de_reponse("Audacity ne répond pas (module de script jamais lancé).")
+        # Les tuyaux restent sur le disque après la fermeture d'Audacity : on vérifie que quelqu'un écoute
+        try:
+            self.w = os.open(to, os.O_WRONLY | os.O_NONBLOCK)
+        except OSError as e:
+            if e.errno == errno.ENXIO:
+                pas_de_reponse("Audacity 3.7 n'écoute pas (fermé, ou module de script pas activé).")
+            raise
+        os.set_blocking(self.w, True)
+        self.r = os.open(fr, os.O_RDONLY | os.O_NONBLOCK)
+        self.buf = b""
+        try:
+            self("Message: Text=Papic", delai=10)
+        except (TimeoutError, OSError):
+            pas_de_reponse("Audacity ne répond pas au bout de 10 s (une fenêtre de dialogue ouverte ?).")
 
-    def __call__(self, cmd):
-        self.to.write(cmd + "\n")
-        self.to.flush()
+    def _ligne(self, fin):
+        while b"\n" not in self.buf:
+            reste = fin - time.monotonic()
+            if reste <= 0:
+                raise TimeoutError("pas de réponse d'Audacity")
+            pret, _, _ = select.select([self.r], [], [], min(reste, 0.5))
+            if pret:
+                d = os.read(self.r, 65536)
+                if d:
+                    self.buf += d
+                else:  # personne n'écrit (pas encore, ou Audacity fermé)
+                    time.sleep(0.05)
+        ln, self.buf = self.buf.split(b"\n", 1)
+        return ln.decode("utf-8", "replace") + "\n"
+
+    def __call__(self, cmd, delai=None):
+        os.write(self.w, (cmd + "\n").encode("utf-8"))
+        fin = time.monotonic() + (delai or self.DELAI)
         rep = []
         while True:
-            ln = self.fr.readline()
-            if ln == "":  # Audacity fermé ou planté
-                raise BrokenPipeError("pas de réponse d'Audacity")
+            ln = self._ligne(fin)
             if ln == "\n" and rep:
                 break
             rep.append(ln)
@@ -325,7 +391,8 @@ def main():
         except Exception as e:
             print(f"[{i}/{len(a_faire)}] ERREUR {nom} : {e}", flush=True)
             if isinstance(e, OSError):
-                sys.exit("Audacity ne répond plus (planté ?). Relance-le puis relance le script : il reprend où il en était.")
+                sys.exit("Audacity ne répond plus (planté, fermé ou fenêtre de dialogue ouverte ?). "
+                         "Relance-le puis relance le script : il reprend où il en était.")
     print("Terminé. Ouvre les .aup3 dans Audacity 4 : il les convertit en .aup4 sans toucher l'original.")
 
 
