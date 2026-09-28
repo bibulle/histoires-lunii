@@ -22,11 +22,11 @@ PAPIC : « Qui part à l'aventure aujourd'hui ? Tourne la molette ! »
 
 ### Menu1-Romy – La Princesse Romy [commun]
 MAMILY : « La Princesse Romy ! »
-ROMY : « C'est moi ! »
+ROMY : «Ouiii ! C'est moi ! [laughter]»
 
 ### Menu1-Alix – La Princesse Alix [commun]
 MAMILY : « La Princesse Alix ! »
-ALIX : « Moi, moi ! »
+ALIX : « Moi, moi !! »
 
 ### Menu1-Romy&Alix – Les deux princesses [commun]
 MAMILY : « Les deux princesses, ensemble ! »
