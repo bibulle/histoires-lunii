@@ -63,7 +63,7 @@ MAMILY : « Le traîneau du Père Noël est en panne. »
 PAPIC (tout doucement) : « La promenade des étoiles… l'histoire du dodo. »
 
 ### Menu3-question – Qui vient aussi ? [commun]
-PAPIC : « Et qui vient à l'aventure aussi ? Tourne la molette ! »
+PAPIC : « Et qui vient à l'aventure aussi ? Tourne la molette »
 
 ### Menu3-Paillette – Paillette [commun]
 MAMILY : « Paillette, la licorne ! »
@@ -72,7 +72,7 @@ PAILLETTE : « La la laaa ! »
 
 ### Menu3-Grumo – Grumo [commun]
 PAPIC : « Grumo, le dragon ! »
-GRUMO : « ATCHOUM ! »
+GRUMO : « Ah... ah... a-tchoum ! »
 [bulles]
 
 ### Menu3-TataBetise – Tata Bêtise [commun]
@@ -82,7 +82,7 @@ TATA BÊTISE : « Oups ! [laughter] »
 ### Menu3-Papic – Papic [commun]
 MAMILY : « Papic, le grand inventeur ! »
 [marteau]
-PAPIC : « Laisse faire Papic ! »
+PAPIC : « Laisse faire Papic »
 
 ### Menu3-Mamily – Mamily [commun]
 PAPIC : « Mamily, la reine des câlins ! »
