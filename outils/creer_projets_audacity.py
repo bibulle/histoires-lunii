@@ -11,8 +11,7 @@ Usage (depuis le dossier histoires-lunii, Audacity 3.7 ouvert, mod-script-pipe a
    et fin communs), H2-2, H2-3-Mamily…  Dans chaque projet :
    - une piste par réplique, placées bout à bout dans l'ordre du script (les prises d'une même
      réplique, ex. …-Romy&Alix-Romy et …-Romy&Alix-Alix, sont superposées sur des pistes séparées) ;
-   - une piste d'étiquettes « Script » avec le texte de chaque réplique (et « À ENREGISTRER » pour
-     une réplique sans prise, ex. Mathéo) ;
+   - une piste d'étiquettes « Script » avec le texte de chaque réplique ;
    - deux pistes vides « Bruitages » et « Musique ».
 
 2) Trois histoires complètes par histoire (« H2 complete - 1/2/3 »), un parcours chacune :
@@ -24,7 +23,8 @@ Enregistré dans « 2 – Projets Audacity » de l'histoire (« 3 – Menus » p
 
 On NE TOUCHE JAMAIS à un projet existant : un projet est sauté s'il existe déjà en .aup3/.aup4
 du même nom dans n'importe quel dossier « 2 – Projets Audacity » ou « 3 – Montés » du Drive
-(un montage .wav/.mp3 seul n'empêche pas la création). Relancer ne crée que ce qui manque.
+(un montage .wav/.mp3 seul n'empêche pas la création). Un projet auquel il manque une prise
+(ex. réplique de Mathéo) n'est pas créé, mais il est signalé. Relancer ne crée que ce qui manque.
 """
 import argparse, json, os, pathlib, sys, time, unicodedata, wave
 
@@ -273,10 +273,8 @@ def main():
                 p, e, _ = frise_prises(lignes, dossier_prises(audio, hid))
                 return p, e
             dp = dossier_prises(audio, hid)
-            manq = [it for it in lignes if not prises_de(dp, it)]
-            desc = f"{len(lignes)} répliques" + (f"  — sans prise : " + ", ".join(
-                f"{it['n']:02d} {it['qui']}" for it in manq) if manq else "")
-            candidats.append((nom, hid, fab, desc))
+            manq = [f"{it['n']:02d} {it['qui']}" for it in lignes if not prises_de(dp, it)]
+            candidats.append((nom, hid, fab, f"{len(lignes)} répliques", manq))
     if "completes" in a.quoi:
         for nom, hid, parcours in plan_completes(struct):
             dp, dj = dossier_prises(audio, hid), dossier_projets(audio, hid)
@@ -284,21 +282,28 @@ def main():
                 p, e, _ = frise_complete(parcours, dp, dj)
                 return p, e
             desc = " → ".join(n + ("" if montage_de(dj, n) else "*") for n, _ in parcours)
-            candidats.append((nom, hid, fab, desc))
+            manq = [f"{n} {it['n']:02d} {it['qui']}" for n, lignes in parcours if not montage_de(dj, n)
+                    for it in lignes if not prises_de(dp, it)]
+            candidats.append((nom, hid, fab, desc, manq))
 
-    a_faire = [c for c in candidats if nfc(c[0]).lower() not in deja]
     sautes = [c for c in candidats if nfc(c[0]).lower() in deja]
+    incomplets = [c for c in candidats if nfc(c[0]).lower() not in deja and c[4]]
+    a_faire = [c for c in candidats if nfc(c[0]).lower() not in deja and not c[4]]
     print(f"Projets déjà là (on n'y touche pas) : {len(sautes)}")
     for nom, *_ in sautes:
         print(f"  = {nom:<22} ({', '.join(sorted({f.name for f in deja[nfc(nom).lower()]}))})")
+    if incomplets:
+        print(f"PAS CRÉÉS, il manque des prises : {len(incomplets)}")
+        for nom, _, _, _, manq in incomplets:
+            print(f"  ! {nom:<22} manque : {', '.join(manq)}")
     print(f"À créer : {len(a_faire)}   (* = segment pas encore monté : prises brutes)")
-    for nom, _, _, desc in a_faire:
+    for nom, _, _, desc, _ in a_faire:
         print(f"  + {nom:<22} {desc}")
     if a.liste or not a_faire:
         return
 
     aud = Audacity()
-    for i, (nom, hid, fab, _) in enumerate(a_faire, 1):
+    for i, (nom, hid, fab, *_) in enumerate(a_faire, 1):
         cible = dossier_projets(audio, hid) / f"{nom}.aup3"
         try:
             pistes, etiquettes = fab()
