@@ -6,6 +6,7 @@ Usage (depuis le dossier histoires-lunii, Audacity 3.7 ouvert, mod-script-pipe a
   sh outils/projets-audacity.sh                    # tout créer (segments + histoires complètes)
   sh outils/projets-audacity.sh --histoire H2 H3   # seulement certaines histoires (ou Menus)
   sh outils/projets-audacity.sh --quoi completes   # seulement les histoires complètes (ou : segments)
+  sh outils/projets-audacity.sh --histoire Menus --quoi completes   # le projet « Menus complet »
 
 1) Un projet par segment et par variante : H2-1-Romy, H2-1-Alix, H2-1-Romy&Alix (avec leur début
    et fin communs), H2-2, H2-3-Mamily…  Dans chaque projet :
@@ -18,6 +19,10 @@ Usage (depuis le dossier histoires-lunii, Audacity 3.7 ouvert, mod-script-pipe a
    1 = Romy, 2 = Alix, 3 = les deux ; le compagnon et le choix changent d'un parcours à l'autre.
    Chaque segment du parcours est pris dans son montage « H2-1-Romy.wav » (dossier Projets) s'il
    existe, sinon dans les prises brutes. Une étiquette marque le début de chaque segment.
+
+3) Pour les menus : un seul projet « Menus complet », tous les fichiers dans l'ordre du script
+   (accueil → question → toutes les réponses → question suivante… → fin), 1 s de blanc entre deux
+   fichiers, chacun pris dans son montage « Menu1-Romy.wav » s'il existe, sinon dans les prises.
 
 Enregistré dans « 2 – Projets Audacity » de l'histoire (« 3 – Menus » pour les menus).
 
@@ -32,6 +37,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from generer_voix import CONFIG, lire_histoires, dossier_prises  # noqa: E402
 
 BLANC = 0.5        # silence entre deux répliques / deux segments (s)
+BLANC_MENUS = 1.0  # entre deux fichiers de menu dans « Menus complet » (s)
 MANQUE = 2.0       # place laissée pour une réplique sans prise (s)
 EXTS_PROJET = {".aup3", ".aup4", ".aup"}
 FILLES = ["Romy", "Alix", "Romy&Alix"]
@@ -87,9 +93,12 @@ def plan_segments(struct):
 
 
 def plan_completes(struct):
-    """[(nom, hid, [(nom_segment, items)])] : 3 parcours par histoire (pas pour les menus)."""
+    """[(nom, hid, [(nom_segment, items)])] : 3 parcours par histoire, 1 « Menus complet »."""
     projets = []
     for hid, liste in struct.items():
+        if hid == "MENUS":  # tous les fichiers des menus bout à bout, dans l'ordre du script
+            projets.append(("Menus complet", hid, [(sc, lignes) for sc, _, lignes in liste]))
+            continue
         if not hid.startswith("H"):
             continue
         # Regroupe les choix (H2-5a / H2-5b) : même scène sans la lettre finale
@@ -166,9 +175,12 @@ def frise_prises(lignes, dossier, t=0.0):
     return pistes, etiquettes, t
 
 
-def frise_complete(parcours, dossier_pr, dossier_proj):
+def frise_complete(parcours, dossier_pr, dossier_proj, entre=0.0):
+    """entre : blanc ajouté entre deux segments, en plus de BLANC (menus : on entend chaque fichier)."""
     pistes, etiquettes, t, sources = [], [], 0.0, []
-    for nom, lignes in parcours:
+    for i, (nom, lignes) in enumerate(parcours):
+        if i:
+            t += entre
         m = montage_de(dossier_proj, nom)
         if m:
             etiquettes.append((t, t, f"▶ {nom} (montage)"))
@@ -278,8 +290,9 @@ def main():
     if "completes" in a.quoi:
         for nom, hid, parcours in plan_completes(struct):
             dp, dj = dossier_prises(audio, hid), dossier_projets(audio, hid)
-            def fab(parcours=parcours, dp=dp, dj=dj):
-                p, e, _ = frise_complete(parcours, dp, dj)
+            entre = BLANC_MENUS - BLANC if hid == "MENUS" else 0.0
+            def fab(parcours=parcours, dp=dp, dj=dj, entre=entre):
+                p, e, _ = frise_complete(parcours, dp, dj, entre)
                 return p, e
             desc = " → ".join(n + ("" if montage_de(dj, n) else "*") for n, _ in parcours)
             manq = [f"{n} {it['n']:02d} {it['qui']}" for n, lignes in parcours if not montage_de(dj, n)

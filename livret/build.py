@@ -283,7 +283,8 @@ def avancement(hid, nb, nb_audio):
     completes = []
     for k, (nom, parcours) in enumerate(PARCOURS.get(hid, [])):
         etat, f = etat_segment(nom)
-        lab = PARCOURS_NOMS[k] if k < len(PARCOURS_NOMS) else str(k + 1)
+        lab = ("Tous les menus" if hid == "MENUS"
+               else PARCOURS_NOMS[k] if k < len(PARCOURS_NOMS) else str(k + 1))
         chemin = " → ".join(parcours)
         if etat == "monte":
             completes.append(f'<a class="complete ok" href="{lien_drive(f)}" target="_blank" rel="noopener" '
@@ -297,7 +298,7 @@ def avancement(hid, nb, nb_audio):
     if segs:
         lignes.append(f'<div class="av-l"><span class="av-k">Montage</span>{jauge(montes, len(segs))}</div>')
     if completes:
-        lignes.append(f'<div class="av-l"><span class="av-k">Histoire complète</span><span class="completes">{"".join(completes)}</span></div>')
+        lignes.append(f'<div class="av-l"><span class="av-k">{"Menus à la suite" if hid == "MENUS" else "Histoire complète"}</span><span class="completes">{"".join(completes)}</span></div>')
     bloc = f'<div class="av">{"".join(lignes)}</div>' if nb else ""
     return dict(nb=nb, voix=nb_audio, segs=len(segs), montes=montes, nc=nc, ncomp=len(completes),
                 completes="".join(completes), bloc=bloc)
@@ -337,7 +338,8 @@ rows = "".join(
     f'<td>{jauge(st["montes"], st["segs"]) if st["segs"] else "–"}</td>'
     f'<td><span class="completes">{st["completes"] or "–"}</span></td></tr>'
     for sid, num, t, _, st in stories)
-tot = {k: sum(st[k] for *_, st in stories) for k in ("nb", "voix", "segs", "montes", "nc", "ncomp")}
+tot = {k: sum(st[k] for sid, *_, st in stories if k not in ("nc", "ncomp") or not sid.startswith("menu"))
+       for k in ("nb", "voix", "segs", "montes", "nc", "ncomp")}  # « histoires complètes » : sans les menus
 suivi = (f'<section class="suivi" id="suivi"><h2 class="sec">Où en est-on ?</h2>'
          f'<p class="suivi-tot"><b>{tot["voix"]}/{tot["nb"]}</b> répliques en voix · <b>{tot["montes"]}/{tot["segs"]}</b> morceaux montés · '
          f'<b>{tot["nc"]}/{tot["ncomp"]}</b> histoires complètes écoutables</p>'
@@ -345,7 +347,7 @@ suivi = (f'<section class="suivi" id="suivi"><h2 class="sec">Où en est-on ?</h2
          f'<th>Histoires complètes</th></tr></thead><tbody>{rows}</tbody></table></div>'
          f'<p class="legende">▶ = à écouter dans le Drive · ◐ = projet Audacity prêt, montage pas encore exporté · ○ = pas encore fait. '
          f'Chaque histoire existe en 3 parcours : Romy, Alix, les deux (le compagnon et le choix changent d\'un parcours à l\'autre ; '
-         f'survole un bouton pour voir le chemin).</p></section>')
+         f'survole un bouton pour voir le chemin). Les menus s\'écoutent tous à la suite dans « Menus complet ».</p></section>')
 opts = ('<option value="NARRATEUR-PAPIC">Narrateur · Papic</option><option value="NARRATEUR-MAMILY">Narrateur · Mamily</option>'
         + "".join(f'<option value="{k}">{ROLES[k][0]}</option>' for k in FILTER if k != "NARRATEUR"))
 today = datetime.date.today().strftime("%d/%m/%Y")
