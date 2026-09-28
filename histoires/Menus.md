@@ -36,28 +36,28 @@ ROMY ET ALIX : « Ensemble ! »
 MAMILY : « Quelle histoire on écoute ? Tourne la molette pour choisir ! »
 
 ### Menu2-H1 – Titre H1 [commun]
-PAPIC : « Paillette va à l'école ! »
+PAPIC : « Le premier jour d'école de Paillette. »
 
 ### Menu2-H2 – Titre H2 [commun]
-MAMILY : « Grumo ne sait pas voler ! »
+MAMILY : « Grumo ne sait pas voler. »
 
 ### Menu2-H3 – Titre H3 [commun]
-MAMILY : « La machine à bisous de Papic ! »
+MAMILY : « La machine à bisous de Papic. »
 
 ### Menu2-H4 – Titre H4 [commun]
-PAPIC : « Le gâteau magique de Mamily ! »
+PAPIC : « Le gâteau magique de Mamily. »
 
 ### Menu2-H5 – Titre H5 [commun]
-MAMILY : « Tata Bêtise a mis le château à l'envers ! »
+MAMILY : « Tata Bêtise a mis le château à l'envers. »
 
 ### Menu2-H6 – Titre H6 [commun]
-MAMILY : « Le grand plouf ! »
+MAMILY : « Le grand plouf. »
 
 ### Menu2-H7 – Titre H7 [commun]
-PAPIC : « Le doudou perdu ! »
+PAPIC : « Le doudou perdu. »
 
 ### Menu2-H8 – Titre H8 [commun]
-MAMILY : « Le traîneau du Père Noël est en panne ! »
+MAMILY : « Le traîneau du Père Noël est en panne. »
 
 ### Menu2-H9 – Titre H9 [commun]
 PAPIC (tout doucement) : « La promenade des étoiles… l'histoire du dodo. »
