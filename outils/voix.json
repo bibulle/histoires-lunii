@@ -19,7 +19,7 @@
   "voix": {
     "NARRATEUR-PAPIC":  {"instruct": "male, elderly, low pitch", "temperature": 0.7},
     "NARRATEUR-MAMILY": {"instruct": "female, elderly, moderate pitch"},
-    "ROMY":             {"instruct": "female, child, moderate pitch", "vitesse": 1.2, "temperature": 0.7},
+    "ROMY":             {"instruct": "female, child, moderate pitch", "vitesse": 1.2, "temperature": 0.7, "seed": 7},
     "ALIX":             {"instruct": "female, child, high pitch", "etapes": 32,"seed": 5},
     "ROMY ET ALIX":     {"instruct": "female, child, high pitch"},
     "MATHÉO":           {"instruct": "male, child, very high pitch", "ignorer": true},

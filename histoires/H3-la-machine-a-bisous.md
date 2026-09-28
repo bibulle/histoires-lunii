@@ -18,7 +18,7 @@ NARRATEUR : Il était une fois, au fond du château, un atelier plein d'outils, 
 PAPIC : « Venez voir ! J'ai inventé… une machine à bisous ! »
 
 **Version Romy**
-ROMY : « [surprise-oh] Une machine à bisous ? Comment elle marche, Papic ? »
+ROMY : « [surprise-wa] Une machine à bisous ! [question-oh] Papic, comment elle marche ? »
 
 **Version Alix**
 ALIX : « Je peux appuyer ? Je peux ? Je peux ? »
@@ -30,8 +30,8 @@ ALIX : « On peut appuyer ? »
 ### H3-2 – Tata Bêtise arrive [commun]
 PAPIC : « Regardez bien : on tourne la manivelle, et la machine envoie des bisous partout dans le château ! Mais attention, il ne faut pas toucher aux autres boutons ! »
 NARRATEUR : Et qui arrive en courant ? Tata Bêtise !
-TATA BÊTISE : « Oh ! Des boutons ! J'adore les boutons ! »
-PAPIC : « Non, Tata, attends ! »
+TATA BÊTISE : « [surprise-oh] Des boutons ! J'adore les boutons ! »
+PAPIC : « [surprise-oh] Non, Tata, attends ! »
 
 ### H3-3 – Question [commun]
 NARRATEUR : Trop tard ! Tata Bêtise va appuyer… Sur le bouton rouge… ou sur le bouton bleu ? Tourne la molette pour choisir !
