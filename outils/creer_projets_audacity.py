@@ -1,66 +1,51 @@
 #!/usr/bin/env python3
-"""Crée un projet Audacity (.aup3) par segment, prêt à monter, à partir des prises OmniVoice.
+"""Crée les projets Audacity (.aup3) prêts à monter, à partir des prises OmniVoice.
 
 Usage (depuis le dossier histoires-lunii, Audacity 3.7 ouvert, mod-script-pipe activé) :
   sh outils/projets-audacity.sh --liste            # voir ce qui sera créé, sans rien faire
-  sh outils/projets-audacity.sh                    # tout créer (histoires + menus)
+  sh outils/projets-audacity.sh                    # tout créer (segments + histoires complètes)
   sh outils/projets-audacity.sh --histoire H2 H3   # seulement certaines histoires (ou Menus)
+  sh outils/projets-audacity.sh --quoi completes   # seulement les histoires complètes (ou : segments)
 
-Un projet par segment et par variante : H2-1-Romy, H2-1-Alix, H2-1-Romy&Alix (avec leur début
-et fin communs), H2-2, H2-3-Mamily…  Dans chaque projet :
-  - une piste par réplique, placées bout à bout dans l'ordre du script (les prises d'une même
-    réplique, ex. …-Romy&Alix-Romy et …-Romy&Alix-Alix, sont superposées sur des pistes séparées) ;
-  - une piste d'étiquettes « Script » avec le texte de chaque réplique (et « À ENREGISTRER » pour
-    une réplique sans prise, ex. Mathéo) ;
-  - deux pistes vides « Bruitages » et « Musique ».
+1) Un projet par segment et par variante : H2-1-Romy, H2-1-Alix, H2-1-Romy&Alix (avec leur début
+   et fin communs), H2-2, H2-3-Mamily…  Dans chaque projet :
+   - une piste par réplique, placées bout à bout dans l'ordre du script (les prises d'une même
+     réplique, ex. …-Romy&Alix-Romy et …-Romy&Alix-Alix, sont superposées sur des pistes séparées) ;
+   - une piste d'étiquettes « Script » avec le texte de chaque réplique (et « À ENREGISTRER » pour
+     une réplique sans prise, ex. Mathéo) ;
+   - deux pistes vides « Bruitages » et « Musique ».
+
+2) Trois histoires complètes par histoire (« H2 complete - 1/2/3 »), un parcours chacune :
+   1 = Romy, 2 = Alix, 3 = les deux ; le compagnon et le choix changent d'un parcours à l'autre.
+   Chaque segment du parcours est pris dans son montage « H2-1-Romy.wav » (dossier Projets) s'il
+   existe, sinon dans les prises brutes. Une étiquette marque le début de chaque segment.
+
 Enregistré dans « 2 – Projets Audacity » de l'histoire (« 3 – Menus » pour les menus).
 
-On NE TOUCHE JAMAIS à l'existant : un segment est sauté s'il a déjà un projet (.aup3/.aup4)
-ou un montage (.wav/.mp3) du même nom dans n'importe quel dossier « 2 – Projets Audacity »
-ou « 3 – Montés » du Drive. Relancer le script ne crée que ce qui manque.
+On NE TOUCHE JAMAIS à un projet existant : un projet est sauté s'il existe déjà en .aup3/.aup4
+du même nom dans n'importe quel dossier « 2 – Projets Audacity » ou « 3 – Montés » du Drive
+(un montage .wav/.mp3 seul n'empêche pas la création). Relancer ne crée que ce qui manque.
 """
 import argparse, json, os, pathlib, sys, time, unicodedata, wave
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from generer_voix import CONFIG, lire_histoires, dossier_prises  # noqa: E402
 
-BLANC = 0.5        # silence entre deux répliques (s)
+BLANC = 0.5        # silence entre deux répliques / deux segments (s)
 MANQUE = 2.0       # place laissée pour une réplique sans prise (s)
-EXTS_EXISTANT = {".aup3", ".aup4", ".aup", ".wav", ".mp3"}
+EXTS_PROJET = {".aup3", ".aup4", ".aup"}
+FILLES = ["Romy", "Alix", "Romy&Alix"]
 
 
 def nfc(t):
     return unicodedata.normalize("NFC", t)
 
 
-# ---------------------------------------------------------------- plan des projets
-def plan_projets(filtre):
-    """[(nom_projet, hid, [items dans l'ordre du script])]"""
-    # segment = « H2-1 », « H2-1-commun », « H2-1-Romy », « Menu1-Romy&Alix »…
-    par_scene = {}  # (hid, scène) -> [items dans l'ordre du script]
-    for it in lire_histoires(filtre):
-        par_scene.setdefault((it["hid"], scene_de(it["segment"])), []).append(it)
-
-    projets = []
-    for (hid, sc), lignes in par_scene.items():
-        variantes = []
-        for it in lignes:
-            v = variante_de(it["segment"], sc)
-            if v and v != "commun" and v not in variantes:
-                variantes.append(v)
-        if not variantes:
-            projets.append((sc, hid, lignes))
-        for v in variantes:  # chaque variante avec le début et la fin communs, dans l'ordre du script
-            sel = [it for it in lignes if variante_de(it["segment"], sc) in (None, "commun", v)]
-            projets.append((f"{sc}-{v}", hid, sel))
-    return projets
-
-
+# ---------------------------------------------------------------- structure des histoires
 def scene_de(segment):
-    """H2-1-Romy&Alix -> H2-1 ; H2-5a -> H2-5a ; Menu1-Romy&Alix -> Menu1-Romy&Alix ; Fin-autre-aventure -> idem."""
+    """H2-1-Romy&Alix -> H2-1 ; H2-5a -> H2-5a ; Menu1-Romy&Alix -> Menu1-Romy&Alix."""
     if segment.startswith("H"):
-        parts = segment.split("-")
-        return "-".join(parts[:2])
+        return "-".join(segment.split("-")[:2])
     return segment
 
 
@@ -68,13 +53,75 @@ def variante_de(segment, scene):
     return segment[len(scene) + 1:] if len(segment) > len(scene) else None
 
 
-# ---------------------------------------------------------------- ce qui existe déjà
-def existants(audio):
+def scenes(filtre):
+    """{hid: [(scène, [variantes], [items])]} dans l'ordre du script."""
+    par_scene = {}
+    for it in lire_histoires(filtre):
+        par_scene.setdefault((it["hid"], scene_de(it["segment"])), []).append(it)
+    res = {}
+    for (hid, sc), lignes in par_scene.items():
+        variantes = []
+        for it in lignes:
+            v = variante_de(it["segment"], sc)
+            if v and v != "commun" and v not in variantes:
+                variantes.append(v)
+        res.setdefault(hid, []).append((sc, variantes, lignes))
+    return res
+
+
+def lignes_variante(lignes, sc, v):
+    """La variante avec le début et la fin communs, dans l'ordre du script."""
+    return [it for it in lignes if variante_de(it["segment"], sc) in (None, "commun", v)]
+
+
+def plan_segments(struct):
+    """[(nom, hid, items)]"""
+    projets = []
+    for hid, liste in struct.items():
+        for sc, variantes, lignes in liste:
+            if not variantes:
+                projets.append((sc, hid, lignes))
+            for v in variantes:
+                projets.append((f"{sc}-{v}", hid, lignes_variante(lignes, sc, v)))
+    return projets
+
+
+def plan_completes(struct):
+    """[(nom, hid, [(nom_segment, items)])] : 3 parcours par histoire (pas pour les menus)."""
+    projets = []
+    for hid, liste in struct.items():
+        if not hid.startswith("H"):
+            continue
+        # Regroupe les choix (H2-5a / H2-5b) : même scène sans la lettre finale
+        etapes = []  # [[(sc, variantes, lignes), …]] ; plusieurs éléments = un choix
+        def base_choix(sc):  # « H2-5 » pour H2-5a / H2-5b, None si ce n'est pas un choix
+            return sc[:-1] if sc[-1].isalpha() and sc[-2].isdigit() else None
+        for sc, variantes, lignes in liste:
+            if etapes and base_choix(sc) and base_choix(etapes[-1][0][0]) == base_choix(sc):
+                etapes[-1].append((sc, variantes, lignes))
+            else:
+                etapes.append([(sc, variantes, lignes)])
+        for k in range(3):
+            parcours = []
+            for options in etapes:
+                sc, variantes, lignes = options[k % len(options)]
+                if not variantes:
+                    parcours.append((sc, lignes))
+                    continue
+                v = FILLES[k] if set(variantes) <= set(FILLES) and FILLES[k] in variantes \
+                    else variantes[k % len(variantes)]
+                parcours.append((f"{sc}-{v}", lignes_variante(lignes, sc, v)))
+            projets.append((f"{hid} complete - {k + 1}", hid, parcours))
+    return projets
+
+
+# ---------------------------------------------------------------- fichiers
+def projets_existants(audio):
     noms = {}
     for d in audio.rglob("*"):
         if d.is_dir() and nfc(d.name) in ("2 – Projets Audacity", "3 – Montés (MP3 Lunii)"):
             for f in d.iterdir():
-                if f.suffix.lower() in EXTS_EXISTANT:
+                if f.suffix.lower() in EXTS_PROJET:
                     noms.setdefault(nfc(f.stem).lower(), []).append(f)
     return noms
 
@@ -89,9 +136,52 @@ def prises_de(dossier, it):
     return sorted(f for f in dossier.iterdir() if f.suffix.lower() == ".wav" and nfc(f.name).startswith(motif))
 
 
+def montage_de(dossier, nom):
+    for f in dossier.iterdir():
+        if f.suffix.lower() == ".wav" and nfc(f.stem).lower() == nfc(nom).lower():
+            return f
+    return None
+
+
 def duree(f):
     with wave.open(str(f), "rb") as w:
         return w.getnframes() / float(w.getframerate())
+
+
+# ---------------------------------------------------------------- frise : pistes + étiquettes
+def frise_prises(lignes, dossier, t=0.0):
+    """Place les prises bout à bout. -> (pistes [(fichier, début, nom)], étiquettes, fin)"""
+    pistes, etiquettes = [], []
+    for it in lignes:
+        fichiers = prises_de(dossier, it)
+        texte = f"{it['n']:02d} {it['qui']} : {it['texte']}"
+        if not fichiers:
+            etiquettes.append((t, t + MANQUE, "À ENREGISTRER — " + texte))
+            t += MANQUE + BLANC
+            continue
+        etiquettes.append((t, t, texte))
+        for f in fichiers:
+            pistes.append((f, t, f.stem.replace("_omnivoice1", "")))
+        t += max(duree(f) for f in fichiers) + BLANC
+    return pistes, etiquettes, t
+
+
+def frise_complete(parcours, dossier_pr, dossier_proj):
+    pistes, etiquettes, t, sources = [], [], 0.0, []
+    for nom, lignes in parcours:
+        m = montage_de(dossier_proj, nom)
+        if m:
+            etiquettes.append((t, t, f"▶ {nom} (montage)"))
+            pistes.append((m, t, nom))
+            t += duree(m) + BLANC
+            sources.append(f"{nom}=montage")
+        else:
+            etiquettes.append((t, t, f"▶ {nom} (prises brutes)"))
+            p, e, t = frise_prises(lignes, dossier_pr, t)
+            pistes += p
+            etiquettes += e
+            sources.append(f"{nom}=prises")
+    return pistes, etiquettes, sources
 
 
 # ---------------------------------------------------------------- pilotage d'Audacity
@@ -103,8 +193,7 @@ class Audacity:
             sys.exit("Audacity ne répond pas.\n"
                      "  1. Ouvre Audacity 3.7 (pas la 4 : elle n'a pas encore le module de script)\n"
                      "  2. Préférences › Modules › mod-script-pipe : « Activé », puis quitte et relance Audacity\n"
-                     "  3. Relance ce script")
-        # (Laisse une seule fenêtre de projet ouverte dans Audacity : le script la réutilise)
+                     "  3. Relance ce script (une seule fenêtre ouverte dans Audacity : le script la réutilise)")
         self.to, self.fr = open(to, "w"), open(fr, "r")
 
     def __call__(self, cmd):
@@ -113,6 +202,8 @@ class Audacity:
         rep = []
         while True:
             ln = self.fr.readline()
+            if ln == "":  # Audacity fermé ou planté
+                raise BrokenPipeError("pas de réponse d'Audacity")
             if ln == "\n" and rep:
                 break
             rep.append(ln)
@@ -126,45 +217,27 @@ def q(t):
     return '"' + t.replace('"', "'") + '"'
 
 
-def creer(aud, nom, lignes, dossier_prises_hist, cible):
+def ecrire_projet(aud, pistes, etiquettes, cible):
     # Une seule fenêtre, vidée entre deux projets (ouvrir/fermer des fenêtres fait planter Audacity)
     aud("SelectAll:")
     aud("RemoveTracks:")
-    t, n_piste, etiquettes = 0.0, 0, []
-    for it in lignes:
-        fichiers = prises_de(dossier_prises_hist, it)
-        texte = f"{it['n']:02d} {it['qui']} : {it['texte']}"
-        if not fichiers:
-            etiquettes.append((t, t + MANQUE, "À ENREGISTRER — " + texte))
-            t += MANQUE + BLANC
-            continue
-        etiquettes.append((t, t, texte))
-        longueur = 0.0
-        for f in fichiers:
-            aud(f"Import2: Filename={q(str(f))}")
-            aud(f"SelectTracks: Track={n_piste} TrackCount=1 Mode=Set")
-            aud(f"SetTrack: Name={q(f.stem.replace('_omnivoice1', ''))}")
-            if t > 0:
-                aud(f"SetClip: At=0 Start={t:.3f}")
-            n_piste += 1
-            longueur = max(longueur, duree(f))
-        t += longueur + BLANC
-    # Pistes de travail
-    aud("NewMonoTrack:")
-    aud(f"SelectTracks: Track={n_piste} TrackCount=1 Mode=Set")
-    aud("SetTrack: Name=Bruitages")
-    n_piste += 1
-    aud("NewStereoTrack:")
-    aud(f"SelectTracks: Track={n_piste} TrackCount=1 Mode=Set")
-    aud("SetTrack: Name=Musique")
-    n_piste += 1
-    # Étiquettes avec le texte du script
-    aud("NewLabelTrack:")
-    aud(f"SelectTracks: Track={n_piste} TrackCount=1 Mode=Set")
-    aud("SetTrack: Name=Script")
+    n = 0
+    for f, debut, nom in pistes:
+        aud(f"Import2: Filename={q(str(f))}")
+        aud(f"SelectTracks: Track={n} TrackCount=1 Mode=Set")
+        aud(f"SetTrack: Name={q(nom)}")
+        if debut > 0:
+            aud(f"SetClip: At=0 Start={debut:.3f}")
+        n += 1
+    for type_, nom in (("NewMonoTrack:", "Bruitages"), ("NewStereoTrack:", "Musique"), ("NewLabelTrack:", "Script")):
+        aud(type_)
+        aud(f"SelectTracks: Track={n} TrackCount=1 Mode=Set")
+        aud(f"SetTrack: Name={nom}")
+        n += 1
+    piste_etiq = n - 1
     for i, (debut, fin, txt) in enumerate(etiquettes):
         aud(f"SelectTime: Start={debut:.3f} End={fin:.3f}")
-        aud(f"SelectTracks: Track={n_piste} TrackCount=1 Mode=Set")
+        aud(f"SelectTracks: Track={piste_etiq} TrackCount=1 Mode=Set")
         aud("AddLabel:")
         aud(f"SetLabel: Label={i} Text={q(txt)} Start={debut:.3f} End={fin:.3f}")
     aud("SelectNone:")
@@ -179,6 +252,7 @@ def creer(aud, nom, lignes, dossier_prises_hist, cible):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--histoire", nargs="*", help="ex. H2 H3 Menus (par défaut : tout)")
+    ap.add_argument("--quoi", nargs="*", choices=["segments", "completes"], default=["segments", "completes"])
     ap.add_argument("--liste", action="store_true", help="afficher ce qui sera créé, sans rien faire")
     ap.add_argument("--audio", help="dossier « Audio (enregistrements) » (par défaut : celui de voix.json)")
     a = ap.parse_args()
@@ -188,37 +262,51 @@ def main():
     if not audio.is_dir():
         sys.exit(f"Dossier Drive introuvable : {audio}")
     filtre = {h.upper() for h in a.histoire} if a.histoire else None
+    struct = scenes(filtre)
+    deja = projets_existants(audio)
 
-    deja = existants(audio)
-    a_faire, sautes = [], []
-    for nom, hid, lignes in plan_projets(filtre):
-        if nfc(nom).lower() in deja:
-            sautes.append((nom, deja[nfc(nom).lower()]))
-        else:
-            a_faire.append((nom, hid, lignes))
+    # (nom, hid, fabrique de la frise, description)
+    candidats = []
+    if "segments" in a.quoi:
+        for nom, hid, lignes in plan_segments(struct):
+            def fab(lignes=lignes, hid=hid):
+                p, e, _ = frise_prises(lignes, dossier_prises(audio, hid))
+                return p, e
+            dp = dossier_prises(audio, hid)
+            manq = [it for it in lignes if not prises_de(dp, it)]
+            desc = f"{len(lignes)} répliques" + (f"  — sans prise : " + ", ".join(
+                f"{it['n']:02d} {it['qui']}" for it in manq) if manq else "")
+            candidats.append((nom, hid, fab, desc))
+    if "completes" in a.quoi:
+        for nom, hid, parcours in plan_completes(struct):
+            dp, dj = dossier_prises(audio, hid), dossier_projets(audio, hid)
+            def fab(parcours=parcours, dp=dp, dj=dj):
+                p, e, _ = frise_complete(parcours, dp, dj)
+                return p, e
+            desc = " → ".join(n + ("" if montage_de(dj, n) else "*") for n, _ in parcours)
+            candidats.append((nom, hid, fab, desc))
 
-    print(f"Déjà faits (on n'y touche pas) : {len(sautes)}")
-    for nom, fs in sautes:
-        print(f"  = {nom:<22} ({', '.join(sorted({f.name for f in fs}))})")
-    print(f"À créer : {len(a_faire)}")
-    for nom, hid, lignes in a_faire:
-        dp = dossier_prises(audio, hid)
-        manquantes = [it for it in lignes if not prises_de(dp, it)]
-        note = f"  — {len(manquantes)} réplique(s) sans prise : " + ", ".join(
-            f"{it['n']:02d} {it['qui']}" for it in manquantes) if manquantes else ""
-        print(f"  + {nom:<22} {len(lignes)} répliques{note}")
+    a_faire = [c for c in candidats if nfc(c[0]).lower() not in deja]
+    sautes = [c for c in candidats if nfc(c[0]).lower() in deja]
+    print(f"Projets déjà là (on n'y touche pas) : {len(sautes)}")
+    for nom, *_ in sautes:
+        print(f"  = {nom:<22} ({', '.join(sorted({f.name for f in deja[nfc(nom).lower()]}))})")
+    print(f"À créer : {len(a_faire)}   (* = segment pas encore monté : prises brutes)")
+    for nom, _, _, desc in a_faire:
+        print(f"  + {nom:<22} {desc}")
     if a.liste or not a_faire:
         return
 
     aud = Audacity()
-    for i, (nom, hid, lignes) in enumerate(a_faire, 1):
+    for i, (nom, hid, fab, _) in enumerate(a_faire, 1):
         cible = dossier_projets(audio, hid) / f"{nom}.aup3"
         try:
-            creer(aud, nom, lignes, dossier_prises(audio, hid), cible)
+            pistes, etiquettes = fab()
+            ecrire_projet(aud, pistes, etiquettes, cible)
             print(f"[{i}/{len(a_faire)}] {cible.parent.parent.name}/{cible.name}", flush=True)
         except Exception as e:
             print(f"[{i}/{len(a_faire)}] ERREUR {nom} : {e}", flush=True)
-            if isinstance(e, (BrokenPipeError, OSError)):
+            if isinstance(e, OSError):
                 sys.exit("Audacity ne répond plus (planté ?). Relance-le puis relance le script : il reprend où il en était.")
     print("Terminé. Ouvre les .aup3 dans Audacity 4 : il les convertit en .aup4 sans toucher l'original.")
 
