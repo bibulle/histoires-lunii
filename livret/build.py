@@ -40,7 +40,10 @@ def index_audio():
     dossiers = [*audio.glob("H* */1 – Prises"), *audio.glob("* Menus/1 – Prises")] if audio.is_dir() else []
     for d in sorted(dossiers):
         for f in sorted(d.iterdir()):
-            m = re.match(r"^((?:H\d+-\d+[a-z]?(?:-[^_]+)?|Menu\d-[^_]+|Fin-[^_]+)_\d\d_[^_]+)_(.+)\.(wav|mp3|m4a)$", f.name)
+            # segment_NN_Qui[-Voix][_prise].wav : l'étiquette de prise est facultative (ex. H3-6-commun_03_Matheo.wav
+            # enregistré à la main) ; « -Voix » = une des voix d'une réplique à plusieurs (Romy&Alix-Romy).
+            m = re.match(r"^((?:H\d+-\d+[a-z]?(?:-[^_]+)?|Menu\d-[^_]+|Fin-[^_]+)_\d\d_[^_\-]+)(?:-[^_]+)?(?:_.+)?\.(wav|mp3|m4a)$",
+                         unicodedata.normalize("NFC", f.name))
             if m:
                 idx.setdefault(m.group(1), []).append(f)
     return idx
@@ -125,8 +128,9 @@ def audio_links(cle):
         return ""
     liens = []
     for f in files:
-        prise = f.stem[len(cle) + 1:]
-        lab = prise.replace("omnivoice", "IA ").replace("prise", "voix ").replace("_OK", " ✓")
+        prise = unicodedata.normalize("NFC", f.stem)[len(cle):].lstrip("_")  # "omnivoice1", "Romy_omnivoice1" ou ""
+        lab = (prise.lstrip("-").replace("omnivoice", "IA ").replace("prise", "voix ").replace("_OK", " ✓")
+               .replace("_", " ").strip() or "voix")
         url = lien_drive(f)
         ok = " ok" if prise.endswith("_OK") else ""
         liens.append(f'<a class="play{ok}" href="{url}" target="_blank" rel="noopener" title="{html.escape(f.name)}">▶ {html.escape(lab)}</a>')
