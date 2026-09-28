@@ -2,7 +2,7 @@
 """Génère livret/livret.html (livret famille) à partir des fichiers Markdown du dépôt.
 Usage : python3 livret/build.py
 """
-import html, json, os, re, subprocess, pathlib, datetime, sys, urllib.parse
+import html, json, os, re, subprocess, pathlib, datetime, sys, unicodedata, urllib.parse
 
 ROOT_OUTILS = pathlib.Path(__file__).resolve().parent.parent / "outils"
 sys.path.insert(0, str(ROOT_OUTILS))
@@ -47,6 +47,70 @@ def index_audio():
 
 AUDIO = index_audio()
 
+def dossier_audio():
+    try:
+        cfg = json.loads((ROOT_OUTILS / "voix.json").read_text(encoding="utf-8"))
+        a = pathlib.Path(os.environ.get("LIVRET_AUDIO") or cfg["drive_audio"]).expanduser()
+        return a if a.is_dir() else None
+    except Exception:
+        return None
+
+def index_montages():
+    """Montages exportés (.wav/.mp3) et projets Audacity (.aup3/.aup4), par nom en minuscules."""
+    mont, proj = {}, set()
+    audio = dossier_audio()
+    if not audio:
+        return mont, proj
+    for d in sorted(audio.glob("*/*")):
+        nom = unicodedata.normalize("NFC", d.name)
+        if not d.is_dir() or not re.match(r"^[23] – (Projets Audacity|Montés)", nom):
+            continue
+        for f in d.iterdir():
+            cle = unicodedata.normalize("NFC", f.stem).lower()
+            if f.suffix.lower() in (".wav", ".mp3", ".m4a"):
+                # le MP3 Lunii (dossier « 3 – Montés ») passe devant le .wav de travail
+                if cle not in mont or "Montés" in nom:
+                    mont[cle] = f
+            elif f.suffix.lower() in (".aup3", ".aup4", ".aup"):
+                proj.add(cle)
+    return mont, proj
+
+MONTAGES, PROJETS = index_montages()
+
+try:  # même découpage que la création des projets Audacity (segments et 3 parcours par histoire)
+    from creer_projets_audacity import scenes as _scenes, plan_segments, plan_completes
+    _STRUCT = _scenes(None)
+    SEGMENTS = {}
+    for nom, hid, _ in plan_segments(_STRUCT):
+        SEGMENTS.setdefault(hid, []).append(nom)
+    PARCOURS = {}
+    for nom, hid, parcours in plan_completes(_STRUCT):
+        PARCOURS.setdefault(hid, []).append((nom, [n for n, _ in parcours]))
+except Exception as e:  # pragma: no cover
+    print("(avancement du montage indisponible :", e, ")")
+    SEGMENTS, PARCOURS = {}, {}
+PARCOURS_NOMS = ["Romy", "Alix", "Les deux"]
+
+def lien_drive(f):
+    fid = drive_id(f)
+    return (f"https://drive.google.com/file/d/{fid}/view" if fid
+            else "https://drive.google.com/drive/search?q=" + urllib.parse.quote(unicodedata.normalize("NFC", f.stem)))
+
+def etat_segment(nom):
+    """('monte', fichier) | ('projet', None) | ('afaire', None)"""
+    cle = unicodedata.normalize("NFC", nom).lower()
+    if cle in MONTAGES:
+        return "monte", MONTAGES[cle]
+    return ("projet" if cle in PROJETS else "afaire"), None
+
+def puce_segment(nom):
+    etat, f = etat_segment(nom)
+    if etat == "monte":
+        return f'<a class="etat monte" href="{lien_drive(f)}" target="_blank" rel="noopener" title="Montage exporté : {html.escape(f.name)}">✓ monté ▶</a>'
+    if etat == "projet":
+        return '<span class="etat projet" title="Le projet Audacity existe, le montage n\'est pas encore exporté en .wav">◐ en montage</span>'
+    return '<span class="etat afaire">○ à monter</span>'
+
 def drive_id(f):
     """Identifiant Google Drive du fichier (attribut posé par Google Drive pour ordinateur), sinon None."""
     try:
@@ -63,9 +127,7 @@ def audio_links(cle):
     for f in files:
         prise = f.stem[len(cle) + 1:]
         lab = prise.replace("omnivoice", "IA ").replace("prise", "voix ").replace("_OK", " ✓")
-        fid = drive_id(f)
-        url = (f"https://drive.google.com/file/d/{fid}/view" if fid
-               else "https://drive.google.com/drive/search?q=" + urllib.parse.quote(f.stem))
+        url = lien_drive(f)
         ok = " ok" if prise.endswith("_OK") else ""
         liens.append(f'<a class="play{ok}" href="{url}" target="_blank" rel="noopener" title="{html.escape(f.name)}">▶ {html.escape(lab)}</a>')
     return '<span class="audio">' + "".join(liens) + "</span>"
@@ -98,7 +160,8 @@ def rendre_section(sec):
             tag, cls = "Commun → à recoller dans " + ", ".join(f"{c}.mp3" for c in cibles), "bloc commun"
         else:
             tag, cls = f"🎬 {scene}.mp3", "bloc"
-        html_out.append(f'<div class="{cls}"><span class="bloc-tag">{html.escape(tag)}</span>{"".join(b["html"])}</div>')
+        etat = puce_segment(f"{scene}-{b['var']}" if b["kind"] == "variant" else scene) if not (b["kind"] != "variant" and variantes) else ""
+        html_out.append(f'<div class="{cls}"><span class="bloc-tag">{html.escape(tag)}{etat}</span>{"".join(b["html"])}</div>')
     recap = []
     for c in cibles:
         v = c[len(scene) + 1:] if c != scene else None
@@ -113,7 +176,7 @@ def rendre_section(sec):
                 _, cle, qui, texte, son = it
                 court = texte if len(texte) <= 60 else texte[:57].rsplit(" ", 1)[0] + "…"
                 lis.append(f'<li><code>{html.escape(cle)}</code> <b>{html.escape(qui)}</b> {html.escape(court)}{son}</li>')
-        recap.append(f'<p class="r-mp3"><b>{html.escape(c)}.mp3</b> <span>projet Audacity « {html.escape(c)} »</span></p><ol>{"".join(lis)}</ol>')
+        recap.append(f'<p class="r-mp3"><b>{html.escape(c)}.mp3</b> {puce_segment(c)} <span>projet Audacity « {html.escape(c)} »</span></p><ol>{"".join(lis)}</ol>')
     if recap:
         n = len(recap)
         html_out.append(f'<details class="recap"><summary>🎬 Ordre de montage : {n} fichier{"s" if n > 1 else ""} MP3</summary>{"".join(recap)}</details>')
@@ -198,14 +261,46 @@ def story(path):
                 ajoute(f"<p>{inline(s)}</p>")
     if sec:
         out.append(rendre_section(sec))
-    if nb_audio:
-        meta.append(f'<li class="avancement">Audio : {nb_audio} répliques sur {nb} déjà générées ou enregistrées</li>')
     num = "M" if sid.startswith("menu") else sid.upper()
     short = title.split("–", 1)[-1].strip()
+    st = avancement(sid.upper(), nb, nb_audio)
     body = (f'<article class="story" id="{sid}" data-narr="{narr.upper()}"><header><p class="num">{num}</p><h2>{html.escape(short)}</h2>'
-            f'<ul class="meta">{"".join(meta)}</ul></header>{"".join(out)}'
+            f'<ul class="meta">{"".join(meta)}</ul>{st["bloc"]}</header>{"".join(out)}'
             f'<p class="top"><a href="#sommaire">Retour au sommaire</a></p></article>')
-    return sid, num, short, body
+    return sid, num, short, body, st
+
+def jauge(fait, total):
+    pc = round(100 * fait / total) if total else 0
+    cls = " fini" if total and fait >= total else ""
+    return (f'<span class="jauge{cls}" role="img" aria-label="{fait} sur {total}"><span style="width:{pc}%"></span></span>'
+            f'<span class="nb">{fait}/{total}</span>')
+
+def avancement(hid, nb, nb_audio):
+    """Voix, segments montés et histoires complètes d'une histoire (ou des menus)."""
+    segs = SEGMENTS.get(hid, [])
+    etats = [etat_segment(n)[0] for n in segs]
+    montes = etats.count("monte")
+    completes = []
+    for k, (nom, parcours) in enumerate(PARCOURS.get(hid, [])):
+        etat, f = etat_segment(nom)
+        lab = PARCOURS_NOMS[k] if k < len(PARCOURS_NOMS) else str(k + 1)
+        chemin = " → ".join(parcours)
+        if etat == "monte":
+            completes.append(f'<a class="complete ok" href="{lien_drive(f)}" target="_blank" rel="noopener" '
+                             f'title="{html.escape(nom)} : {html.escape(chemin)}">▶ {lab}</a>')
+        else:
+            quoi = "projet créé, pas encore exporté" if etat == "projet" else "pas encore montée"
+            completes.append(f'<span class="complete" title="{html.escape(nom)} ({quoi}) : {html.escape(chemin)}">'
+                             f'{"◐" if etat == "projet" else "○"} {lab}</span>')
+    nc = sum("ok" in c for c in completes)
+    lignes = [f'<div class="av-l"><span class="av-k">Voix</span>{jauge(nb_audio, nb)}</div>']
+    if segs:
+        lignes.append(f'<div class="av-l"><span class="av-k">Montage</span>{jauge(montes, len(segs))}</div>')
+    if completes:
+        lignes.append(f'<div class="av-l"><span class="av-k">Histoire complète</span><span class="completes">{"".join(completes)}</span></div>')
+    bloc = f'<div class="av">{"".join(lignes)}</div>' if nb else ""
+    return dict(nb=nb, voix=nb_audio, segs=len(segs), montes=montes, nc=nc, ncomp=len(completes),
+                completes="".join(completes), bloc=bloc)
 
 def doc(path, anchor):
     try:  # bibliothèque Python « markdown » (installée par publier.sh), sinon pandoc
@@ -224,13 +319,39 @@ def doc(path, anchor):
     return f'<section class="doc" id="{anchor}">{frag}<p class="top"><a href="#sommaire">Retour au sommaire</a></p></section>'
 
 stories = [story(p) for p in fichiers_scripts()]
-toc = "".join(f'<li><a href="#{sid}"><span class="n">{num}</span>{html.escape(t)}</a></li>' for sid, num, t, _ in stories)
+def etat_court(st):
+    if st["ncomp"] and st["nc"] == st["ncomp"]:
+        return "fini", "✓ Terminée"
+    if st["montes"] or st["nc"]:
+        return "encours", "◐ Montage en cours"
+    if st["voix"]:
+        return "voix", "◔ Voix en cours" if st["voix"] < st["nb"] else "◑ Voix prêtes"
+    return "afaire", "○ À faire"
+
+toc = "".join(f'<li><a href="#{sid}"><span class="n">{num}</span><span class="t">{html.escape(t)}'
+              f'<span class="etat-h {etat_court(st)[0]}">{etat_court(st)[1]}</span></span></a></li>'
+              for sid, num, t, _, st in stories)
+rows = "".join(
+    f'<tr><th scope="row"><a href="#{sid}">{num} · {html.escape(t)}</a></th>'
+    f'<td>{jauge(st["voix"], st["nb"])}</td>'
+    f'<td>{jauge(st["montes"], st["segs"]) if st["segs"] else "–"}</td>'
+    f'<td><span class="completes">{st["completes"] or "–"}</span></td></tr>'
+    for sid, num, t, _, st in stories)
+tot = {k: sum(st[k] for *_, st in stories) for k in ("nb", "voix", "segs", "montes", "nc", "ncomp")}
+suivi = (f'<section class="suivi" id="suivi"><h2 class="sec">Où en est-on ?</h2>'
+         f'<p class="suivi-tot"><b>{tot["voix"]}/{tot["nb"]}</b> répliques en voix · <b>{tot["montes"]}/{tot["segs"]}</b> morceaux montés · '
+         f'<b>{tot["nc"]}/{tot["ncomp"]}</b> histoires complètes écoutables</p>'
+         f'<div class="tablewrap"><table class="av-table"><thead><tr><th>Histoire</th><th>Voix</th><th>Montage</th>'
+         f'<th>Histoires complètes</th></tr></thead><tbody>{rows}</tbody></table></div>'
+         f'<p class="legende">▶ = à écouter dans le Drive · ◐ = projet Audacity prêt, montage pas encore exporté · ○ = pas encore fait. '
+         f'Chaque histoire existe en 3 parcours : Romy, Alix, les deux (le compagnon et le choix changent d\'un parcours à l\'autre ; '
+         f'survole un bouton pour voir le chemin).</p></section>')
 opts = ('<option value="NARRATEUR-PAPIC">Narrateur · Papic</option><option value="NARRATEUR-MAMILY">Narrateur · Mamily</option>'
         + "".join(f'<option value="{k}">{ROLES[k][0]}</option>' for k in FILTER if k != "NARRATEUR"))
 today = datetime.date.today().strftime("%d/%m/%Y")
 tpl = (ROOT / "livret" / "template.html").read_text(encoding="utf-8")
-page = (tpl.replace("{{TOC}}", toc).replace("{{OPTIONS}}", opts).replace("{{DATE}}", today)
-        .replace("{{STORIES}}", "".join(b for *_, b in stories))
+page = (tpl.replace("{{TOC}}", toc).replace("{{SUIVI}}", suivi).replace("{{OPTIONS}}", opts).replace("{{DATE}}", today)
+        .replace("{{STORIES}}", "".join(b for *_, b, _ in stories))
         .replace("{{PERSONNAGES}}", doc(ROOT / "docs" / "02-personnages-et-voix.md", "personnages"))
         .replace("{{PLAN}}", doc(ROOT / "docs" / "01-plan-projet.md", "plan")))
 OUT.write_text(page, encoding="utf-8")
