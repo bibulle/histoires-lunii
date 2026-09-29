@@ -14,7 +14,7 @@ Déroulé : H2-1 (×3) → H2-2 → H2-3 (×compagnon) → H2-4 question → H2-
 
 *(Début commun aux 3 versions)*
 NARRATEUR : Il était une fois, dans le jardin du château, un gros dragon vert tout triste, assis dans l'herbe. C'était Grumo.
-GRUMO : « [sigh] Tous les dragons savent voler… sauf moi. Snif… Aaaah… TCHOUM ! »
+GRUMO : « [dissatisfaction-hnn] pfff !! Tous les dragons savent voler… sauf moi. [sigh] [surprise-ah]… [surprise-ah]… [surprise-ah]-tchoum ! »
 [bulles]
 NARRATEUR : Grumo était un peu enrhumé. Au lieu de cracher du feu, il éternuait des bulles !
 
@@ -44,7 +44,7 @@ PAPIC : « [sigh] Bon… il faut encore bricoler. »
 ### H2-3 – Le compagnon essaie d'aider [×compagnon]
 
 **Paillette**
-PAILLETTE : « Moi, quand je chante, je m'envole ! Écoute : Tra-la-li-laaa ! »
+PAILLETTE : « Moi, quand je chante, je m'envole ! Écoute : laaa !! la !! laaa !! »
 [clochette]
 NARRATEUR : Alors Grumo essaie de chanter, lui aussi… Mais ça fait :
 GRUMO : « BROOOOOAAAAA ! »
@@ -55,7 +55,7 @@ TATA BÊTISE : « J'ai une super idée ! Des ballons ! »
 NARRATEUR : Tata Bêtise attache vingt ballons à la queue de Grumo. Grumo monte… un tout petit peu… et…
 [pop, pop, pop]
 TATA BÊTISE : « Oups-la-boum ! Une toute petite bêtise… [laughter] Hi hi hi ! »
-GRUMO (en riant) : « [laughter] Hi hi, ça chatouille, Tata ! »
+GRUMO (en riant) : « [laughter] Hi hi ! ça chatouille !! Tata ! »
 
 **Mamily**
 MAMILY : « Pour voler, il faut des forces, mon gros dragon ! »
