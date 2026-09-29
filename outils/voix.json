@@ -24,7 +24,7 @@
     "ALIX":             {"instruct": "female, child, high pitch", "etapes": 32,"seed": 5},
     "ROMY ET ALIX":     {"instruct": "female, child, high pitch"},
     "MATHÉO":           {"instruct": "male, child, very high pitch", "ignorer": true},
-    "PAPIC":            {"instruct": "male, elderly, low pitch"},
+    "PAPIC":            {"instruct": "male, elderly, low pitch", "vitesse": 0.5},
     "MAMILY":           {"instruct": "female, elderly, moderate pitch"},
     "TATA BÊTISE":      {"instruct": "female, young adult, high pitch"},
     "PAILLETTE":        {"instruct": "female, child, very high pitch"},
