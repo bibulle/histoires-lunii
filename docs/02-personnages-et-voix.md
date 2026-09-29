@@ -58,6 +58,10 @@ Dans les scripts, les **balises en anglais** placées dans les répliques (`[lau
 
 Les voix sont **clonées** depuis les échantillons du Drive « Audio (enregistrements)/4 - Sources » (`Personnage-Interprete.wav` + `.txt` avec le texte exact). Le narrateur a deux voix distinctes, **Narrateur-Papic** et **Narrateur-Mamily**, séparées des personnages Papic et Mamily. Une voix sans échantillon est générée en « voix décrite » (champ *instruct* de `outils/voix.json`), où se règlent aussi seed, guidance, étapes, vitesse et température. Un fichier déjà généré n'est jamais refait : pour le refaire, le supprimer. Dans le livret, les boutons ▶ à côté des répliques ouvrent les audios déjà faits dans le Drive.
 
+## Monter dans Audacity
+
+`sh outils/projets-audacity.sh` (Audacity 3.7 ouvert, module mod-script-pipe activé) crée un projet par segment et par variante (`H2-1-Romy.aup3`…), les 3 histoires complètes (`H2 complete - 1/2/3`) et « Menus complet », à partir des prises du Drive. Tout est rangé dans le dossier **`Audacity/`** du dépôt (réglable par `audacity` dans `outils/voix.json`), qui reste sur le Mac : il est exclu de git. Un projet qui existe déjà (en .aup3 ou .aup4) n'est jamais écrasé. Exporter chaque montage en .wav **dans ce même dossier**, avec le nom du projet (`H2-1-Romy.wav`) : les histoires complètes l'utilisent à la place des prises brutes, et le livret le compte comme « ✓ monté ».
+
 Pour les voix jouées par la famille, la balise sert simplement d'indication de jeu.
 
 | Balise | Effet | Utilisée pour |

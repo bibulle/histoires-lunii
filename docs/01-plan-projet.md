@@ -47,7 +47,7 @@ Le château est **rose pour Romy**, **bleu pour Alix** et **rose et bleu** quand
 Papic et Mamily racontent à tour de rôle : Papic pour H1, H4, H7, H9 ; Mamily pour H2, H3, H5, H6, H8. Les menus de la Lunii sont dits à deux voix.
 
 ## Textes des menus (communs)
-Script complet, avec qui dit quoi : `histoires/Menus.md` (22 fichiers, dossier Drive « 3 – Menus »). Papic et Mamily annoncent, la princesse ou le compagnon choisi répond.
+Script complet, avec qui dit quoi : `histoires/Menus.md` (22 fichiers ; prises dans le Drive « 3 – Menus/1 – Prises », projets et montages dans `Audacity/`). Papic et Mamily annoncent, la princesse ou le compagnon choisi répond.
 - **Accueil** : « Bienvenue au château des Princesses, mes chéries ! » / « Tourne la molette pour choisir, et appuie sur le bouton pour commencer ! »
 - **Menu 1** : « Qui part à l'aventure aujourd'hui ? » → « La Princesse Romy ! » « C'est moi ! » / « La Princesse Alix ! » « Moi, moi ! » / « Les deux princesses, ensemble ! » « Ensemble ! »
 - **Menu 2** : « Quelle histoire on écoute ? » + le titre, lu par le narrateur de l'histoire.
@@ -67,7 +67,8 @@ Les questions évitent « tu » et « vous » : le même fichier sert pour une p
 ## Où sont les fichiers
 - **Textes** : ce dépôt GitHub (source de référence), avec une copie locale dans `Documents/histoires-lunii` sur le Mac.
 - **Livret famille** : page web générée depuis ce dépôt, partagée avec Mamily et Tata.
-- **Audio et images** : dossier Google Drive « Histoires Lunii – Les Aventures des Princesses ».
+- **Prises de voix, échantillons, bruitages et images** : dossier Google Drive « Histoires Lunii – Les Aventures des Princesses » (prises dans « Audio (enregistrements)/H… /1 – Prises » et « 3 – Menus/1 – Prises »).
+- **Projets Audacity et montages exportés (.wav)** : dossier `Audacity/` du dépôt, tous ensemble (histoires et menus). Il reste sur le Mac : exclu de git par `.gitignore`, et sorti du Drive faute de place. C'est la seule copie : à sauvegarder à part.
 
 ## Planning (fin septembre → Noël)
 | Semaines | Étape |

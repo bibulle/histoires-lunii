@@ -17,18 +17,21 @@ Usage (depuis le dossier histoires-lunii, Audacity 3.7 ouvert, mod-script-pipe a
 
 2) Trois histoires complètes par histoire (« H2 complete - 1/2/3 »), un parcours chacune :
    1 = Romy, 2 = Alix, 3 = les deux ; le compagnon et le choix changent d'un parcours à l'autre.
-   Chaque segment du parcours est pris dans son montage « H2-1-Romy.wav » (dossier Projets) s'il
+   Chaque segment du parcours est pris dans son montage « H2-1-Romy.wav » (dossier Audacity) s'il
    existe, sinon dans les prises brutes. Une étiquette marque le début de chaque segment.
 
 3) Pour les menus : un seul projet « Menus complet », tous les fichiers dans l'ordre du script
    (accueil → question → toutes les réponses → question suivante… → fin), 1 s de blanc entre deux
    fichiers, chacun pris dans son montage « Menu1-Romy.wav » s'il existe, sinon dans les prises.
 
-Enregistré dans « 2 – Projets Audacity » de l'histoire (« 3 – Menus » pour les menus).
+Les prises sont lues dans le Drive (« H2 – …/1 – Prises », « 3 – Menus/1 – Prises »).
+Les projets sont enregistrés dans le dossier « Audacity/ » du dépôt (tous au même endroit, histoires
+et menus ; dossier exclu de git par .gitignore, réglable par 'audacity' dans outils/voix.json).
+C'est là aussi qu'on exporte les montages .wav (H2-1-Romy.wav, H2 complete - 1.wav…).
 
 On NE TOUCHE JAMAIS à un projet existant : un projet est sauté s'il existe déjà en .aup3/.aup4
-du même nom dans n'importe quel dossier « 2 – Projets Audacity » ou « 3 – Montés » du Drive
-(un montage .wav/.mp3 seul n'empêche pas la création). Un projet auquel il manque une prise
+du même nom dans « Audacity/ », ou dans un ancien dossier « 2 – Projets Audacity » / « 3 – Montés »
+du Drive (un montage .wav/.mp3 seul n'empêche pas la création). Un projet auquel il manque une prise
 (ex. réplique de Mathéo) n'est pas créé, mais il est signalé. Relancer ne crée que ce qui manque.
 """
 import argparse, errno, json, os, pathlib, plistlib, re, select, subprocess, sys, time, unicodedata, wave
@@ -125,18 +128,27 @@ def plan_completes(struct):
 
 
 # ---------------------------------------------------------------- fichiers
-def projets_existants(audio):
+DEPOT = pathlib.Path(__file__).resolve().parent.parent
+
+
+def dossier_audacity(cfg=None):
+    """Dossier des projets Audacity et des montages exportés : « Audacity/ » à la racine du dépôt."""
+    if cfg is None:
+        cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
+    return (DEPOT / pathlib.Path(cfg.get("audacity", "Audacity")).expanduser()).resolve()
+
+
+def projets_existants(audio, projets):
     noms = {}
-    for d in audio.rglob("*"):
-        if d.is_dir() and nfc(d.name) in ("2 – Projets Audacity", "3 – Montés (MP3 Lunii)"):
-            for f in d.iterdir():
-                if f.suffix.lower() in EXTS_PROJET:
-                    noms.setdefault(nfc(f.stem).lower(), []).append(f)
+    anciens = [d for d in audio.rglob("*") if d.is_dir()
+               and nfc(d.name) in ("2 – Projets Audacity", "3 – Montés (MP3 Lunii)")]
+    for d in [projets, *anciens]:
+        if not d.is_dir():
+            continue
+        for f in d.iterdir():
+            if f.suffix.lower() in EXTS_PROJET:
+                noms.setdefault(nfc(f.stem).lower(), []).append(f)
     return noms
-
-
-def dossier_projets(audio, hid):
-    return dossier_prises(audio, hid).parent / "2 – Projets Audacity"
 
 
 def prises_de(dossier, it):
@@ -341,7 +353,8 @@ def main():
         sys.exit(f"Dossier Drive introuvable : {audio}")
     filtre = {h.upper() for h in a.histoire} if a.histoire else None
     struct = scenes(filtre)
-    deja = projets_existants(audio)
+    projets = dossier_audacity(cfg)
+    deja = projets_existants(audio, projets)
 
     # (nom, hid, fabrique de la frise, description)
     candidats = []
@@ -355,13 +368,14 @@ def main():
             candidats.append((nom, hid, fab, f"{len(lignes)} répliques", manq))
     if "completes" in a.quoi:
         for nom, hid, parcours in plan_completes(struct):
-            dp, dj = dossier_prises(audio, hid), dossier_projets(audio, hid)
+            dp, dj = dossier_prises(audio, hid), projets
             entre = BLANC_MENUS - BLANC if hid == "MENUS" else 0.0
             def fab(parcours=parcours, dp=dp, dj=dj, entre=entre):
                 p, e, _ = frise_complete(parcours, dp, dj, entre)
                 return p, e
-            desc = " → ".join(n + ("" if montage_de(dj, n) else "*") for n, _ in parcours)
-            manq = [f"{n} {it['n']:02d} {it['qui']}" for n, lignes in parcours if not montage_de(dj, n)
+            desc = " → ".join(n + ("" if dj.is_dir() and montage_de(dj, n) else "*") for n, _ in parcours)
+            manq = [f"{n} {it['n']:02d} {it['qui']}" for n, lignes in parcours
+                    if not (dj.is_dir() and montage_de(dj, n))
                     for it in lignes if not prises_de(dp, it)]
             candidats.append((nom, hid, fab, desc, manq))
 
@@ -381,13 +395,14 @@ def main():
     if a.liste or not a_faire:
         return
 
+    projets.mkdir(parents=True, exist_ok=True)
     aud = Audacity()
     for i, (nom, hid, fab, *_) in enumerate(a_faire, 1):
-        cible = dossier_projets(audio, hid) / f"{nom}.aup3"
+        cible = projets / f"{nom}.aup3"
         try:
             pistes, etiquettes = fab()
             ecrire_projet(aud, pistes, etiquettes, cible)
-            print(f"[{i}/{len(a_faire)}] {cible.parent.parent.name}/{cible.name}", flush=True)
+            print(f"[{i}/{len(a_faire)}] {cible.parent.name}/{cible.name}", flush=True)
         except Exception as e:
             print(f"[{i}/{len(a_faire)}] ERREUR {nom} : {e}", flush=True)
             if isinstance(e, OSError):

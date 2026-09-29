@@ -58,16 +58,29 @@ def dossier_audio():
     except Exception:
         return None
 
+def dossier_audacity():
+    """Projets Audacity et montages exportés : dossier « Audacity/ » du dépôt (non poussé dans git)."""
+    try:
+        cfg = json.loads((ROOT_OUTILS / "voix.json").read_text(encoding="utf-8"))
+    except Exception:
+        cfg = {}
+    d = pathlib.Path(os.environ.get("LIVRET_AUDACITY") or ROOT / cfg.get("audacity", "Audacity")).expanduser()
+    return d if d.is_dir() else None
+
 def index_montages():
-    """Montages exportés (.wav/.mp3) et projets Audacity (.aup3/.aup4), par nom en minuscules."""
+    """Montages exportés (.wav/.mp3) et projets Audacity (.aup3/.aup4), par nom en minuscules.
+    Cherchés dans « Audacity/ » du dépôt, puis dans les anciens dossiers « 2 – Projets Audacity » /
+    « 3 – Montés (MP3 Lunii) » du Drive (un MP3 Lunii déposé dans « 3 – Montés » passe devant)."""
     mont, proj = {}, set()
+    dossiers = []
+    if dossier_audacity():
+        dossiers.append(("Audacity", dossier_audacity()))
     audio = dossier_audio()
-    if not audio:
-        return mont, proj
-    for d in sorted(audio.glob("*/*")):
+    for d in (sorted(audio.glob("*/*")) if audio else []):
         nom = unicodedata.normalize("NFC", d.name)
-        if not d.is_dir() or not re.match(r"^[23] – (Projets Audacity|Montés)", nom):
-            continue
+        if d.is_dir() and re.match(r"^[23] – (Projets Audacity|Montés)", nom):
+            dossiers.append((nom, d))
+    for nom, d in dossiers:
         for f in d.iterdir():
             cle = unicodedata.normalize("NFC", f.stem).lower()
             if f.suffix.lower() in (".wav", ".mp3", ".m4a"):
@@ -94,6 +107,10 @@ except Exception as e:  # pragma: no cover
     SEGMENTS, PARCOURS = {}, {}
 PARCOURS_NOMS = ["Romy", "Alix", "Les deux"]
 
+def dans_drive(f):
+    audio = dossier_audio()
+    return bool(audio) and audio in pathlib.Path(f).parents
+
 def lien_drive(f):
     fid = drive_id(f)
     return (f"https://drive.google.com/file/d/{fid}/view" if fid
@@ -108,8 +125,10 @@ def etat_segment(nom):
 
 def puce_segment(nom):
     etat, f = etat_segment(nom)
-    if etat == "monte":
+    if etat == "monte" and dans_drive(f):
         return f'<a class="etat monte" href="{lien_drive(f)}" target="_blank" rel="noopener" title="Montage exporté : {html.escape(f.name)}">✓ monté ▶</a>'
+    if etat == "monte":
+        return f'<span class="etat monte" title="Montage exporté sur le Mac (dossier Audacity) : {html.escape(f.name)}">✓ monté</span>'
     if etat == "projet":
         return '<span class="etat projet" title="Le projet Audacity existe, le montage n\'est pas encore exporté en .wav">◐ en montage</span>'
     return '<span class="etat afaire">○ à monter</span>'
@@ -290,7 +309,10 @@ def avancement(hid, nb, nb_audio):
         lab = ("Tous les menus" if hid == "MENUS"
                else PARCOURS_NOMS[k] if k < len(PARCOURS_NOMS) else str(k + 1))
         chemin = " → ".join(parcours)
-        if etat == "monte":
+        if etat == "monte" and not dans_drive(f):
+            completes.append(f'<span class="complete ok" title="{html.escape(nom)} (sur le Mac, dossier Audacity) : '
+                             f'{html.escape(chemin)}">✓ {lab}</span>')
+        elif etat == "monte":
             completes.append(f'<a class="complete ok" href="{lien_drive(f)}" target="_blank" rel="noopener" '
                              f'title="{html.escape(nom)} : {html.escape(chemin)}">▶ {lab}</a>')
         else:
@@ -349,7 +371,7 @@ suivi = (f'<section class="suivi" id="suivi"><h2 class="sec">Où en est-on ?</h2
          f'<b>{tot["nc"]}/{tot["ncomp"]}</b> histoires complètes écoutables</p>'
          f'<div class="tablewrap"><table class="av-table"><thead><tr><th>Histoire</th><th>Voix</th><th>Montage</th>'
          f'<th>Histoires complètes</th></tr></thead><tbody>{rows}</tbody></table></div>'
-         f'<p class="legende">▶ = à écouter dans le Drive · ◐ = projet Audacity prêt, montage pas encore exporté · ○ = pas encore fait. '
+         f'<p class="legende">▶ = à écouter dans le Drive · ✓ = monté (fichier sur le Mac de Papic) · ◐ = projet Audacity prêt, montage pas encore exporté · ○ = pas encore fait. '
          f'Chaque histoire existe en 3 parcours : Romy, Alix, les deux (le compagnon et le choix changent d\'un parcours à l\'autre ; '
          f'survole un bouton pour voir le chemin). Les menus s\'écoutent tous à la suite dans « Menus complet ».</p></section>')
 opts = ('<option value="NARRATEUR-PAPIC">Narrateur · Papic</option><option value="NARRATEUR-MAMILY">Narrateur · Mamily</option>'
