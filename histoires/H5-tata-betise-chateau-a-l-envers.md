@@ -21,7 +21,7 @@ ROMY : « [dissatisfaction-hnn] Ça, ce n'est pas normal ! Je vais trouver qui a
 
 **Version Alix**
 NARRATEUR : La Princesse Alix saute de son lit.
-ALIX : « Hé ! Qui a fait ça ? Je vais le trouver ! »
+ALIX : « [question-ei] Qui a fait ça ? Je vais le trouver !!!! »
 
 **Version les deux**
 NARRATEUR : Les deux princesses ouvrent les yeux.
@@ -33,7 +33,7 @@ NARRATEUR : Dans la cuisine, les chaussures sont… dans le frigo !
 [porte de frigo]
 NARRATEUR : Dans le salon, le canapé est… à l'envers ! Et derrière le rideau, il y a deux pieds qui dépassent… et quelqu'un qui rigole. Qui se cache là ?
 TATA BÊTISE : « [laughter] Hi hi hi ! Coucou, c'est moi ! J'ai fait une grosse bêtise ! »
-TOUS (en riant) : « [laughter] Oh, Tata Bêtise ! »
+TOUS (en riant) : « [laughter] [surprise-oh], Tata Bêtise ! »
 TATA BÊTISE : « Je voulais vous faire une surprise… mais j'ai tout mélangé ! [laughter] Ha ha ha ! »
 
 ### H5-3 – Question [commun]
@@ -47,7 +47,7 @@ NARRATEUR : Et hop, on remet tout à sa place.
 ### H5-4b – La salle de bain [commun]
 NARRATEUR : Dans la baignoire, il n'y a pas d'eau… il y a des céréales ! Et la brosse à dents est dans… le pot de confiture !
 TATA BÊTISE : « Comme ça, les dents sont sucrées ! [laughter] Ha ha ! »
-NARRATEUR : Tout le monde éclate de rire. Pas dans la confiture, Tata !
+NARRATEUR : Tout le monde éclate de rire. [laughter] Pas dans la confiture, Tata !
 NARRATEUR : Et hop, on remet tout à sa place.
 
 ### H5-5 – Le compagnon aide à ranger [×compagnon]
@@ -58,7 +58,7 @@ PAILLETTE : « Range, range, chaque chose à sa place ! »
 NARRATEUR : …et tout ce qui était à l'envers s'envole et retourne à sa place, tout seul ! Les chaussons descendent du plafond, et le canapé se retourne.
 
 **Grumo**
-NARRATEUR : Grumo veut souffler la poussière… Atchoum-boum !
+NARRATEUR : Grumo veut souffler la poussière… ah !... ah!... ah-tchoum-BOUM !!
 [bulles]
 NARRATEUR : Les bulles emportent toute la poussière… mais aussi toutes les chaussettes du château !
 GRUMO : « Oups… [laughter] Maintenant, c'est moi qui fais des bêtises ! »
@@ -83,9 +83,9 @@ ROMY : « Tata Bêtise, écoute bien : les chaussures, c'est dans l'entrée. Les
 ALIX : « [laughter] C'était rigolo, quand même ! On recommence ? »
 
 **Version les deux**
-ROMY : « Plus de bêtises, Tata ! »
+ROMY : « Plu de bêtises, Tata ! »
 ALIX : « Enfin… juste une petite ? »
 
 *(Fin commune)*
-TATA BÊTISE : « Promis, plus de bêtises… Enfin… presque plus ! [laughter] Hi hi hi ! »
+TATA BÊTISE : « Promis, plu de bêtises… Enfin… presque plus ! [laughter] Hi hi hi ! »
 NARRATEUR : Et tout le monde rit. Fin !
