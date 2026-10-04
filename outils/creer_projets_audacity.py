@@ -7,6 +7,7 @@ Usage (depuis le dossier histoires-lunii, Audacity 3.7 ouvert, mod-script-pipe a
   sh outils/projets-audacity.sh --histoire H2 H3   # seulement certaines histoires (ou Menus)
   sh outils/projets-audacity.sh --quoi completes   # seulement les histoires complètes (ou : segments)
   sh outils/projets-audacity.sh --histoire Menus --quoi completes   # le projet « Menus complet »
+  sh outils/projets-audacity.sh --perimes          # montages .wav plus vieux que ce qu'ils contiennent
 
 1) Un projet par segment et par variante : H2-1-Romy, H2-1-Alix, H2-1-Romy&Alix (avec leur début
    et fin communs), H2-2, H2-3-Mamily…  Dans chaque projet :
@@ -33,6 +34,12 @@ On NE TOUCHE JAMAIS à un projet existant : un projet est sauté s'il existe dé
 du même nom dans « Audacity/ », ou dans un ancien dossier « 2 – Projets Audacity » / « 3 – Montés »
 du Drive (un montage .wav/.mp3 seul n'empêche pas la création). Un projet auquel il manque une prise
 (ex. réplique de Mathéo) n'est pas créé, mais il est signalé. Relancer ne crée que ce qui manque.
+
+--perimes : ne crée rien (Audacity n'a pas besoin d'être ouvert). Liste les montages exportés
+(H2-1-Romy.wav, H2 complete - 1.wav, Menus complet.wav…) qui sont plus vieux qu'un des .wav
+qu'ils contiennent : une prise refaite depuis l'export pour un segment ; pour une histoire
+complète, un montage de segment ré-exporté depuis (ou lui-même à refaire), ou une prise refaite
+pour un segment pas encore monté. Se combine avec --histoire et --quoi.
 """
 import argparse, errno, json, os, pathlib, plistlib, re, select, subprocess, sys, time, unicodedata, wave
 
@@ -167,6 +174,77 @@ def montage_de(dossier, nom):
 def duree(f):
     with wave.open(str(f), "rb") as w:
         return w.getnframes() / float(w.getframerate())
+
+
+# ---------------------------------------------------------------- montages périmés
+MARGE = 2.0  # s : écart de date ignoré (arrondis des systèmes de fichiers)
+
+
+def quand(f):
+    return time.strftime("%d/%m %H:%M", time.localtime(f.stat().st_mtime))
+
+
+def lister_perimes(struct, audio, projets, quoi):
+    """Affiche les montages .wav plus vieux qu'un des .wav qu'ils contiennent. -> nombre de périmés"""
+    if not projets.is_dir():
+        print(f"Dossier des montages introuvable : {projets}")
+        return 0
+    perimes = {}   # nom du segment (minuscules) -> True si son montage est à refaire
+    vus = total = 0
+
+    def afficher(m, raisons):
+        print(f"  ! {m.name:<28} exporté le {quand(m)}")
+        for r in raisons:
+            print(f"        {r}")
+
+    def prises_recentes(m, dp, lignes):
+        t = m.stat().st_mtime
+        return [f"{f.name}  (prise du {quand(f)})" for it in lignes for f in prises_de(dp, it)
+                if f.stat().st_mtime > t + MARGE]
+
+    # Les segments sont toujours examinés : une histoire complète dépend de leur état
+    lignes_seg = []
+    for nom, hid, lignes in plan_segments(struct):
+        m = montage_de(projets, nom)
+        if not m:
+            continue
+        raisons = prises_recentes(m, dossier_prises(audio, hid), lignes)
+        perimes[nfc(nom).lower()] = bool(raisons)
+        lignes_seg.append((m, raisons))
+    if "segments" in quoi:
+        vus += len(lignes_seg)
+        a_refaire = [(m, r) for m, r in lignes_seg if r]
+        total += len(a_refaire)
+        print(f"Segments montés à refaire (une prise est plus récente que le .wav) : {len(a_refaire)} sur {len(lignes_seg)}")
+        for m, r in a_refaire:
+            afficher(m, r)
+
+    if "completes" in quoi:
+        a_refaire, n = [], 0
+        for nom, hid, parcours in plan_completes(struct):
+            m = montage_de(projets, nom)
+            if not m:
+                continue
+            n += 1
+            t, raisons = m.stat().st_mtime, []
+            for seg, lignes in parcours:
+                ms = montage_de(projets, seg)
+                if not ms:  # segment pas monté : l'histoire complète a été faite avec les prises brutes
+                    raisons += prises_recentes(m, dossier_prises(audio, hid), lignes)
+                elif ms.stat().st_mtime > t + MARGE:
+                    raisons.append(f"{ms.name}  (montage du {quand(ms)})")
+                elif perimes.get(nfc(seg).lower()):
+                    raisons.append(f"{ms.name}  (lui-même à refaire, voir plus haut)")
+            if raisons:
+                a_refaire.append((m, raisons))
+        vus += n
+        total += len(a_refaire)
+        print(f"Histoires complètes à refaire (un morceau est plus récent que le .wav) : {len(a_refaire)} sur {n}")
+        for m, r in a_refaire:
+            afficher(m, r)
+    if not total:
+        print(f"Tout est à jour ({vus} montages vérifiés).")
+    return total
 
 
 # ---------------------------------------------------------------- frise : pistes + étiquettes
@@ -344,6 +422,8 @@ def main():
     ap.add_argument("--histoire", nargs="*", help="ex. H2 H3 Menus (par défaut : tout)")
     ap.add_argument("--quoi", nargs="*", choices=["segments", "completes"], default=["segments", "completes"])
     ap.add_argument("--liste", action="store_true", help="afficher ce qui sera créé, sans rien faire")
+    ap.add_argument("--perimes", action="store_true",
+                    help="lister les montages .wav plus vieux que les .wav qu'ils contiennent, sans rien créer")
     ap.add_argument("--audio", help="dossier « Audio (enregistrements) » (par défaut : celui de voix.json)")
     a = ap.parse_args()
 
@@ -354,6 +434,9 @@ def main():
     filtre = {h.upper() for h in a.histoire} if a.histoire else None
     struct = scenes(filtre)
     projets = dossier_audacity(cfg)
+    if a.perimes:
+        lister_perimes(struct, audio, projets, a.quoi)
+        return
     deja = projets_existants(audio, projets)
 
     # (nom, hid, fabrique de la frise, description)

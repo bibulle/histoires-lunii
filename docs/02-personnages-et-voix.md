@@ -62,6 +62,8 @@ Les voix sont **clonées** depuis les échantillons du Drive « Audio (enregistr
 
 `sh outils/projets-audacity.sh` (Audacity 3.7 ouvert, module mod-script-pipe activé) crée un projet par segment et par variante (`H2-1-Romy.aup3`…), les 3 histoires complètes (`H2 complete - 1/2/3`) et « Menus complet », à partir des prises du Drive. Tout est rangé dans le dossier **`Audacity/`** du dépôt (réglable par `audacity` dans `outils/voix.json`), qui reste sur le Mac : il est exclu de git. Un projet qui existe déjà (en .aup3 ou .aup4) n'est jamais écrasé. Exporter chaque montage en .wav **dans ce même dossier**, avec le nom du projet (`H2-1-Romy.wav`) : les histoires complètes l'utilisent à la place des prises brutes, et le livret le compte comme « ✓ monté ».
 
+`sh outils/projets-audacity.sh --perimes` liste les montages .wav à refaire : ceux qui sont plus vieux qu'une prise ou qu'un morceau qu'ils contiennent (prise regénérée après l'export, segment ré-exporté après l'histoire complète). Audacity n'a pas besoin d'être ouvert ; se combine avec `--histoire` et `--quoi`.
+
 Pour les voix jouées par la famille, la balise sert simplement d'indication de jeu.
 
 | Balise | Effet | Utilisée pour |
