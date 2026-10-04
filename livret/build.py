@@ -93,6 +93,37 @@ def index_montages():
 
 MONTAGES, PROJETS = index_montages()
 
+def index_copies_drive():
+    """Montages copiés dans le Drive pour que la famille les écoute (« H1 complete - 1.wav » dans le
+    dossier de l'histoire, « Menus complet.wav »…), par nom en minuscules. Les prises, les sources et
+    les bruitages ne sont pas des montages : dossiers ignorés. À nom égal, la copie la plus récente gagne."""
+    copies, audio = {}, dossier_audio()
+    if not audio:
+        return copies
+    ignores = ("1 – Prises", "1 – Bruitages", "2 – Musiques", "4 - Sources", "0 – À trier")
+    for racine, dossiers, fichiers in os.walk(audio):
+        dossiers[:] = [d for d in dossiers if not unicodedata.normalize("NFC", d).startswith(ignores)]
+        for n in fichiers:
+            f = pathlib.Path(racine) / n
+            if f.suffix.lower() in (".wav", ".mp3", ".m4a"):
+                cle = unicodedata.normalize("NFC", f.stem).lower()
+                if cle not in copies or f.stat().st_mtime > copies[cle].stat().st_mtime:
+                    copies[cle] = f
+    return copies
+
+COPIES_DRIVE = index_copies_drive()
+
+def copie_drive(nom):
+    """(fichier du Drive, périmée ?) ou (None, False). Périmée = le montage du Mac a été refait depuis la copie."""
+    cle = unicodedata.normalize("NFC", nom).lower()
+    d, m = COPIES_DRIVE.get(cle), MONTAGES.get(cle)
+    if not d:
+        return None, False
+    return d, bool(m and m != d and m.stat().st_mtime > d.stat().st_mtime + 2)
+
+def date_fichier(f):
+    return datetime.datetime.fromtimestamp(f.stat().st_mtime).strftime("%d/%m à %Hh%M")
+
 try:  # même découpage que la création des projets Audacity (segments et 3 parcours par histoire)
     from creer_projets_audacity import scenes as _scenes, plan_segments, plan_completes
     _STRUCT = _scenes(None)
@@ -125,8 +156,9 @@ def etat_segment(nom):
 
 def puce_segment(nom):
     etat, f = etat_segment(nom)
-    if etat == "monte" and dans_drive(f):
-        return f'<a class="etat monte" href="{lien_drive(f)}" target="_blank" rel="noopener" title="Montage exporté : {html.escape(f.name)}">✓ monté ▶</a>'
+    d, _ = copie_drive(nom)
+    if d:
+        return f'<a class="etat monte" href="{lien_drive(d)}" target="_blank" rel="noopener" title="Montage dans le Drive : {html.escape(d.name)}">✓ monté ▶</a>'
     if etat == "monte":
         return f'<span class="etat monte" title="Montage exporté sur le Mac (dossier Audacity) : {html.escape(f.name)}">✓ monté</span>'
     if etat == "projet":
@@ -309,7 +341,13 @@ def avancement(hid, nb, nb_audio):
         lab = ("Tous les menus" if hid == "MENUS"
                else PARCOURS_NOMS[k] if k < len(PARCOURS_NOMS) else str(k + 1))
         chemin = " → ".join(parcours)
-        if etat == "monte" and not dans_drive(f):
+        d, perimee = copie_drive(nom)
+        if d:
+            note = (f"copie du {date_fichier(d)}, le montage a été refait depuis" if perimee
+                    else f"copie du {date_fichier(d)}")
+            completes.append(f'<a class="complete ok{" vieux" if perimee else ""}" href="{lien_drive(d)}" target="_blank" '
+                             f'rel="noopener" title="{html.escape(nom)} ({note}) : {html.escape(chemin)}">▶ {lab}</a>')
+        elif etat == "monte" and not dans_drive(f):
             completes.append(f'<span class="complete ok" title="{html.escape(nom)} (sur le Mac, dossier Audacity) : '
                              f'{html.escape(chemin)}">✓ {lab}</span>')
         elif etat == "monte":
@@ -371,7 +409,7 @@ suivi = (f'<section class="suivi" id="suivi"><h2 class="sec">Où en est-on ?</h2
          f'<b>{tot["nc"]}/{tot["ncomp"]}</b> histoires complètes écoutables</p>'
          f'<div class="tablewrap"><table class="av-table"><thead><tr><th>Histoire</th><th>Voix</th><th>Montage</th>'
          f'<th>Histoires complètes</th></tr></thead><tbody>{rows}</tbody></table></div>'
-         f'<p class="legende">▶ = à écouter dans le Drive · ✓ = monté (fichier sur le Mac de Papic) · ◐ = projet Audacity prêt, montage pas encore exporté · ○ = pas encore fait. '
+         f'<p class="legende">▶ = à écouter dans le Drive (en doré : le montage a été refait depuis cette copie) · ✓ = monté (fichier sur le Mac de Papic) · ◐ = projet Audacity prêt, montage pas encore exporté · ○ = pas encore fait. '
          f'Chaque histoire existe en 3 parcours : Romy, Alix, les deux (le compagnon et le choix changent d\'un parcours à l\'autre ; '
          f'survole un bouton pour voir le chemin). Les menus s\'écoutent tous à la suite dans « Menus complet ».</p></section>')
 opts = ('<option value="NARRATEUR-PAPIC">Narrateur · Papic</option><option value="NARRATEUR-MAMILY">Narrateur · Mamily</option>'
@@ -390,4 +428,6 @@ head = ('<!doctype html><html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
         '<meta name="robots" content="noindex, nofollow">')
 (SITE / "index.html").write_text(head + page.replace("<div class=\"wrap\">", "</head><body><div class=\"wrap\">", 1) + "</body></html>", encoding="utf-8")
+_liens = sorted(unicodedata.normalize("NFC", f.stem) for k, f in COPIES_DRIVE.items() if "complet" in k)
+print(f"Écoutes complètes dans le Drive : {len(_liens)}" + (" (" + ", ".join(_liens) + ")" if _liens else ""))
 print(f"OK {OUT} ({len(page)//1024} Ko, {len(stories) - 1} histoires + menus) + {SITE / 'index.html'}")
