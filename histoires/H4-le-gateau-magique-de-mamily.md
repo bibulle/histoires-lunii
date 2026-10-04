@@ -51,7 +51,7 @@ NARRATEUR : Paillette touche le gâteau avec le bout de sa corne… [clochette] 
 PAILLETTE : « Voilà ! Un gâteau arc-en-ciel ! »
 
 **Grumo**
-NARRATEUR : Oh non ! Le four est tout froid ! Grumo souffle dessus, tout doucement, un souffle bien chaud… mais ça le chatouille… Aaaa… TCHA !
+NARRATEUR : Oh non ! Le four est tout froid ! Grumo souffle dessus, tout doucement, un souffle bien chaud… mais ça le chatouille… [surprise-ah] [surprise-ah]-tcha !
 [bulles]
 NARRATEUR : Des bulles partout dans le gâteau ! Maintenant, c'est un gâteau qui pétille !
 GRUMO : « Oups… [laughter] Mais il sent bon ! »
@@ -73,15 +73,15 @@ MATHÉO : « Gueu-gueu ! »
 MAMILY : « La première part est pour le plus petit ! »
 
 **Version Romy**
-ROMY : « Et moi, je donne la cuillère à Mathéo. Je m'occupe bien de lui ! »
+ROMY : « Et moi, je donne la cuillère à Mathéo. Je m'occupe bien de lui !! »
 
 **Version Alix**
 ALIX : « Et après, c'est moi ! Miam ! »
 
 **Version les deux**
-ROMY : « On partage ? »
-ALIX : « Oui ! Miam ! »
+ROMY : « [question-ei] On partage ? »
+ALIX : « Oui !! Miamm !!! »
 
 *(Fin commune)*
-MAMILY : « Vous savez, mes amours, le vrai secret de mes gâteaux… c'est qu'on les fait ensemble. »
+MAMILY : « Vous savez, mes amours, le vrai secret de mes gâteaux… C'est qu'on les fait ensemble !!! »
 NARRATEUR : Et tout le monde mange le plus grand gâteau du royaume. Fin !
