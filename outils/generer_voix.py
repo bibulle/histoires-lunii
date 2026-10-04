@@ -17,8 +17,9 @@ Voix de référence : Drive « Audio (enregistrements)/4 - Sources », deux fich
 Sortie (nomenclature du Drive) : « Audio (enregistrements)/H1 – …/1 – Prises/ »
   H1-1-Romy_04_Paillette_omnivoice1.wav  = segment, n° de réplique dans le segment, qui parle, prise
   Les parties « début/fin commune » sont dans H1-6-commun_…
-  Réplique à plusieurs voix (« ensemble » dans voix.json, ex. ROMY ET ALIX) : un fichier par voix,
+  Réplique à plusieurs voix (« ensemble » dans voix.json : ROMY ET ALIX, TOUS) : un fichier par voix,
   H1-6_03_Romy&Alix-Romy_omnivoice1.wav + H1-6_03_Romy&Alix-Alix_omnivoice1.wav, à superposer dans Audacity.
+  TOUS = Papic, Mamily, Romy et Alix : H5-2_04_Tous-Papic_…, …_Tous-Mamily_…, …_Tous-Romy_…, …_Tous-Alix_…
 Un fichier déjà généré n'est pas refait : on peut relancer après une coupure,
 ou après avoir ajouté une nouvelle voix dans Sources (seules les répliques manquantes sont faites).
 """
@@ -277,7 +278,7 @@ def main():
     filtre = {h.upper() for h in a.histoire} if a.histoire else None
     roles = {r.upper() for r in a.role} if a.role else None
 
-    taches, manquantes = [], {}
+    taches, manquantes, anciennes = [], {}, []
     if a.essais:
         voix_essai = []  # (nom affiché, échantillon ou None, clé dans voix.json)
         for stem, ref in refs.items():
@@ -303,11 +304,15 @@ def main():
         for it in lire_histoires(filtre):
             if roles and it["role"] not in roles:
                 continue
-            # Réplique à plusieurs voix (ex. ROMY ET ALIX) : une prise par voix, à superposer au montage
+            # Réplique à plusieurs voix (ROMY ET ALIX, TOUS) : une prise par voix, à superposer au montage
             for v in cfg.get("ensemble", {}).get(it["voix"], []):
                 items.append(dict(it, voix=v, qui=f"{it['qui']}-{nom_propre(v)}"))
             if it["voix"] not in cfg.get("ensemble", {}):
                 items.append(it)
+            else:  # prise à une seule voix, d'avant le passage de ce rôle en « ensemble »
+                d = dossier_prises(audio, it["hid"])
+                if d.is_dir():
+                    anciennes += sorted(d.glob(f"{it['segment']}_{it['n']:02d}_{it['qui']}_omnivoice*.wav"))
         for it in items:
             reglage = regler(cfg["voix"].get(it["voix"], {}), a)
             if reglage.get("ignorer"):
@@ -325,6 +330,11 @@ def main():
     if manquantes:
         print(f"Sans échantillon dans Sources ({'maquette voix décrite' if sans_ref == 'instruct' else 'non générées'}) : "
               + ", ".join(f"{k} ({v})" for k, v in sorted(manquantes.items())))
+    if anciennes:
+        print("Anciennes prises à une seule voix, remplacées par une prise par voix (à retirer du Drive, "
+              "sinon elles s'ajoutent aux autres dans les prochains projets Audacity) :")
+        for f in anciennes:
+            print(f"  {f.parent.parent.name}/{f.name}")
     a_faire = [t for t in taches if a.refaire or not t[4].exists()]
     resume(a_faire)
     print(f"{len(taches)} fichiers prévus, {len(a_faire)} à générer.")
