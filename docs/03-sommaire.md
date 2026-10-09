@@ -22,4 +22,4 @@ Conseil : l'histoire 8 à écouter en premier le soir du réveillon. On peut met
 - [x] Château : rose pour Romy, bleu pour Alix, rose et bleu à deux.
 - [x] École de Romy : pas de détails réels, on garde l'histoire telle quelle.
 - [x] Narrateur : Papic et Mamily à tour de rôle.
-- [ ] Relire chaque script : ton, longueur, mots trop difficiles.
+- [X] Relire chaque script : ton, longueur, mots trop difficiles.

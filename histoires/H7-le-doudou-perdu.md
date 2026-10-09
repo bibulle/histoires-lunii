@@ -59,7 +59,7 @@ NARRATEUR : Et dans le jardin ? Derrière les fleurs… pas de doudou ! Dans la 
 NARRATEUR : Alors, dans sa poussette, le tout petit Prince Mathéo se met à gazouiller.
 MATHÉO : « Areuh ! Areuh ! »
 NARRATEUR : Mathéo montre le grand arbre avec son petit doigt. Tout le monde lève la tête… Et là-haut, sur une branche, un petit écureuil fait un gros câlin au doudou !
-NOISETTE : « [sigh] Pardon… Je m'appelle Noisette. J'avais froid, cette nuit… et ce doudou est si doux… »
+NOISETTE : « Pardon… Je m'appelle Noisette. J'avais froid, cette nuit… et ce doudou est si doux… »
 
 **Version Romy**
 ROMY : « Je comprends, Noisette. Mais Doudou Renard, c'est mon doudou à moi. Tu sais quoi ? Je vais te donner une petite couverture, et tu pourras venir lui faire des câlins quand tu veux ! »

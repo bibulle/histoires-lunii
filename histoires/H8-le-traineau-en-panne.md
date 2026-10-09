@@ -36,7 +36,7 @@ NARRATEUR : Papic arrive en pyjama, avec sa boîte à outils.
 PAPIC : « Hmm hmm, voyons voir… Un petit coup de tournevis, et hop ! »
 [toc, toc, toc] [cric, crac]
 PAPIC : « Voilà ! Le patin est réparé ! »
-NARRATEUR : Mais les rennes sont tout fatigués. Le petit renne, qui s'appelle Tornade, bâille. Aaaaah…
+NARRATEUR : Mais les rennes sont tout fatigués. Le petit renne, qui s'appelle Tornade, bâille. 
 
 ### H8-3 – Question [commun]
 NARRATEUR : Qu'est-ce qu'on donne aux rennes, pour leur donner des forces ? Des carottes du jardin… ou les biscuits de Mamily ? Tourne la molette pour choisir !
@@ -63,7 +63,7 @@ NARRATEUR : Paillette s'avance, et elle chante sa plus belle chanson de Noël : 
 NARRATEUR : Le traîneau se met à briller… et il s'envole, léger comme une plume !
 
 **Grumo**
-NARRATEUR : Grumo se met derrière le traîneau. Il pousse, il pousse… et ça le chatouille… ATCHOUUUUUM !
+NARRATEUR : Grumo se met derrière le traîneau. Il pousse, il pousse… et ça le chatouille…
 [bulles]
 NARRATEUR : Des milliers de bulles soulèvent le traîneau, et il s'envole !
 

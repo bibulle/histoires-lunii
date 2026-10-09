@@ -23,8 +23,8 @@ ROMY : « Ne pleure pas, Pipou. On va la retrouver ! Mais d'abord, je mets mes b
 
 **Version Alix**
 ALIX : « Je plonge ! Même pas peur ! »
-NARRATEUR : Attends, Princesse Alix ! D'abord, la bouée !
-ALIX : « Ah oui… la bouée ! Et maintenant… plouf ! »
+NARRATEUR : Attends, Princesse Alix ! D'abord, les nageots !
+ALIX : « Ah oui… les nageos ! Et maintenant… plouf ! »
 
 **Version les deux**
 ROMY : « On va t'aider, Pipou ! Alix, tes brassards ! »
@@ -44,7 +44,7 @@ NARRATEUR : Où est la maman de Pipou ? Derrière le grand rocher… ou tout au 
 
 ### H6-4a – Le grand rocher [commun]
 NARRATEUR : Derrière le grand rocher, il y a… un crabe !
-LE CRABE : « Clic, clac ! Pas de maman dauphin ici ! Mais je vous dis bonjour ! Clic, clac ! »
+LE CRABE : « Pas de maman dauphin ici ! Mais je vous dis bonjour ! »
 
 ### H6-4b – Les algues [commun]
 NARRATEUR : Au fond, les algues chatouillent les pieds. Et derrière les algues, il y a… un petit poisson rouge !
@@ -56,7 +56,7 @@ LE POISSON ROUGE : « Glou, glou ! Elle n'est pas là… Mais bonne chance ! Glo
 NARRATEUR : Paillette plonge sa corne dans l'eau… et sa corne s'allume, comme une petite lampe ! [clochette] Maintenant, on voit tout au fond de la mer.
 
 **Grumo**
-NARRATEUR : Grumo a le nez qui chatouille… Ah… ah… ah… ATCHOUUUM !
+NARRATEUR : Grumo a le nez qui chatouille… Ah… ah… ah… Ah TCHOUUUM !!
 [bulles]
 NARRATEUR : Une bulle géante ! Tout le monde regarde dedans, comme dans une loupe, et on voit très, très loin !
 
@@ -81,11 +81,11 @@ ALIX : « Et on crie très fort ! »
 NARRATEUR : « Pipou, Pipou, où es-tu ? MAMAN DE PIPOUUUU ! »
 
 *(Fin commune aux 3 versions)*
-NARRATEUR : Et là… une grande dauphine saute hors de l'eau ! I-hi-hi-hi !
+NARRATEUR : Et là… une grande dauphine saute hors de l'eau ! [laughter]I-hi-hi-hi !
 [grand splash]
-MAMAN DAUPHIN : « [surprise-ah] Pipou ! Mon petit Pipou ! »
+MAMAN DAUPHIN : « Pipou ! Mon petit Pipou ! »
 NARRATEUR : Pipou saute dans les nageoires de sa maman. Gros câlin de dauphin !
 MAMAN DAUPHIN : « Merci à tous ! »
 NARRATEUR : Et pour dire merci, Pipou éclabousse tout le monde. Mathéo rit aux éclats.
 MATHÉO : « [laughter] Ha ha ha ! »
-NARRATEUR : Le soir, la piscine est redevenue une piscine toute simple. Mais parfois, si on écoute bien… on entend encore Pipou rire. I-hi-hi ! Fin !
+NARRATEUR : Le soir, la piscine est redevenue une piscine toute simple. Mais parfois, si on écoute bien… on entend encore Pipou rire. [laughter]hi hi ! Fin !
