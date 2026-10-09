@@ -3,6 +3,7 @@
   svg/<code>.svg       le dessin vectoriel
   png/<code>.png       l'image pour STUdio : 320x240, fond noir, 16 couleurs au plus
   planche.png          toutes les images sur une page, pour relire
+  vignette.png         la vignette du pack dans STUdio
 Usage : python3 rendu.py     (il faut : pip install playwright pillow numpy ; playwright install chromium)
 """
 import os
@@ -61,6 +62,14 @@ def planche(chemin, images, colonnes=5, marge=14, legende=22):
     out.save(chemin)
 
 
+def vignette(chemin, code="Menu0-accueil", cote=300):
+    """La vignette du pack dans la bibliothèque de STUdio : l'image d'accueil, au carré."""
+    im = Image.open(os.path.join(ICI, "png", code + ".png")).convert("RGB")
+    out = Image.new("RGB", (im.width, im.width), (0, 0, 0))
+    out.paste(im, (0, (im.width - im.height) // 2))
+    out.resize((cote, cote), Image.LANCZOS).save(chemin)
+
+
 if __name__ == "__main__":
     for dossier in ("svg", "png"):
         os.makedirs(os.path.join(ICI, dossier), exist_ok=True)
@@ -79,4 +88,5 @@ if __name__ == "__main__":
                 print("%-20s %d aplats, abandonnés : %s" % (code, aplats, perdues))
         nav.close()
     planche(os.path.join(ICI, "planche.png"), IMAGES)
+    vignette(os.path.join(ICI, "vignette.png"))
     print("%d images" % len(IMAGES))

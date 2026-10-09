@@ -9,7 +9,9 @@ Histoires personnalisées pour la Lunii de Romy et Alix (avec leur cousin Mathé
 - `histoires/Menus.md` : les questions et réponses des menus de la Lunii
 - `histoires/H1…H9` : les scripts d'enregistrement
 - `livret/` : génération du livret HTML pour la famille (`python3 livret/build.py`)
-- `outils/` : génération des voix (OmniVoice) et création des projets Audacity
+- `outils/` : génération des voix (OmniVoice), création des projets Audacity, et fabrication du pack Lunii (`sh outils/pack.sh`)
+- `images/` : les 35 images du pack et le script qui les dessine (voir `images/README.md`)
+- `pack/` : le pack fabriqué (`Les-Aventures-des-Princesses.zip`, archive STUdio) — **uniquement sur le Mac**, exclu de git
 - `Audacity/` : projets Audacity (.aup3/.aup4) et montages exportés (.wav) — **uniquement sur le Mac**, exclu de git (`.gitignore`)
 
 Ce dépôt est la **source de référence** des textes. Le Google Drive sert pour les prises de voix (`H… / 1 – Prises`), les échantillons de voix (`4 - Sources`), les bruitages et les images. Les projets Audacity et les montages sont dans `Audacity/` sur le Mac (sortis du Drive, trop gros).
